@@ -209,3 +209,13 @@ body {
 .status-inprogress { background: rgba(236,36,97,0.12); color: #EC2461; border: 0.5px solid rgba(236,36,97,0.3); }
 .status-completed { background: rgba(34,197,94,0.12); color: #4ADE80; border: 0.5px solid rgba(34,197,94,0.3); }
 .status-cancelled { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.45); border: 0.5px solid rgba(255,255,255,0.1); }
+
+/* Responsive top nav */
+.cs-nav { padding: 16px 20px; }
+@media (min-width: 768px) { .cs-nav { padding: 20px 24px; } }
+
+.cs-nav-hide-mobile { display: none; }
+@media (min-width: 768px) { .cs-nav-hide-mobile { display: block; } }
+
+.cs-nav-btn { padding: 8px 14px; font-size: 12px; }
+@media (min-width: 768px) { .cs-nav-btn { padding: 10px 20px; font-size: 13px; } }
