@@ -252,7 +252,7 @@ export const MOCK_ASSISTANTS = [
   { id: 'a1', name: 'Abena Mensah', area: 'East Legon', rating: 4.9, jobs: 142, avatar: 'AM', skills: ['Kitchen','Laundry','Bedrooms'], status: 'available' },
   { id: 'a2', name: 'Esi Owusu', area: 'Osu', rating: 4.8, jobs: 98, avatar: 'EO', skills: ['Living Areas','Bathrooms'], status: 'available' },
   { id: 'a3', name: 'Akosua Tetteh', area: 'Spintex', rating: 5.0, jobs: 201, avatar: 'AT', skills: ['All services'], status: 'busy' },
-  { id: 'a4', name: 'Maame Asante', area: 'Adenta', rating: 4.7, jobs: 67, avatar: 'MA', skills: ['Kitchen','Ironing'], status: 'available' },
+  { id: 'a4', name: 'Maame Asante', area: 'Labone', rating: 4.7, jobs: 67, avatar: 'MA', skills: ['Kitchen','Ironing'], status: 'available' },
   { id: 'a5', name: 'Adwoa Boateng', area: 'Cantonments', rating: 4.9, jobs: 115, avatar: 'AB', skills: ['Bedrooms','Living Areas'], status: 'available' },
 ]
 
