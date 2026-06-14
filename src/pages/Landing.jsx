@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Check, X, ChevronDown, MapPin, Clock, Shield, Star } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
 import ServiceCarousel from '../components/ServiceCarousel.jsx'
-import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING } from '../data/index.js'
+import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
 
 const FAQ = [
   { q: 'How do I book a ClubScrub Assistant?', a: 'Tap "Book Now", select the tasks you need done, then your area, date and start time. The process takes under 3 minutes.' },
@@ -72,14 +72,17 @@ export default function Landing() {
           </div>
         </FadeUp>
 
-        {/* Stats */}
+        {/* Pricing summary pills */}
         <FadeUp delay={0.2}>
-          <div style={{ display: 'flex', gap: 32, marginTop: 48, paddingTop: 32, borderTop: '0.5px solid rgba(255,255,255,0.07)' }}>
-            {[['1,200+','Verified Assistants'],['4.9 ★','Average Rating'],['2 hrs','Avg Arrival']].map(([n, l]) => (
-              <div key={l}>
-                <p className="font-display italic" style={{ fontSize: 24, fontWeight: 600, marginBottom: 2 }}>{n}</p>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{l}</p>
-              </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 48, paddingTop: 32, borderTop: '0.5px solid rgba(255,255,255,0.07)' }}>
+            {[
+              `GH₵ ${PRICING.base} minimum`,
+              `+GH₵ ${PRICING.hourlyRate} / extra hour`,
+              `Sun +GH₵ ${SUNDAY_SURCHARGE}`,
+            ].map((label) => (
+              <span key={label} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 100, color: '#fff', fontSize: 13, fontWeight: 400, padding: '10px 18px', whiteSpace: 'nowrap' }}>
+                {label}
+              </span>
             ))}
           </div>
         </FadeUp>
