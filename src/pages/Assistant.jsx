@@ -10,6 +10,7 @@ const SKILLS = TASK_GROUPS.map(g => g.label)
 
 function AssistantSignup({ onComplete }) {
   const [step, setStep] = useState(0)
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [form, setForm] = useState({ name: '', phone: '', email: '', area: '', experience: '', availability: [], skills: [], bio: '' })
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }))
 
@@ -36,6 +37,17 @@ function AssistantSignup({ onComplete }) {
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Before applying, please read and understand our Home Assistant Agreement.</p>
         <Link to="/assistant-agreement" style={{ fontSize: 13, color: '#EC2461', fontWeight: 500, textDecoration: 'none' }}>Read the Home Assistant Agreement →</Link>
       </div>
+      <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer', marginBottom: 24 }}>
+        <input
+          type="checkbox"
+          checked={agreedToTerms}
+          onChange={e => setAgreedToTerms(e.target.checked)}
+          style={{ marginTop: 2, accentColor: '#EC2461', width: 16, height: 16, flexShrink: 0 }}
+        />
+        <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
+          I have read and agree to the <Link to="/assistant-agreement" style={{ color: '#EC2461', textDecoration: 'none' }}>Home Assistant Agreement</Link>
+        </span>
+      </label>
       {[
         { k: 'name', label: 'Full name', ph: 'Your full name', type: 'text' },
         { k: 'phone', label: 'Phone number', ph: '024 000 0000', type: 'tel' },
@@ -50,8 +62,8 @@ function AssistantSignup({ onComplete }) {
         </div>
       ))}
       <button className="cs-btn-primary" onClick={() => setStep(1)}
-        disabled={!form.name || !form.phone || !form.email}
-        style={{ width: '100%', justifyContent: 'center', marginTop: 8, opacity: (!form.name || !form.phone || !form.email) ? 0.4 : 1 }}>
+        disabled={!form.name || !form.phone || !form.email || !agreedToTerms}
+        style={{ width: '100%', justifyContent: 'center', marginTop: 8, opacity: (!form.name || !form.phone || !form.email || !agreedToTerms) ? 0.4 : 1, cursor: (!form.name || !form.phone || !form.email || !agreedToTerms) ? 'not-allowed' : 'pointer' }}>
         Continue
       </button>
     </FadeUp>,
