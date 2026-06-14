@@ -287,6 +287,7 @@ export default function Landing() {
           <Link to="/assistant" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Become an Assistant</Link>
           <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Terms & Conditions</Link>
           <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Privacy Policy</Link>
+          <Link to="/assistant-agreement" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Home Assistant Agreement</Link>
           <Link to="/admin" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Admin</Link>
         </div>
         <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 20, fontWeight: 300, lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
