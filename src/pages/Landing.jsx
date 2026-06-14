@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Check, X, ChevronDown, MapPin, Clock, Shield, Star } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
 import ServiceCarousel from '../components/ServiceCarousel.jsx'
+import CookieNotice from '../components/CookieNotice.jsx'
 import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
 
 const FAQ = [
@@ -293,6 +294,8 @@ export default function Landing() {
           Club Scrub provides light home support and refresh services. Services are not intended to replace specialist cleaning, restoration, construction cleaning, pest control, or hazardous waste removal services.
         </p>
       </footer>
+
+      <CookieNotice />
     </div>
   )
 }

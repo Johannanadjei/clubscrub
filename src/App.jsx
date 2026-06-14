@@ -9,6 +9,7 @@ import Terms from './pages/Terms.jsx'
 import Privacy from './pages/Privacy.jsx'
 import AssistantAgreement from './pages/AssistantAgreement.jsx'
 import Contact from './pages/Contact.jsx'
+import NotFound from './pages/NotFound.jsx'
 import AdminGate from './components/AdminGate.jsx'
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
       <Route path="/assistant-agreement" element={<AssistantAgreement />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/admin" element={<AdminGate><Admin /></AdminGate>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
