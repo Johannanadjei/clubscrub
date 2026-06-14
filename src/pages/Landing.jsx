@@ -72,7 +72,7 @@ export default function Landing() {
           </div>
 
           {/* Pricing card */}
-          <div style={{ marginTop: 40, background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '28px 24px' }}>
+          <div style={{ marginTop: 40, background: '#000', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '28px 24px' }}>
 
             {/* Eyebrow */}
             <p style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 24, fontFamily: 'DM Sans, sans-serif' }}>Transparent pricing</p>
@@ -87,9 +87,9 @@ export default function Landing() {
             <span style={{ display: 'inline-block', background: '#EC2461', color: '#fff', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '5px 12px', borderRadius: 100, marginBottom: 20, fontFamily: 'DM Sans, sans-serif' }}>{PRICING.baseHours} hours included</span>
 
             {/* 3-column breakdown grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden', marginBottom: 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 12, overflow: 'hidden', marginBottom: 20 }}>
               {[[3, PRICING.base], [4, PRICING.base + PRICING.hourlyRate], [5, PRICING.base + PRICING.hourlyRate * 2]].map(([hrs, price]) => (
-                <div key={hrs} style={{ background: '#0a0a0a', padding: '14px 16px' }}>
+                <div key={hrs} style={{ background: '#000', padding: '14px 16px' }}>
                   <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 4, fontFamily: 'DM Sans, sans-serif' }}>{hrs} hours</p>
                   <p className="font-display" style={{ fontSize: 20, fontWeight: 600, color: '#fff' }}>
                     <span style={{ color: '#EC2461' }}>₵</span>{price}
