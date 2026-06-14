@@ -35,6 +35,11 @@ export const PRICING = {
   hourlyRate: 100,  // GH₵ per extra hour (rounded up)
 }
 
+// Weekend rules:
+//  - Saturday: closed (not bookable).
+//  - Sunday: bookable, with a flat surcharge added to the total.
+export const SUNDAY_SURCHARGE = 50 // GH₵
+
 // ---------------------------------------------------------------------------
 // TASK GROUPS — each task carries an estimated duration in minutes.
 // Selected tasks sum to an estimated time, which drives the price.
@@ -182,6 +187,55 @@ export function formatDuration(mins) {
   if (h && rem) return `${h}h ${rem}m`
   if (h) return `${h}h`
   return `${rem}m`
+}
+
+// ---------------------------------------------------------------------------
+// DATE HELPERS — parse 'YYYY-MM-DD' as a LOCAL date (avoids UTC off-by-one)
+// ---------------------------------------------------------------------------
+export function parseLocalDate(str) {
+  if (!str) return null
+  const [y, m, d] = String(str).split('-').map(Number)
+  if (!y || !m || !d) return null
+  return new Date(y, m - 1, d)
+}
+
+// Date -> 'YYYY-MM-DD' (local)
+export function toYmd(date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+// 0 = Sunday ... 6 = Saturday, or -1 if unparseable
+export function dayOfWeek(str) {
+  const d = parseLocalDate(str)
+  return d ? d.getDay() : -1
+}
+export function isSunday(str) { return dayOfWeek(str) === 0 }
+export function isSaturday(str) { return dayOfWeek(str) === 6 }
+
+// DD/MM/YYYY display (CLAUDE.md Ghana format)
+export function formatDate(str) {
+  const d = parseLocalDate(str)
+  if (!d) return str || '—'
+  const dd = String(d.getDate()).padStart(2, '0')
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  return `${dd}/${mm}/${d.getFullYear()}`
+}
+
+// ---------------------------------------------------------------------------
+// BOOKING TOTAL — wraps calcEstimate() and applies the Sunday surcharge.
+// The surcharge applies ONLY when the selected date falls on a Sunday.
+// ---------------------------------------------------------------------------
+export function calcBooking({ taskIds = [], date = '' }) {
+  const est = calcEstimate(taskIds)
+  const surcharge = isSunday(date) ? SUNDAY_SURCHARGE : 0
+  return {
+    ...est,            // mins, hours, extraHours, billedHours, price
+    surcharge,
+    total: est.price + surcharge,
+  }
 }
 
 export function getZoneForArea(area) {

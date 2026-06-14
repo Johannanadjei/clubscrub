@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ChevronLeft, ChevronRight, X, AlertCircle, Clock, Sparkles } from 'lucide-react'
 import { Logo, FadeUp, PriceRow, Divider } from '../components/UI.jsx'
+import Calendar from '../components/Calendar.jsx'
 import {
   ZONES, TASK_GROUPS, QUICK_SELECTS, EXCLUDED_TASKS,
-  calcEstimate, formatDuration, taskLabels, getZoneForArea, generateRef,
+  calcEstimate, calcBooking, formatDuration, formatDate, taskLabels,
+  isSaturday, isSunday, SUNDAY_SURCHARGE, getZoneForArea, generateRef,
 } from '../data/index.js'
 import { useBookings } from '../hooks/useStore.js'
 import { payWithPaystack } from '../lib/paystack.js'
@@ -238,16 +240,21 @@ function StepArea({ data, update, onBack, onNext }) {
 
 // STEP 3: Date & Time
 function StepDate({ data, update, onBack, onNext }) {
-  const today = new Date().toISOString().split('T')[0]
+  const sundaySelected = isSunday(data.date)
   return (
     <FadeUp>
       <StepTitle title="Pick a date & time" sub="Choose when you'd like your assistant to arrive." />
       <div className="cs-card p-5 mb-4">
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Date</p>
-        <input type="date" className="cs-input" min={today}
-          value={data.date || ''}
-          onChange={e => update({ date: e.target.value })} />
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14 }}>Date</p>
+        <Calendar value={data.date} onChange={(d) => update({ date: d })} />
       </div>
+      {sundaySelected && (
+        <div className="cs-card p-4 mb-4" style={{ borderColor: 'rgba(236,36,97,0.3)', background: 'rgba(236,36,97,0.06)' }}>
+          <p style={{ fontSize: 13, color: '#EC2461', fontWeight: 400 }}>
+            Sunday booking — GH₵ {SUNDAY_SURCHARGE} weekend surcharge applies
+          </p>
+        </div>
+      )}
       <div className="cs-card p-5 mb-4">
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Preferred start</p>
         {TIME_SLOTS.map(s => (
@@ -261,7 +268,7 @@ function StepDate({ data, update, onBack, onNext }) {
 
 // STEP 4: Summary
 function StepSummary({ data, onBack, onNext }) {
-  const est = calcEstimate(data.tasks || [])
+  const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   const labels = taskLabels(data.tasks || [])
   return (
     <FadeUp>
@@ -269,12 +276,15 @@ function StepSummary({ data, onBack, onNext }) {
       <div className="cs-card p-5 mb-4">
         <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
         <PriceRow label="Area" value={`${data.area} · ${ZONES[data.zone]?.label || ''}`} />
-        <PriceRow label="Date" value={data.date} />
+        <PriceRow label="Date" value={formatDate(data.date)} />
         <PriceRow label="Start" value={data.timeSlot} />
         <Divider />
         <PriceRow label={`Service (up to ${3} hrs)`} value={`GH₵ ${349}`} small />
         {est.extraHours > 0 && (
           <PriceRow label={`Extra time (${est.extraHours} hr${est.extraHours > 1 ? 's' : ''} × GH₵ 100)`} value={`GH₵ ${est.extraHours * 100}`} small />
+        )}
+        {est.surcharge > 0 && (
+          <PriceRow label="Sunday weekend surcharge" value={`GH₵ ${est.surcharge}`} accent small />
         )}
         <Divider />
         <div className="flex items-center justify-between">
@@ -310,7 +320,7 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
   const selectedPay = PAYMENT_OPTIONS.find(o => o.id === data.payment)
   const addressBrief = info.address && info.address.trim().length > 0 && info.address.trim().length < 10
   const valid = info.name && info.email && info.phone && info.address && data.payment
-  const est = calcEstimate(data.tasks || [])
+  const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   const nextLabel = selectedPay?.online ? `Pay GH₵ ${est.total.toLocaleString()} & confirm` : 'Confirm booking'
   return (
     <FadeUp>
@@ -367,7 +377,7 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
 // STEP 6: Confirmed
 function StepConfirmed({ data, bookingRef }) {
   const navigate = useNavigate()
-  const est = calcEstimate(data.tasks || [])
+  const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   return (
     <FadeUp>
       <div style={{ textAlign: 'center', padding: '24px 0' }}>
@@ -386,8 +396,11 @@ function StepConfirmed({ data, bookingRef }) {
         <p className="font-display italic" style={{ fontSize: 28, fontWeight: 600, color: '#EC2461', marginBottom: 16 }}>{bookingRef}</p>
         <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
         <PriceRow label="Area" value={data.area} />
-        <PriceRow label="Date" value={data.date} />
+        <PriceRow label="Date" value={formatDate(data.date)} />
         <PriceRow label="Start" value={data.timeSlot} />
+        {est.surcharge > 0 && (
+          <PriceRow label="Sunday weekend surcharge" value={`GH₵ ${est.surcharge}`} accent />
+        )}
         <Divider />
         <PriceRow label="Total" value={`GH₵ ${est.total.toLocaleString()}`} />
       </div>
@@ -421,6 +434,7 @@ export default function BookingFlow() {
       estHours: Math.round(est.hours * 100) / 100,
       billedHours: est.billedHours,
       price: est.price,
+      surcharge: est.surcharge || 0,
       total: est.total,
       zone: data.zone, area: data.area,
       date: data.date, timeSlot: data.timeSlot,
@@ -450,12 +464,17 @@ export default function BookingFlow() {
   const confirm = async () => {
     if (submitting) return
     setError('')
+    // Saturday is closed — reject even if a Saturday date slips through (CLAUDE.md).
+    if (isSaturday(data.date)) {
+      setError("We're closed on Saturdays. Please choose another day.")
+      return
+    }
     const payOption = PAYMENT_OPTIONS.find(o => o.id === data.payment)
     if (!payOption) {
       setError('Please select a payment method to continue.')
       return
     }
-    const est = calcEstimate(data.tasks || [])
+    const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
     const ref = generateRef()
 
     if (!payOption.online) {

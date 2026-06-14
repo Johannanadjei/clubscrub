@@ -1,7 +1,7 @@
 // Pure, dependency-light email builders shared by BOTH the Vercel serverless
 // function (real sending) and the client-side console fallback. No browser- or
 // Node-specific APIs and no env access here, so it imports cleanly on both sides.
-import { ZONES, formatDuration } from '../data/index.js'
+import { ZONES, formatDuration, isSunday } from '../data/index.js'
 
 export const ADMIN_EMAIL = 'info@club-scrub.com'
 export const BRAND_PINK = '#EC2461'
@@ -82,8 +82,9 @@ function detailTable(booking) {
     ${row('Reference', `<span style="color:${BRAND_PINK};font-weight:700;">${booking.id}</span>`)}
     ${row('Service', serviceLabel(booking))}
     ${row('Area', `${booking.area || '—'}${zone ? ` (${zone})` : ''}`)}
-    ${row('Date', formatDate(booking.date))}
+    ${row('Date', `${formatDate(booking.date)}${isSunday(booking.date) ? ' (Sunday)' : ''}`)}
     ${row('Time', booking.timeSlot || '—')}
+    ${booking.surcharge > 0 ? row('Sunday surcharge', formatCurrency(booking.surcharge)) : ''}
     ${row('Total', `<span style="color:${BRAND_PINK};font-weight:700;">${formatCurrency(booking.total)}</span>`)}
   </table>`
 }
@@ -103,7 +104,14 @@ export function buildAdminEmail(booking) {
         ⚠ Address looks brief or unverifiable — call the customer to confirm location before the appointment.
        </div>`
 
+  const sundayFlag = isSunday(booking.date)
+    ? `<div style="background:rgba(236,36,97,0.12);border:1px solid rgba(236,36,97,0.4);border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:${BRAND_PINK};">
+        📅 SUNDAY booking — ${formatCurrency(booking.surcharge || 0)} weekend surcharge applied.
+       </div>`
+    : ''
+
   const inner = `
+    ${sundayFlag}
     ${flag}
     <div style="background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px 20px;margin-bottom:20px;">
       ${detailTable(booking)}
@@ -126,17 +134,20 @@ export function buildAdminEmail(booking) {
       ${booking.customer?.notes ? `<div style="margin-top:8px;font-size:13px;color:rgba(255,255,255,0.6);"><strong style="color:rgba(255,255,255,0.8);">Access:</strong> ${booking.customer.notes}</div>` : ''}
     </div>`
 
+  const sun = isSunday(booking.date)
   return {
     to: ADMIN_EMAIL,
-    subject: `${verified ? '' : '⚠ '}New booking ${booking.id} — ${booking.customer?.name || 'Guest'}`,
+    subject: `${sun ? '📅 SUNDAY · ' : ''}${verified ? '' : '⚠ '}New booking ${booking.id} — ${booking.customer?.name || 'Guest'}`,
     html: shell('New booking received', inner),
     text:
       `New booking ${booking.id}\n` +
+      (sun ? `** SUNDAY booking — ${formatCurrency(booking.surcharge || 0)} weekend surcharge applied **\n` : '') +
       `Customer: ${booking.customer?.name} · ${booking.customer?.phone} · ${booking.customer?.email}\n` +
       `Address: ${booking.customer?.address} (verified: ${verified ? 'yes' : 'NO — follow up'})\n` +
       `Service: ${serviceLabel(booking)}\n` +
       `Area: ${booking.area} · Date: ${formatDate(booking.date)} · ${booking.timeSlot}\n` +
       `Tasks: ${tasksList(booking).join(', ')}\n` +
+      (booking.surcharge > 0 ? `Sunday surcharge: ${formatCurrency(booking.surcharge)}\n` : '') +
       `Payment: ${paymentText(booking)}\n` +
       `Total: ${formatCurrency(booking.total)}`,
   }
@@ -169,6 +180,7 @@ export function buildCustomerEmail(booking) {
       `Reference: ${booking.id}\n` +
       `Service: ${serviceLabel(booking)}\n` +
       `Area: ${booking.area} · Date: ${formatDate(booking.date)} · ${booking.timeSlot}\n` +
+      (booking.surcharge > 0 ? `Sunday weekend surcharge: ${formatCurrency(booking.surcharge)}\n` : '') +
       `Total: ${formatCurrency(booking.total)}\n\n` +
       `Thank you for choosing ClubScrub.`,
   }

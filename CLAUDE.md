@@ -47,6 +47,7 @@ to a price:
 |------|-------|
 | Up to 3 hours (minimum booking) | GH₵ 349 |
 | Each additional hour (rounded UP) | + GH₵ 100 |
+| Sunday booking | + GH₵ 50 weekend surcharge |
 
 **Worked examples (implement exactly):**
 - 3 hrs → GH₵ 349
@@ -57,6 +58,10 @@ to a price:
 **Rules:**
 - Minimum booking is always GH₵ 349 (applies even with zero tasks selected).
 - Extra time is rounded UP to the next whole hour.
+- **Sunday surcharge:** a flat GH₵ 50 is added to the total for any booking whose
+  date falls on a Sunday. Saturdays are closed (not bookable). The surcharge is
+  applied in `calcBooking()` (never hardcoded in components) and shown as a
+  separate line item everywhere the total appears.
 - **No zone fees.** Zones are used for area/coverage selection only — they do NOT
   add to the price.
 - **No multi-day discount.** Each booking is a single session; there is no
@@ -134,6 +139,8 @@ Status is updated by admin only — never auto-updated by the frontend.
 - **Same-day booking cutoff:** If it is past 12:00 PM Ghana time (GMT), today is no longer bookable. Minimum becomes tomorrow.
 - **Advance booking limit:** Maximum 60 days in advance.
 - **Minimum notice:** Bookings must be made at least 24 hours in advance at all times.
+- **Saturdays — CLOSED:** Saturdays are never bookable. They must be greyed out, struck through, and unselectable in the calendar. If a Saturday date is somehow submitted (e.g. via API), reject it with: "We're closed on Saturdays. Please choose another day."
+- **Sundays — weekend surcharge:** Sundays are bookable but add a flat **GH₵ 50** surcharge (see Pricing). The calendar must flag Sundays with a subtle indicator (small pink dot) and a tooltip/note "Weekend surcharge: +GH₵ 50" before selection. When a Sunday is selected, show "Sunday booking — GH₵ 50 weekend surcharge applies". The surcharge appears as a separate line item in the summary, confirmation, and admin email, and is included in the Paystack payment amount.
 - **Blackout days:** Admin can mark dates as unavailable (stored in Supabase). Blocked dates must be visually greyed out and unselectable — never just hidden.
 - **Public holidays:** Visually flag Ghana public holidays on the calendar with a subtle indicator. Still bookable unless admin has blocked them.
 - **Multi-day bookings:** Each day in the range must be individually valid. If any day in a range is blocked, warn the customer before they proceed — never silently skip days.
