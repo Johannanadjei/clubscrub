@@ -70,20 +70,18 @@ export default function Landing() {
               </button>
             </Link>
           </div>
-        </FadeUp>
 
-        {/* Pricing summary pills */}
-        <FadeUp delay={0.2}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 48, paddingTop: 32, borderTop: '0.5px solid rgba(255,255,255,0.07)' }}>
-            {[
-              `GH₵ ${PRICING.base} minimum`,
-              `+GH₵ ${PRICING.hourlyRate} / extra hour`,
-              `Sun +GH₵ ${SUNDAY_SURCHARGE}`,
-            ].map((label) => (
-              <span key={label} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 100, color: '#fff', fontSize: 13, fontWeight: 400, padding: '10px 18px', whiteSpace: 'nowrap' }}>
-                {label}
-              </span>
-            ))}
+          {/* Compact pricing summary */}
+          <div style={{ marginTop: 40, padding: '20px 24px', background: 'rgba(236,36,97,0.08)', border: '0.5px solid rgba(236,36,97,0.3)', borderRadius: 16 }}>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Transparent pricing</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
+              <span className="font-display italic" style={{ fontSize: 40, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>GH₵ {PRICING.base}</span>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>minimum · {PRICING.baseHours} hrs</span>
+            </div>
+            <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingTop: 12, borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>+GH₵ {PRICING.hourlyRate} / extra hr</span>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>Sun +GH₵ {SUNDAY_SURCHARGE}</span>
+            </div>
           </div>
         </FadeUp>
       </section>
