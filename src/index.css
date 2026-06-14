@@ -150,15 +150,13 @@ body {
 .cs-steps { display: grid; grid-template-columns: 1fr; gap: 0; }
 @media (min-width: 1024px) { .cs-steps { grid-template-columns: 1fr 1fr; gap: 8px 48px; } }
 
-/* Hero — two columns on desktop */
+/* Hero — single column on all sizes */
 .cs-hero-section { padding: 60px 24px 52px; position: relative; overflow: hidden; }
-@media (min-width: 1024px) { .cs-hero-section { padding: 80px 56px 64px; } }
-.cs-hero { display: grid; grid-template-columns: 1fr; gap: 32px; }
-.cs-hero-right { display: none; }
-@media (min-width: 1024px) {
-  .cs-hero { grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: 56px; }
-  .cs-hero-right { display: block; }
-}
+@media (min-width: 1024px) { .cs-hero-section { padding: 80px 56px 56px; } }
+
+/* Service carousel — full-width section, edge to edge */
+.cs-carousel-section { padding: 32px 0; border-top: 0.5px solid rgba(255,255,255,0.06); overflow: hidden; }
+@media (min-width: 1024px) { .cs-carousel-section { padding: 48px 0; } }
 
 /* Bottom nav — hidden on tablet and up */
 @media (min-width: 768px) {

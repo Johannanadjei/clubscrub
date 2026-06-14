@@ -49,8 +49,6 @@ export default function Landing() {
       {/* HERO */}
       <section className="cs-hero-section">
         <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,36,97,0.12) 0%, transparent 65%)', pointerEvents: 'none' }} />
-        <div className="cs-hero">
-          <div className="cs-hero-left">
         <FadeUp>
           <span className="cs-badge mb-5">🇬🇭 Serving Accra</span>
         </FadeUp>
@@ -85,13 +83,11 @@ export default function Landing() {
             ))}
           </div>
         </FadeUp>
-          </div>
+      </section>
 
-          {/* Service category carousel — desktop only */}
-          <div className="cs-hero-right">
-            <ServiceCarousel />
-          </div>
-        </div>
+      {/* SERVICE CAROUSEL — full-width, all screen sizes */}
+      <section className="cs-carousel-section">
+        <ServiceCarousel />
       </section>
 
       <Divider />
