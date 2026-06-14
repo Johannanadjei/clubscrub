@@ -6,12 +6,11 @@ import { Logo, FadeUp, Divider } from '../components/UI.jsx'
 import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING } from '../data/index.js'
 
 const FAQ = [
-  { q: 'How do I book a ClubScrub Assistant?', a: 'Simply tap "Book Now", choose your service type, area, date and tasks. The process takes under 3 minutes.' },
+  { q: 'How do I book a ClubScrub Assistant?', a: 'Tap "Book Now", select the tasks you need done, then your area, date and start time. The process takes under 3 minutes.' },
+  { q: 'How is the price calculated?', a: 'Pricing is based on time. The minimum booking is GH₵ 349 for up to 3 hours, then GH₵ 100 for each extra hour (rounded up). As you pick tasks, we estimate the time and show your price instantly.' },
   { q: 'Are assistants vetted and trained?', a: 'Yes. Every ClubScrub Assistant goes through a rigorous selection, training and supervised onboarding process before accepting jobs.' },
-  { q: 'What does the service fee cover?', a: 'The service fee covers platform support, assistant coordination, insurance coverage and quality assurance for your booking.' },
-  { q: 'Can I book multiple days?', a: 'Absolutely. You receive a 10% discount on service cost for any booking over 3 days.' },
-  { q: 'What payment methods are accepted?', a: 'We accept Mobile Money (MTN, Vodafone, AirtelTigo), bank transfer, and cash on arrival.' },
-  { q: 'What if I need to cancel?', a: 'You can cancel upcoming bookings from your dashboard up to 24 hours before the scheduled date.' },
+  { q: 'What payment methods are accepted?', a: 'Pay securely in-app by card or Mobile Money (via Paystack), or choose cash on arrival or bank transfer.' },
+  { q: 'What if I need to cancel?', a: 'You can cancel upcoming bookings from your dashboard. Cancellations more than 24 hours before your appointment are fully refunded.' },
 ]
 
 function FAQItem({ q, a }) {
@@ -59,7 +58,7 @@ export default function Landing() {
         </FadeUp>
         <FadeUp delay={0.1}>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 460, marginBottom: 36, fontWeight: 300 }}>
-            Book a trained ClubScrub Assistant for a half day, full day, or multiple days. Clear pricing. Reliable assistants. No hidden costs.
+            Pick the tasks you need done — we estimate the time and price instantly. Trained assistants. Clear pricing. No hidden costs.
           </p>
         </FadeUp>
         <FadeUp delay={0.15}>
@@ -97,22 +96,29 @@ export default function Landing() {
         <FadeUp>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Pricing</p>
           <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 6 }}>Simple, <span style={{ color: '#EC2461' }}>transparent</span> pricing.</h2>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, marginBottom: 24 }}>Book time. Set priorities. We'll handle the rest.</p>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, marginBottom: 24 }}>Pay for the time you need. Pick tasks, see the price instantly.</p>
         </FadeUp>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-          {Object.entries(PRICING).map(([k, p]) => (
-            <FadeUp key={k} delay={0.05}>
-              <div className="cs-card p-5">
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>{p.label}</p>
-                <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, marginBottom: 4 }}>GH₵ {p.price}</p>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{p.hours} hours</p>
-              </div>
-            </FadeUp>
-          ))}
+          <FadeUp delay={0.05}>
+            <div className="cs-card p-5">
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>From</p>
+              <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, marginBottom: 4 }}>GH₵ {PRICING.base}</p>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>up to {PRICING.baseHours} hours</p>
+            </div>
+          </FadeUp>
+          <FadeUp delay={0.05}>
+            <div className="cs-card p-5">
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>Extra time</p>
+              <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, marginBottom: 4 }}>GH₵ {PRICING.hourlyRate}</p>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>per extra hour</p>
+            </div>
+          </FadeUp>
         </div>
         <div className="cs-card p-4" style={{ background: 'rgba(236,36,97,0.08)', borderColor: 'rgba(236,36,97,0.2)' }}>
-          <p style={{ fontSize: 13, fontWeight: 500, marginBottom: 4 }}>Multi-day discount</p>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}>Book more than 3 days and receive <strong style={{ color: '#EC2461' }}>10% off</strong> your total service cost. Service fees apply per day.</p>
+          <p style={{ fontSize: 13, fontWeight: 500, marginBottom: 4 }}>How it adds up</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}>
+            3 hrs = <strong style={{ color: '#EC2461' }}>GH₵ 349</strong> · 4 hrs = <strong style={{ color: '#EC2461' }}>GH₵ 449</strong> · 5 hrs = <strong style={{ color: '#EC2461' }}>GH₵ 549</strong>. Extra time is rounded up to the next hour.
+          </p>
         </div>
       </section>
 
@@ -125,10 +131,10 @@ export default function Landing() {
           <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 24 }}>How it <span style={{ color: '#EC2461' }}>works</span></h2>
         </FadeUp>
         {[
-          { n: '01', t: 'Choose your service', d: 'Select Half Day or Full Day and how many days you need.' },
-          { n: '02', t: 'Pick your area & date', d: 'Tell us your zone, preferred date and time slot.' },
-          { n: '03', t: 'Set your priorities', d: 'Choose from our task categories to guide your assistant.' },
-          { n: '04', t: 'Confirm & relax', d: 'Receive your booking reference. We assign your assistant and handle the rest.' },
+          { n: '01', t: 'Pick your tasks', d: 'Choose what you need done — we estimate the time and price live.' },
+          { n: '02', t: 'Pick your area & date', d: 'Tell us your area, preferred date and start time.' },
+          { n: '03', t: 'Confirm & pay', d: 'Pay securely by card or Mobile Money, or choose cash on arrival.' },
+          { n: '04', t: 'Relax', d: 'Receive your booking reference. We assign your assistant and handle the rest.' },
         ].map((s, i) => (
           <FadeUp key={s.n} delay={i * 0.04}>
             <div className="flex gap-4 mb-5">
@@ -159,7 +165,6 @@ export default function Landing() {
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin size={14} style={{ color: '#EC2461' }} />
                   <p style={{ fontSize: 12, fontWeight: 500, color: '#EC2461' }}>{z.label}</p>
-                  <span className="cs-badge ml-auto" style={{ fontSize: 10 }}>GH₵ {z.fee}/day</span>
                 </div>
                 {z.areas.map(a => (
                   <p key={a} style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', padding: '2px 0', fontWeight: 300 }}>{a}</p>
@@ -184,9 +189,9 @@ export default function Landing() {
               <div className="cs-card p-4">
                 <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 8, color: 'rgba(255,255,255,0.8)' }}>{g.label}</p>
                 {g.tasks.map(t => (
-                  <div key={t} className="flex items-start gap-2 mb-1.5">
+                  <div key={t.id} className="flex items-start gap-2 mb-1.5">
                     <Check size={12} style={{ color: '#EC2461', marginTop: 2, flexShrink: 0 }} />
-                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{t}</span>
+                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{t.label}</span>
                   </div>
                 ))}
               </div>

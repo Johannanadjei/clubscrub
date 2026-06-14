@@ -37,30 +37,42 @@ This is a real business. Code must be production-quality at all times.
 
 ---
 
-## Pricing Logic — Always Implement Exactly
+## Pricing Logic — Always Implement Exactly (v2: task-based hourly)
 
-| Type | Duration | Price |
-|------|----------|-------|
-| Half Day | 3.5 hours | GH₵ 235 |
-| Full Day | 7 hours | GH₵ 465 |
+Pricing is driven by the **estimated time** of the tasks a customer selects. Each
+task has an estimated duration; selected durations sum to a total time, which maps
+to a price:
 
-**Zone fees (per booking day, never discounted):**
-- Zone 1: GH₵ 20
-- Zone 2: GH₵ 30
+| Time | Price |
+|------|-------|
+| Up to 3 hours (minimum booking) | GH₵ 349 |
+| Each additional hour (rounded UP) | + GH₵ 100 |
 
-**Multi-day discount:**
-- Applies ONLY when days > 3
-- 10% off service cost only
-- Service fee is NEVER discounted
+**Worked examples (implement exactly):**
+- 3 hrs → GH₵ 349
+- 3.5 hrs → GH₵ 449 (0.5h over → rounds up to 1 extra hour)
+- 4 hrs → GH₵ 449
+- 4.5 hrs → GH₵ 549 (1.5h over → rounds up to 2 extra hours)
+
+**Rules:**
+- Minimum booking is always GH₵ 349 (applies even with zero tasks selected).
+- Extra time is rounded UP to the next whole hour.
+- **No zone fees.** Zones are used for area/coverage selection only — they do NOT
+  add to the price.
+- **No multi-day discount.** Each booking is a single session; there is no
+  multi-day concept in v2.
+- Show the estimated time and price live as tasks are selected (sticky bar).
+- All pricing logic lives in `calcEstimate()` in `/src/data/index.js` — never
+  hardcode prices in components.
 
 ---
 
 ## Service Zones
 
-**Zone 1 (GH₵ 20/day):**
+**Zone 1 (coverage only — no fee):**
 East Legon, Airport Residential, Cantonments, Osu, Labone, Ridge, Dzorwulu, Roman Ridge, North Ridge, Abelemkpe, Adjiringanor, Shiashie
 
-**Zone 2 (GH₵ 30/day):**
+**Zone 2 (coverage only — no fee):**
 Madina, Adenta, Spintex, Teshie, Achimota, Dansoman, Legon, Haatso, West Legon, Tesano, Taifa, North Kaneshie, South Kaneshie, Bortianor
 
 **Outside zones:** Show "We currently do not service this location." — do NOT block the booking, flag it for admin review instead.

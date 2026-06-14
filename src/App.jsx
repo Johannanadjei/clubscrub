@@ -5,6 +5,7 @@ import BookingFlow from './pages/BookingFlow.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import AssistantApp from './pages/Assistant.jsx'
 import Admin from './pages/Admin.jsx'
+import AdminGate from './components/AdminGate.jsx'
 
 export default function App() {
   return (
@@ -13,7 +14,7 @@ export default function App() {
       <Route path="/book" element={<BookingFlow />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/assistant" element={<AssistantApp />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin" element={<AdminGate><Admin /></AdminGate>} />
     </Routes>
   )
 }

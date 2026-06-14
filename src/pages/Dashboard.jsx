@@ -4,11 +4,10 @@ import { motion } from 'framer-motion'
 import { Calendar, Clock, MapPin, User, RotateCcw, X, ChevronRight } from 'lucide-react'
 import { PageLayout, Logo, FadeUp, Avatar, StatusBadge, Divider } from '../components/UI.jsx'
 import { useBookings, useAssistants } from '../hooks/useStore.js'
-import { PRICING, ZONES } from '../data/index.js'
+import { ZONES, formatDuration } from '../data/index.js'
 
 function BookingCard({ booking, assistant, onCancel, onRebook }) {
   const [expanded, setExpanded] = useState(false)
-  const p = PRICING[booking.type]
   const canCancel = ['pending', 'accepted'].includes(booking.status)
   const canRebook = booking.status === 'completed' || booking.status === 'cancelled'
 
@@ -18,9 +17,9 @@ function BookingCard({ booking, assistant, onCancel, onRebook }) {
       <div className="p-4 cursor-pointer" onClick={() => setExpanded(!expanded)}>
         <div className="flex items-start justify-between mb-3">
           <div>
-            <p style={{ fontWeight: 500, fontSize: 15, marginBottom: 4 }}>{p?.label || booking.type}</p>
+            <p style={{ fontWeight: 500, fontSize: 15, marginBottom: 4 }}>Home assistance</p>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>
-              {booking.days} day{booking.days > 1 ? 's' : ''} · {booking.area}
+              {booking.tasks?.length || 0} task{(booking.tasks?.length || 0) === 1 ? '' : 's'} · est. {formatDuration(booking.estMins || 0)} · {booking.area}
             </p>
           </div>
           <StatusBadge status={booking.status} />

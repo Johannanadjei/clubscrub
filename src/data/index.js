@@ -1,7 +1,12 @@
+// ===========================================================================
+// ClubScrub — data & pricing (v2: task-based hourly model)
+// ===========================================================================
+
+// Service areas. Zones are used for coverage/area selection only — there is no
+// separate zone fee in the v2 pricing model (price is purely time-based).
 export const ZONES = {
   zone1: {
     label: 'Zone 1',
-    fee: 20,
     areas: [
       'East Legon','Airport Residential','Cantonments','Osu','Labone',
       'Ridge','Dzorwulu','Roman Ridge','North Ridge','Abelemkpe',
@@ -10,7 +15,6 @@ export const ZONES = {
   },
   zone2: {
     label: 'Zone 2',
-    fee: 30,
     areas: [
       'Madina','Adenta','Spintex','Teshie','Achimota','Dansoman',
       'Legon','Haatso','West Legon','Tesano','Taifa','North Kaneshie',
@@ -19,35 +23,128 @@ export const ZONES = {
   }
 }
 
+// ---------------------------------------------------------------------------
+// PRICING (task-based hourly)
+//   - Minimum booking: GH₵ 349 for up to 3 hours
+//   - Additional time: GH₵ 100 per extra hour, rounded UP
+//   Examples: 3h = 349 · 3.5h = 449 · 4h = 449 · 4.5h = 549
+// ---------------------------------------------------------------------------
 export const PRICING = {
-  halfDay: { label: 'Half Day', hours: 3.5, price: 235 },
-  fullDay: { label: 'Full Day', hours: 7, price: 465 }
+  base: 349,        // GH₵ — covers up to baseHours
+  baseHours: 3,     // hours included in the base price
+  hourlyRate: 100,  // GH₵ per extra hour (rounded up)
 }
 
+// ---------------------------------------------------------------------------
+// TASK GROUPS — each task carries an estimated duration in minutes.
+// Selected tasks sum to an estimated time, which drives the price.
+// ---------------------------------------------------------------------------
 export const TASK_GROUPS = [
   {
-    id: 'light_cleaning',
-    label: 'Light Home Cleaning',
+    id: 'kitchen', label: 'Kitchen',
     tasks: [
-      'Sweeping floors','Mopping floors','Dusting surfaces',
-      'Wiping countertops','Bathroom refresh','Living room tidying','Bedroom tidying'
-    ]
+      { id: 'k_dishes',    label: 'Wash dishes',                 mins: 30 },
+      { id: 'k_counters',  label: 'Clean countertops & stovetop', mins: 20 },
+      { id: 'k_sink',      label: 'Scrub sink',                  mins: 10 },
+      { id: 'k_cabinets',  label: 'Wipe cabinet fronts',         mins: 15 },
+      { id: 'k_microwave', label: 'Clean microwave',             mins: 10 },
+      { id: 'k_floor',     label: 'Sweep & mop floor',           mins: 20 },
+      { id: 'k_trash',     label: 'Take out trash',              mins: 5  },
+    ],
   },
   {
-    id: 'kitchen',
-    label: 'Kitchen Support',
-    tasks: ['Dishwashing','Kitchen surface cleaning','Kitchen organisation','General upkeep']
+    id: 'laundry', label: 'Laundry',
+    tasks: [
+      { id: 'l_wash', label: 'Wash a load',        mins: 15 },
+      { id: 'l_hang', label: 'Hang / dry clothes', mins: 15 },
+      { id: 'l_fold', label: 'Fold & put away',    mins: 20 },
+    ],
   },
   {
-    id: 'laundry',
-    label: 'Laundry & Ironing',
-    tasks: ['Machine washing','Hanging/drying clothes','Folding clothes','Ironing']
+    id: 'ironing', label: 'Ironing',
+    tasks: [
+      { id: 'i_small',  label: 'Iron up to 10 items', mins: 30 },
+      { id: 'i_large',  label: 'Iron up to 25 items', mins: 60 },
+      { id: 'i_linens', label: 'Iron bed linens',     mins: 20 },
+    ],
   },
   {
-    id: 'organisation',
-    label: 'Home Organisation',
-    tasks: ['Bed making','Changing linens','General tidying','Room organisation']
-  }
+    id: 'bedrooms', label: 'Bedrooms',
+    tasks: [
+      { id: 'b_make',   label: 'Make beds',          mins: 10 },
+      { id: 'b_linens', label: 'Change bed linens',  mins: 15 },
+      { id: 'b_dust',   label: 'Dust surfaces',      mins: 10 },
+      { id: 'b_tidy',   label: 'Tidy & organise',    mins: 20 },
+      { id: 'b_floor',  label: 'Sweep / vacuum floor', mins: 15 },
+      { id: 'b_mop',    label: 'Mop floor',          mins: 15 },
+    ],
+  },
+  {
+    id: 'living', label: 'Living Areas',
+    tasks: [
+      { id: 'lv_dust',   label: 'Dust surfaces',        mins: 15 },
+      { id: 'lv_tidy',   label: 'Tidy & declutter',     mins: 20 },
+      { id: 'lv_vacuum', label: 'Sweep / vacuum',       mins: 15 },
+      { id: 'lv_mop',    label: 'Mop floors',           mins: 15 },
+      { id: 'lv_tables', label: 'Wipe tables & surfaces', mins: 10 },
+      { id: 'lv_glass',  label: 'Clean glass & mirrors', mins: 10 },
+    ],
+  },
+  {
+    id: 'bathrooms', label: 'Bathrooms',
+    tasks: [
+      { id: 'ba_toilet',  label: 'Clean toilet',        mins: 15 },
+      { id: 'ba_sink',    label: 'Clean sink & counter', mins: 10 },
+      { id: 'ba_shower',  label: 'Clean shower / bath',  mins: 20 },
+      { id: 'ba_mirror',  label: 'Clean mirror',         mins: 5  },
+      { id: 'ba_floor',   label: 'Mop floor',            mins: 10 },
+      { id: 'ba_restock', label: 'Restock & tidy',       mins: 5  },
+    ],
+  },
+  {
+    id: 'extras', label: 'Extras',
+    tasks: [
+      { id: 'e_windows',  label: 'Interior windows',     mins: 30 },
+      { id: 'e_skirting', label: 'Wipe skirting boards', mins: 20 },
+      { id: 'e_balcony',  label: 'Balcony / patio tidy', mins: 20 },
+      { id: 'e_fridge',   label: 'Wipe inside fridge',   mins: 20 },
+      { id: 'e_wardrobe', label: 'Organise a wardrobe',  mins: 30 },
+    ],
+  },
+]
+
+// Flat lookups built from TASK_GROUPS.
+export const ALL_TASKS = TASK_GROUPS.flatMap(g => g.tasks)
+const TASK_MINUTES = Object.fromEntries(ALL_TASKS.map(t => [t.id, t.mins]))
+const TASK_LABELS = Object.fromEntries(ALL_TASKS.map(t => [t.id, t.label]))
+
+export function taskLabel(id) { return TASK_LABELS[id] || id }
+export function taskLabels(ids = []) { return ids.map(taskLabel) }
+
+// ---------------------------------------------------------------------------
+// QUICK SELECTS — preset bundles that auto-select a set of tasks.
+// ---------------------------------------------------------------------------
+export const QUICK_SELECTS = [
+  {
+    id: 'quick_refresh',
+    label: 'Quick Refresh',
+    sub: 'A light tidy across the essentials',
+    tasks: ['k_dishes','k_counters','lv_tidy','lv_vacuum','ba_toilet','ba_sink','b_make'],
+  },
+  {
+    id: 'home_reset',
+    label: 'Home Reset',
+    sub: 'A thorough clean of the whole home',
+    tasks: ['k_dishes','k_counters','k_sink','k_floor','lv_dust','lv_tidy','lv_vacuum','lv_mop',
+            'ba_toilet','ba_sink','ba_shower','ba_floor','b_make','b_dust','b_floor','b_mop'],
+  },
+  {
+    id: 'family_catch_up',
+    label: 'Family Catch-Up',
+    sub: 'Laundry, ironing & kitchen sorted',
+    tasks: ['k_dishes','k_counters','k_floor','k_sink','l_wash','l_hang','l_fold','i_large',
+            'b_make','b_linens','b_dust','lv_tidy','lv_vacuum','lv_mop','ba_toilet','ba_sink','ba_shower'],
+  },
 ]
 
 export const EXCLUDED_TASKS = [
@@ -58,110 +155,33 @@ export const EXCLUDED_TASKS = [
   'Renovation cleanup','Paint removal','Mold removal','Pest-related cleaning','Industrial cleaning'
 ]
 
-export const MOCK_ASSISTANTS = [
-  { id: 'a1', name: 'Abena Mensah', area: 'East Legon', zone: 'zone1', rating: 4.9, jobs: 142, avatar: 'AM', skills: ['Light Home Cleaning','Laundry & Ironing','Kitchen Support'], status: 'available' },
-  { id: 'a2', name: 'Esi Owusu', area: 'Osu', zone: 'zone1', rating: 4.8, jobs: 98, avatar: 'EO', skills: ['Home Organisation','Light Home Cleaning'], status: 'available' },
-  { id: 'a3', name: 'Akosua Tetteh', area: 'Spintex', zone: 'zone2', rating: 5.0, jobs: 201, avatar: 'AT', skills: ['All services'], status: 'busy' },
-  { id: 'a4', name: 'Maame Asante', area: 'Adenta', zone: 'zone2', rating: 4.7, jobs: 67, avatar: 'MA', skills: ['Kitchen Support','Laundry & Ironing'], status: 'available' },
-  { id: 'a5', name: 'Adwoa Boateng', area: 'Cantonments', zone: 'zone1', rating: 4.9, jobs: 115, avatar: 'AB', skills: ['Light Home Cleaning','Home Organisation'], status: 'available' },
-]
-
-export const MOCK_BOOKINGS = [
-  {
-    id: 'CS-100421',
-    type: 'fullDay',
-    days: 1,
-    zone: 'zone1',
-    area: 'East Legon',
-    date: '2026-05-20',
-    timeSlot: 'Full day',
-    tasks: ['Sweeping floors','Mopping floors','Dishwashing','Bed making'],
-    notes: 'Please bring own cleaning cloths',
-    customer: { name: 'James Osei', email: 'james@email.com', phone: '024 123 4567', address: '12 Airport Rd, East Legon' },
-    assistant: 'a1',
-    status: 'accepted',
-    subtotal: 465, discount: 0, serviceFee: 20, total: 485,
-    createdAt: '2026-05-15'
-  },
-  {
-    id: 'CS-100398',
-    type: 'halfDay',
-    days: 2,
-    zone: 'zone1',
-    area: 'Osu',
-    date: '2026-05-18',
-    timeSlot: 'Morning',
-    tasks: ['Sweeping floors','Bathroom refresh','Ironing'],
-    notes: '',
-    customer: { name: 'Sarah Ampah', email: 'sarah@email.com', phone: '020 987 6543', address: '5 Oxford St, Osu' },
-    assistant: 'a2',
-    status: 'completed',
-    subtotal: 470, discount: 0, serviceFee: 40, total: 510,
-    createdAt: '2026-05-10'
-  },
-  {
-    id: 'CS-100412',
-    type: 'fullDay',
-    days: 4,
-    zone: 'zone2',
-    area: 'Spintex',
-    date: '2026-05-22',
-    timeSlot: 'Full day',
-    tasks: ['Sweeping floors','Mopping floors','Kitchen surface cleaning','Folding clothes'],
-    notes: 'Gate code: 1234',
-    customer: { name: 'David Nkrumah', email: 'david@email.com', phone: '026 555 0001', address: '8 Spintex Rd, Spintex' },
-    assistant: null,
-    status: 'pending',
-    subtotal: 1674, discount: 186, serviceFee: 120, total: 1794,
-    createdAt: '2026-05-16'
+// ---------------------------------------------------------------------------
+// PRICING ENGINE
+// ---------------------------------------------------------------------------
+// Estimate time + price from a list of selected task ids.
+export function calcEstimate(taskIds = []) {
+  const mins = taskIds.reduce((sum, id) => sum + (TASK_MINUTES[id] || 0), 0)
+  const hours = mins / 60
+  const extraHours = hours > PRICING.baseHours ? Math.ceil(hours - PRICING.baseHours) : 0
+  const price = PRICING.base + extraHours * PRICING.hourlyRate
+  return {
+    mins,
+    hours,
+    extraHours,
+    billedHours: PRICING.baseHours + extraHours,
+    price,
+    total: price, // no zone fee in v2 — total equals service price
   }
-]
+}
 
-export const MOCK_JOBS = [
-  {
-    id: 'CS-100430',
-    area: 'East Legon',
-    zone: 'zone1',
-    type: 'Full Day',
-    date: '2026-05-21',
-    timeSlot: 'Full day',
-    tasks: ['Sweeping floors','Mopping floors','Dishwashing','Ironing'],
-    pay: 220,
-    distance: '1.2 km'
-  },
-  {
-    id: 'CS-100431',
-    area: 'Osu',
-    zone: 'zone1',
-    type: 'Half Day',
-    date: '2026-05-21',
-    timeSlot: 'Morning',
-    tasks: ['Bathroom refresh','Bed making','Folding clothes'],
-    pay: 110,
-    distance: '2.5 km'
-  },
-  {
-    id: 'CS-100432',
-    area: 'Airport Residential',
-    zone: 'zone1',
-    type: 'Full Day',
-    date: '2026-05-22',
-    timeSlot: 'Full day',
-    tasks: ['Light Home Cleaning','Kitchen Support'],
-    pay: 230,
-    distance: '0.8 km'
-  }
-]
-
-export function calcPricing({ type, days, zone }) {
-  const base = PRICING[type]?.price || 0
-  const zoneFee = ZONES[zone]?.fee || 0
-  const subtotal = base * days
-  const discount = days > 3 ? Math.round(subtotal * 0.1) : 0
-  const discountedSubtotal = subtotal - discount
-  const serviceFee = zoneFee * days
-  const total = discountedSubtotal + serviceFee
-  return { subtotal, discount, discountedSubtotal, serviceFee, total }
+// "2h 30m" / "45m" / "3h"
+export function formatDuration(mins) {
+  const m = Math.max(0, Math.round(mins))
+  const h = Math.floor(m / 60)
+  const rem = m % 60
+  if (h && rem) return `${h}h ${rem}m`
+  if (h) return `${h}h`
+  return `${rem}m`
 }
 
 export function getZoneForArea(area) {
@@ -182,3 +202,56 @@ export function getStatusLabel(status) {
 export function generateRef() {
   return 'CS-' + Math.floor(100000 + Math.random() * 900000)
 }
+
+// ---------------------------------------------------------------------------
+// MOCK DATA (localStorage seed)
+// ---------------------------------------------------------------------------
+export const MOCK_ASSISTANTS = [
+  { id: 'a1', name: 'Abena Mensah', area: 'East Legon', zone: 'zone1', rating: 4.9, jobs: 142, avatar: 'AM', skills: ['Kitchen','Laundry','Bedrooms'], status: 'available' },
+  { id: 'a2', name: 'Esi Owusu', area: 'Osu', zone: 'zone1', rating: 4.8, jobs: 98, avatar: 'EO', skills: ['Living Areas','Bathrooms'], status: 'available' },
+  { id: 'a3', name: 'Akosua Tetteh', area: 'Spintex', zone: 'zone2', rating: 5.0, jobs: 201, avatar: 'AT', skills: ['All services'], status: 'busy' },
+  { id: 'a4', name: 'Maame Asante', area: 'Adenta', zone: 'zone2', rating: 4.7, jobs: 67, avatar: 'MA', skills: ['Kitchen','Ironing'], status: 'available' },
+  { id: 'a5', name: 'Adwoa Boateng', area: 'Cantonments', zone: 'zone1', rating: 4.9, jobs: 115, avatar: 'AB', skills: ['Bedrooms','Living Areas'], status: 'available' },
+]
+
+export const MOCK_BOOKINGS = [
+  {
+    id: 'CS-100421',
+    tasks: ['Wash dishes','Clean countertops & stovetop','Tidy & declutter','Sweep / vacuum','Clean toilet','Make beds'],
+    estMins: 120, estHours: 2, billedHours: 3, price: 349, total: 349,
+    zone: 'zone1', area: 'East Legon',
+    date: '2026-06-20', timeSlot: 'Morning (from 8am)',
+    notes: 'Please bring own cleaning cloths',
+    customer: { name: 'James Osei', email: 'james@email.com', phone: '024 123 4567', address: '12 Airport Rd, East Legon' },
+    payment: 'online', paymentLabel: 'Pay now — Card or Mobile Money', paymentStatus: 'paid',
+    assistant: 'a1', status: 'accepted', createdAt: '2026-06-12'
+  },
+  {
+    id: 'CS-100398',
+    tasks: ['Wash a load','Hang / dry clothes','Fold & put away','Iron up to 25 items','Make beds','Clean toilet'],
+    estMins: 195, estHours: 3.25, billedHours: 4, price: 449, total: 449,
+    zone: 'zone1', area: 'Osu',
+    date: '2026-06-18', timeSlot: 'Afternoon (from 1pm)',
+    notes: '',
+    customer: { name: 'Sarah Ampah', email: 'sarah@email.com', phone: '020 987 6543', address: '5 Oxford St, Osu' },
+    payment: 'cash', paymentLabel: 'Cash on arrival', paymentStatus: 'cash_on_arrival',
+    assistant: 'a2', status: 'completed', createdAt: '2026-06-08'
+  },
+  {
+    id: 'CS-100412',
+    tasks: ['Wash dishes','Clean countertops & stovetop','Sweep & mop floor','Dust surfaces','Tidy & declutter','Mop floors','Clean shower / bath','Interior windows'],
+    estMins: 265, estHours: 4.4, billedHours: 5, price: 549, total: 549,
+    zone: 'zone2', area: 'Spintex',
+    date: '2026-06-22', timeSlot: 'Morning (from 8am)',
+    notes: 'Gate code: 1234',
+    customer: { name: 'David Nkrumah', email: 'david@email.com', phone: '026 555 0001', address: '8 Spintex Rd, Spintex' },
+    payment: 'bank', paymentLabel: 'Bank transfer', paymentStatus: 'pending',
+    assistant: null, status: 'pending', createdAt: '2026-06-13'
+  }
+]
+
+export const MOCK_JOBS = [
+  { id: 'CS-100430', area: 'East Legon', zone: 'zone1', estHours: 4, date: '2026-06-21', timeSlot: 'Morning (from 8am)', tasks: ['Wash dishes','Sweep & mop floor','Iron up to 25 items'], pay: 220, distance: '1.2 km' },
+  { id: 'CS-100431', area: 'Osu', zone: 'zone1', estHours: 3, date: '2026-06-21', timeSlot: 'Afternoon (from 1pm)', tasks: ['Clean toilet','Make beds','Fold & put away'], pay: 150, distance: '2.5 km' },
+  { id: 'CS-100432', area: 'Airport Residential', zone: 'zone1', estHours: 5, date: '2026-06-22', timeSlot: 'Morning (from 8am)', tasks: ['Kitchen','Living Areas'], pay: 280, distance: '0.8 km' },
+]

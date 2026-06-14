@@ -3,7 +3,13 @@ import { motion } from 'framer-motion'
 import { Users, Calendar, TrendingUp, Check, X, User, MapPin, Clock, ChevronRight } from 'lucide-react'
 import { Logo, FadeUp, Avatar, StatusBadge, Stars, Divider } from '../components/UI.jsx'
 import { useBookings, useAssistants } from '../hooks/useStore.js'
-import { PRICING, MOCK_ASSISTANTS } from '../data/index.js'
+import { formatDuration } from '../data/index.js'
+
+const PAY_STATUS = {
+  paid: { label: 'Paid', color: '#4ADE80' },
+  cash_on_arrival: { label: 'Cash on arrival', color: '#FBBF24' },
+  pending: { label: 'Awaiting payment', color: 'rgba(255,255,255,0.5)' },
+}
 
 function StatCard({ label, value, sub, color = '#EC2461' }) {
   return (
@@ -18,7 +24,6 @@ function StatCard({ label, value, sub, color = '#EC2461' }) {
 function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
   const [expanded, setExpanded] = useState(false)
   const assigned = assistants.find(a => a.id === booking.assistant)
-  const p = PRICING[booking.type]
 
   return (
     <div className="cs-card mb-3">
@@ -29,7 +34,7 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
             <StatusBadge status={booking.status} />
           </div>
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>
-            {booking.customer?.name} · {p?.label} · {booking.area}
+            {booking.customer?.name} · {booking.tasks?.length || 0} task{(booking.tasks?.length || 0) === 1 ? '' : 's'} · {booking.area}
           </p>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -47,9 +52,19 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
             </div>
             <div>
               <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 3 }}>Service</p>
-              <p style={{ fontSize: 13, fontWeight: 300 }}>{p?.label} · {booking.days} day{booking.days > 1 ? 's' : ''}</p>
+              <p style={{ fontSize: 13, fontWeight: 300 }}>{booking.tasks?.length || 0} tasks · est. {formatDuration(booking.estMins || 0)}</p>
               <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>{booking.timeSlot}</p>
             </div>
+          </div>
+          <div className="mb-3">
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 3 }}>Payment</p>
+            <p style={{ fontSize: 13, fontWeight: 300 }}>
+              {booking.paymentLabel || booking.payment || '—'}
+              {' · '}
+              <span style={{ color: PAY_STATUS[booking.paymentStatus]?.color || 'rgba(255,255,255,0.5)' }}>
+                {PAY_STATUS[booking.paymentStatus]?.label || 'Awaiting payment'}
+              </span>
+            </p>
           </div>
           <div className="mb-3">
             <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 6 }}>Assigned assistant</p>
