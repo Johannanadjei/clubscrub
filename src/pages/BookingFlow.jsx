@@ -375,8 +375,7 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
 }
 
 // STEP 6: Confirmed
-function StepConfirmed({ data, bookingRef }) {
-  const navigate = useNavigate()
+function StepConfirmed({ data, bookingRef, onBookAnother }) {
   const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   return (
     <FadeUp>
@@ -404,8 +403,8 @@ function StepConfirmed({ data, bookingRef }) {
         <Divider />
         <PriceRow label="Total" value={`GH₵ ${est.total.toLocaleString()}`} />
       </div>
-      <button className="cs-btn-primary" onClick={() => navigate('/dashboard')} style={{ width: '100%', justifyContent: 'center', padding: '15px', minHeight: 48 }}>
-        View my bookings
+      <button className="cs-btn-primary" onClick={onBookAnother} style={{ width: '100%', justifyContent: 'center', padding: '15px', minHeight: 48 }}>
+        Book another clean
       </button>
     </FadeUp>
   )
@@ -423,6 +422,16 @@ export default function BookingFlow() {
   const update = (updates) => setData(p => ({ ...p, ...updates }))
   const next = () => setStep(s => s + 1)
   const back = () => step > 0 ? setStep(s => s - 1) : navigate('/')
+
+  // Reset the whole flow back to step 1 for a fresh booking.
+  const resetFlow = () => {
+    setData({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '' })
+    setBookingRef('')
+    setError('')
+    setSubmitting(false)
+    setStep(0)
+    navigate('/book')
+  }
 
   // Persist the booking, fire confirmation emails (non-blocking), advance.
   const finalize = (ref, est, payOption, extra = {}) => {
@@ -515,7 +524,7 @@ export default function BookingFlow() {
     <StepDate data={data} update={update} onBack={back} onNext={next} />,
     <StepSummary data={data} onBack={back} onNext={next} />,
     <StepInfo data={data} update={update} onBack={back} onNext={confirm} submitting={submitting} error={error} />,
-    <StepConfirmed data={data} bookingRef={bookingRef} />,
+    <StepConfirmed data={data} bookingRef={bookingRef} onBookAnother={resetFlow} />,
   ]
 
   return (
