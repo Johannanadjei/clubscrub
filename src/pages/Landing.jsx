@@ -70,11 +70,6 @@ export default function Landing() {
                 Book Now <ArrowRight size={18} />
               </button>
             </Link>
-            <Link to="/dashboard">
-              <button className="cs-btn-ghost" style={{ fontSize: 15, padding: '15px 24px' }}>
-                My Bookings
-              </button>
-            </Link>
           </div>
         </FadeUp>
 
