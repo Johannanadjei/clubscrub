@@ -2,26 +2,21 @@
 // ClubScrub — data & pricing (v2: task-based hourly model)
 // ===========================================================================
 
-// Service areas. Zones are used for coverage/area selection only — there is no
-// separate zone fee in the v2 pricing model (price is purely time-based).
-export const ZONES = {
-  zone1: {
-    label: 'Zone 1',
-    areas: [
-      'East Legon','Airport Residential','Cantonments','Osu','Labone',
-      'Ridge','Dzorwulu','Roman Ridge','North Ridge','Abelemkpe',
-      'Adjiringanor','Shiashie'
-    ]
-  },
-  zone2: {
-    label: 'Zone 2',
-    areas: [
-      'Madina','Adenta','Spintex','Teshie','Achimota','Dansoman',
-      'Legon','Haatso','West Legon','Tesano','Taifa','North Kaneshie',
-      'South Kaneshie','Bortianor'
-    ]
-  }
-}
+// Service areas. A flat list of covered areas — no zone tiers and no zone fee
+// (price is purely time-based). Area selection does not affect the price.
+export const ZONES = [
+  'Cantonments',
+  'Labone',
+  'Airport Residential Area',
+  'Roman Ridge',
+  'East Airport',
+  'Osu',
+  'Dzorwulu',
+  'East Legon',
+  'Trasacco Valley',
+  'Airport Hills',
+  'Spintex',
+]
 
 // ---------------------------------------------------------------------------
 // PRICING (task-based hourly)
@@ -236,13 +231,6 @@ export function calcBooking({ taskIds = [], date = '' }) {
     surcharge,
     total: est.price + surcharge,
   }
-}
-
-export function getZoneForArea(area) {
-  for (const [key, z] of Object.entries(ZONES)) {
-    if (z.areas.includes(area)) return key
-  }
-  return null
 }
 
 export function getStatusLabel(status) {

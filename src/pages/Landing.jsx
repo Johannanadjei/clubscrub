@@ -162,16 +162,13 @@ export default function Landing() {
           <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>Service <span style={{ color: '#EC2461' }}>areas</span></h2>
         </FadeUp>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          {Object.entries(ZONES).map(([k, z]) => (
-            <FadeUp key={k} delay={0.05}>
+          {ZONES.map((a, i) => (
+            <FadeUp key={a} delay={Math.min(i * 0.03, 0.2)}>
               <div className="cs-card p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin size={14} style={{ color: '#EC2461' }} />
-                  <p style={{ fontSize: 12, fontWeight: 500, color: '#EC2461' }}>{z.label}</p>
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} style={{ color: '#EC2461', flexShrink: 0 }} />
+                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>{a}</p>
                 </div>
-                {z.areas.map(a => (
-                  <p key={a} style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', padding: '2px 0', fontWeight: 300 }}>{a}</p>
-                ))}
               </div>
             </FadeUp>
           ))}

@@ -7,7 +7,7 @@ import Calendar from '../components/Calendar.jsx'
 import {
   ZONES, TASK_GROUPS, QUICK_SELECTS, EXCLUDED_TASKS,
   calcEstimate, calcBooking, formatDuration, formatDate, taskLabels,
-  isSaturday, isSunday, SUNDAY_SURCHARGE, getZoneForArea, generateRef,
+  isSaturday, isSunday, SUNDAY_SURCHARGE, generateRef,
 } from '../data/index.js'
 import { useBookings } from '../hooks/useStore.js'
 import { payWithPaystack } from '../lib/paystack.js'
@@ -25,10 +25,7 @@ const PAYMENT_OPTIONS = [
   { id: 'bank', label: 'Bank transfer', sub: "We'll share account details to confirm", online: false, paymentStatus: 'pending' },
 ]
 
-const allAreas = [
-  ...ZONES.zone1.areas.map(a => ({ a, z: 'zone1' })),
-  ...ZONES.zone2.areas.map(a => ({ a, z: 'zone2' }))
-].sort((x, y) => x.a.localeCompare(y.a))
+const allAreas = [...ZONES].sort((a, b) => a.localeCompare(b))
 
 function StepIndicator({ step, total }) {
   return (
@@ -214,17 +211,17 @@ function StepTasks({ data, update, onNext }) {
 // STEP 2: Area
 function StepArea({ data, update, onBack, onNext }) {
   const [search, setSearch] = useState('')
-  const filtered = allAreas.filter(({ a }) => a.toLowerCase().includes(search.toLowerCase()))
+  const filtered = allAreas.filter((a) => a.toLowerCase().includes(search.toLowerCase()))
   return (
     <FadeUp>
-      <StepTitle title="Select your area" sub="We service specific zones across Accra." />
+      <StepTitle title="Select your area" sub="We service these areas across Accra." />
       <input className="cs-input mb-4" placeholder="Search your area…" value={search}
         onChange={e => setSearch(e.target.value)} />
       <div style={{ maxHeight: 360, overflowY: 'auto' }}>
-        {filtered.map(({ a, z }) => (
-          <OptionCard key={a} label={a} sub={ZONES[z].label}
+        {filtered.map((a) => (
+          <OptionCard key={a} label={a}
             selected={data.area === a}
-            onClick={() => update({ area: a, zone: z })} />
+            onClick={() => update({ area: a })} />
         ))}
         {filtered.length === 0 && (
           <div className="cs-card p-5 text-center">
@@ -277,7 +274,7 @@ function StepSummary({ data, onBack, onNext }) {
       <StepTitle title="Booking summary" sub="Review your booking before continuing." />
       <div className="cs-card p-5 mb-4">
         <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
-        <PriceRow label="Area" value={`${data.area} · ${ZONES[data.zone]?.label || ''}`} />
+        <PriceRow label="Area" value={data.area} />
         <PriceRow label="Date" value={formatDate(data.date)} />
         <PriceRow label="Start" value={data.timeSlot} />
         <Divider />

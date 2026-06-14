@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Calendar, Clock, MapPin, User, RotateCcw, X, ChevronRight } from 'lucide-react'
 import { PageLayout, Logo, FadeUp, Avatar, StatusBadge, Divider } from '../components/UI.jsx'
 import { useBookings, useAssistants } from '../hooks/useStore.js'
-import { ZONES, formatDuration } from '../data/index.js'
+import { formatDuration } from '../data/index.js'
 
 function BookingCard({ booking, assistant, onCancel, onRebook }) {
   const [expanded, setExpanded] = useState(false)
@@ -47,7 +47,7 @@ function BookingCard({ booking, assistant, onCancel, onRebook }) {
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Booking details</p>
           <div className="flex items-center gap-2 mb-2">
             <MapPin size={13} style={{ color: 'rgba(255,255,255,0.35)' }} />
-            <span style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.6)' }}>{booking.area} · {ZONES[booking.zone]?.label}</span>
+            <span style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.6)' }}>{booking.area}</span>
           </div>
           {assistant && (
             <div className="flex items-center gap-2 mb-3">

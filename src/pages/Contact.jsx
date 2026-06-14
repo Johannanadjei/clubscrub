@@ -83,7 +83,7 @@ export default function Contact() {
         <FadeUp>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Where we work</p>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300, lineHeight: 1.8 }}>
-            Based in Accra, Ghana — serving East Legon, Airport, Cantonments, Labone, Ridge, Osu, Dzorwulu and surrounding areas.
+            Based in Accra, Ghana — serving Cantonments, Labone, Airport Residential Area, Roman Ridge, East Airport, Osu, Dzorwulu, East Legon, Trasacco Valley, Airport Hills and Spintex.
           </p>
         </FadeUp>
       </section>

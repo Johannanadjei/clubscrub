@@ -1,7 +1,7 @@
 // Pure, dependency-light email builders shared by BOTH the Vercel serverless
 // function (real sending) and the client-side console fallback. No browser- or
 // Node-specific APIs and no env access here, so it imports cleanly on both sides.
-import { ZONES, formatDuration, isSunday } from '../data/index.js'
+import { formatDuration, isSunday } from '../data/index.js'
 
 export const ADMIN_EMAIL = 'info@club-scrub.com'
 export const BRAND_PINK = '#EC2461'
@@ -77,11 +77,10 @@ function row(label, value) {
 }
 
 function detailTable(booking) {
-  const zone = ZONES[booking.zone]?.label
   return `<table style="width:100%;border-collapse:collapse;">
     ${row('Reference', `<span style="color:${BRAND_PINK};font-weight:700;">${booking.id}</span>`)}
     ${row('Service', serviceLabel(booking))}
-    ${row('Area', `${booking.area || '—'}${zone ? ` (${zone})` : ''}`)}
+    ${row('Area', booking.area || '—')}
     ${row('Date', `${formatDate(booking.date)}${isSunday(booking.date) ? ' (Sunday)' : ''}`)}
     ${row('Time', booking.timeSlot || '—')}
     ${booking.surcharge > 0 ? row('Sunday surcharge', formatCurrency(booking.surcharge)) : ''}
