@@ -41,6 +41,7 @@ export default function Landing() {
         <Logo size="md" />
         <div className="flex items-center gap-3">
           <Link to="/assistant" style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>Become an Assistant</Link>
+          <Link to="/contact" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Contact</Link>
           <Link to="/book">
             <button className="cs-btn-primary" style={{ padding: '10px 20px', fontSize: 13 }}>Book Now</button>
           </Link>
