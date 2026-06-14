@@ -2,16 +2,18 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 // Self-contained full-width coverflow carousel of ClubScrub service categories.
-// Placeholder backgrounds are CSS gradients in dark brand tones (no real photos).
+// Each card is a photo (with service name + description baked into the image) under
+// /carousel/*.jpg; the gradient is a fallback behind the image plus a bottom overlay
+// to keep the baked-in text legible.
 // Visible cards scale with the viewport: 5 on desktop, 3 on tablet, ~1.5 on mobile.
 
 const SERVICES = [
-  { name: 'General Cleaning',     desc: 'Sweeping, mopping, dusting, and maintaining a clean, fresh home', bg: 'linear-gradient(135deg, #14271b 0%, #060807 100%)', img: 'https://images.pexels.com/photos/4107120/pexels-photo-4107120.jpeg?w=600' },
-  { name: 'Kitchen Support',      desc: 'Dishwashing, surface cleaning, and spotless kitchen maintenance', bg: 'linear-gradient(135deg, #1f2933 0%, #0c0f12 100%)', img: 'https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg?w=600' },
-  { name: 'Bedding & Linen Care', desc: 'Changing bed sheets and maintaining fresh, crisp linens',          bg: 'linear-gradient(135deg, #0d2b2b 0%, #050a0a 100%)', img: 'https://images.pexels.com/photos/1329645/pexels-photo-1329645.jpeg?w=600' },
-  { name: 'Home Organisation',    desc: 'Tidying spaces, organising wardrobes and shelves',                 bg: 'linear-gradient(135deg, #111b33 0%, #05070d 100%)', img: 'https://images.pexels.com/photos/6284239/pexels-photo-6284239.jpeg?w=600' },
-  { name: 'Laundry & Ironing',    desc: 'Washing, drying, folding, and pressing clothes',                   bg: 'linear-gradient(135deg, #262814 0%, #0b0c05 100%)', img: 'https://images.pexels.com/photos/5591440/pexels-photo-5591440.jpeg?w=600' },
-  { name: 'Errands & Support',    desc: 'Additional household tasks and personal errands',                  bg: 'linear-gradient(135deg, #2a1418 0%, #0c0608 100%)', img: 'https://images.pexels.com/photos/3962285/pexels-photo-3962285.jpeg?w=600' },
+  { name: 'General Cleaning',     bg: 'linear-gradient(135deg, #14271b 0%, #060807 100%)', img: '/carousel/general-cleaning.jpg' },
+  { name: 'Kitchen Support',      bg: 'linear-gradient(135deg, #1f2933 0%, #0c0f12 100%)', img: '/carousel/kitchen-support.jpg' },
+  { name: 'Dishwashing',          bg: 'linear-gradient(135deg, #14271b 0%, #060807 100%)', img: '/carousel/dishwashing.jpg' },
+  { name: 'Laundry & Ironing',    bg: 'linear-gradient(135deg, #262814 0%, #0b0c05 100%)', img: '/carousel/laundry-ironing.jpg' },
+  { name: 'Bedding & Linen Care', bg: 'linear-gradient(135deg, #0d2b2b 0%, #050a0a 100%)', img: '/carousel/bedding-linen.jpg' },
+  { name: 'Home Organisation',    bg: 'linear-gradient(135deg, #111b33 0%, #05070d 100%)', img: '/carousel/home-organisation.jpg' },
 ]
 
 const N = SERVICES.length
@@ -116,19 +118,8 @@ export default function ServiceCarousel() {
                 loading="lazy"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
               />
-              {/* Bottom overlay gradient */}
+              {/* Bottom overlay gradient — helps the baked-in label/description in each photo read clearly */}
               <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 48%, transparent 72%)' }} />
-
-              {/* Pink ClubScrub watermark, bottom-right */}
-              <span className="font-display italic" style={{ position: 'absolute', bottom: 18, right: 18, fontSize: 14, fontWeight: 600, color: 'rgba(236,36,97,0.85)', letterSpacing: '0.01em', zIndex: 2 }}>
-                ClubScrub
-              </span>
-
-              {/* Name + description, bottom-left */}
-              <div style={{ position: 'absolute', left: 20, right: 92, bottom: 18, zIndex: 2 }}>
-                <p style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 6, lineHeight: 1.2 }}>{s.name}</p>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.5 }}>{s.desc}</p>
-              </div>
             </div>
           )
         })}
