@@ -72,15 +72,21 @@ export default function Landing() {
           </div>
 
           {/* Compact pricing summary */}
-          <div style={{ marginTop: 40, padding: '20px 24px', background: 'rgba(236,36,97,0.08)', border: '0.5px solid rgba(236,36,97,0.3)', borderRadius: 16 }}>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Transparent pricing</p>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
-              <span className="font-display italic" style={{ fontSize: 40, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>GH₵ {PRICING.base}</span>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>minimum · {PRICING.baseHours} hrs</span>
+          <div style={{ marginTop: 40, padding: '24px', background: 'rgba(255,255,255,0.95)', borderRadius: 16 }}>
+            <p style={{ fontSize: 11, color: '#EC2461', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, fontWeight: 600 }}>Transparent pricing</p>
+            <p style={{ fontSize: 15, color: '#0a0a0a', fontWeight: 500, marginBottom: 4 }}>Simple, transparent pricing.</p>
+            <p style={{ fontSize: 13, color: '#555', fontWeight: 300, marginBottom: 16 }}>Pay for the time you need. Pick tasks, see the price instantly.</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 16 }}>
+              <span className="font-display italic" style={{ fontSize: 42, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>GH₵ {PRICING.base}</span>
+              <span style={{ fontSize: 13, color: '#666' }}>minimum · {PRICING.baseHours} hrs</span>
             </div>
-            <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingTop: 12, borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>+GH₵ {PRICING.hourlyRate} / extra hr</span>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>Sun +GH₵ {SUNDAY_SURCHARGE}</span>
+            <p style={{ fontSize: 12, color: '#444', marginBottom: 8, fontWeight: 500 }}>How it adds up</p>
+            <p style={{ fontSize: 12, color: '#555', marginBottom: 12, lineHeight: 1.6 }}>
+              3 hrs = GH₵ {PRICING.base} · 4 hrs = GH₵ {PRICING.base + PRICING.hourlyRate} · 5 hrs = GH₵ {PRICING.base + PRICING.hourlyRate * 2}. Extra time is rounded up to the next hour.
+            </p>
+            <div style={{ display: 'flex', gap: 16, paddingTop: 12, borderTop: '1px solid #f0f0f0' }}>
+              <span style={{ fontSize: 12, color: '#666' }}>+GH₵ {PRICING.hourlyRate} / extra hr</span>
+              <span style={{ fontSize: 12, color: '#666' }}>Sun +GH₵ {SUNDAY_SURCHARGE} surcharge</span>
             </div>
           </div>
         </FadeUp>
@@ -89,39 +95,6 @@ export default function Landing() {
       {/* SERVICE CAROUSEL — full-width, all screen sizes */}
       <section className="cs-carousel-section">
         <ServiceCarousel />
-      </section>
-
-      <Divider />
-
-      {/* PRICING */}
-      <section className="cs-section">
-        <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Pricing</p>
-          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 6 }}>Simple, <span style={{ color: '#EC2461' }}>transparent</span> pricing.</h2>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, marginBottom: 24 }}>Pay for the time you need. Pick tasks, see the price instantly.</p>
-        </FadeUp>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-          <FadeUp delay={0.05}>
-            <div className="cs-card p-5">
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>From</p>
-              <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, marginBottom: 4 }}>GH₵ {PRICING.base}</p>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>up to {PRICING.baseHours} hours</p>
-            </div>
-          </FadeUp>
-          <FadeUp delay={0.05}>
-            <div className="cs-card p-5">
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>Extra time</p>
-              <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, marginBottom: 4 }}>GH₵ {PRICING.hourlyRate}</p>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>per extra hour</p>
-            </div>
-          </FadeUp>
-        </div>
-        <div className="cs-card p-4" style={{ background: 'rgba(236,36,97,0.08)', borderColor: 'rgba(236,36,97,0.2)' }}>
-          <p style={{ fontSize: 13, fontWeight: 500, marginBottom: 4 }}>How it adds up</p>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}>
-            3 hrs = <strong style={{ color: '#EC2461' }}>GH₵ 349</strong> · 4 hrs = <strong style={{ color: '#EC2461' }}>GH₵ 449</strong> · 5 hrs = <strong style={{ color: '#EC2461' }}>GH₵ 549</strong>. Extra time is rounded up to the next hour.
-          </p>
-        </div>
       </section>
 
       <Divider />
