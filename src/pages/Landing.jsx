@@ -284,6 +284,7 @@ export default function Landing() {
         </p>
         <div className="flex justify-center gap-6 mt-4">
           <Link to="/assistant" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Become an Assistant</Link>
+          <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Terms & Conditions</Link>
           <Link to="/admin" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Admin</Link>
         </div>
       </footer>
