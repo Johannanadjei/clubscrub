@@ -111,6 +111,100 @@ body {
   display: inline-block;
 }
 
+/* ============================================================= */
+/* Responsive layout — mobile-first. Mobile (<768px) values match */
+/* the original design exactly, so there is no layout shift.      */
+/* Breakpoints: 768px tablet, 1024px desktop.                     */
+/* ============================================================= */
+
+/* Page containers */
+.cs-landing { max-width: 1200px; margin: 0 auto; padding-bottom: 32px; }
+.cs-booking { max-width: 720px; margin: 0 auto; min-height: 100vh; }
+.cs-admin   { max-width: 1200px; margin: 0 auto; min-height: 100vh; padding-bottom: 32px; }
+
+.cs-page { min-height: 100vh; max-width: 680px; margin: 0 auto; }
+.cs-page--nav { padding-bottom: 90px; }
+@media (min-width: 768px) {
+  .cs-page { max-width: 900px; }
+  .cs-page--nav { padding-bottom: 0; }
+}
+
+/* Section spacing + heading scale */
+.cs-section { padding: 40px 24px; }
+.cs-h2 { font-size: 28px; }
+@media (min-width: 1024px) {
+  .cs-section { padding: 72px 56px; }
+  .cs-h2 { font-size: 40px; }
+}
+
+/* Responsive grids */
+.cs-grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 768px) { .cs-grid-2 { grid-template-columns: 1fr 1fr; } }
+
+.cs-grid-services { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (min-width: 1024px) { .cs-grid-services { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+
+.cs-grid-2to4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (min-width: 1024px) { .cs-grid-2to4 { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
+
+.cs-steps { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 1024px) { .cs-steps { grid-template-columns: 1fr 1fr; gap: 8px 48px; } }
+
+/* Hero — two columns on desktop */
+.cs-hero-section { padding: 60px 24px 52px; position: relative; overflow: hidden; }
+@media (min-width: 1024px) { .cs-hero-section { padding: 80px 56px 64px; } }
+.cs-hero { display: grid; grid-template-columns: 1fr; gap: 32px; }
+.cs-hero-right { display: none; }
+@media (min-width: 1024px) {
+  .cs-hero { grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: 56px; }
+  .cs-hero-right { display: block; }
+}
+
+/* Bottom nav — hidden on tablet and up */
+@media (min-width: 768px) {
+  .cs-bottom-nav { display: none !important; }
+}
+
+/* Booking flow — roomier on tablet/desktop */
+.cs-booking-header { padding: 20px 24px; }
+.cs-booking-body { padding: 28px 24px; }
+@media (min-width: 768px) {
+  .cs-booking-header { padding: 26px 48px; }
+  .cs-booking-body { padding: 44px 48px; }
+}
+
+/* Task groups: single column on mobile, two columns on desktop */
+.cs-task-groups > .cs-task-group { margin-bottom: 20px; }
+@media (min-width: 768px) {
+  .cs-task-groups { column-count: 2; column-gap: 24px; }
+  .cs-task-groups > .cs-task-group { break-inside: avoid; }
+}
+
+/* Quick selects: horizontal scroll on mobile, 3-up grid on desktop */
+.cs-quickselects { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+.cs-quickselect { min-width: 180px; flex-shrink: 0; }
+@media (min-width: 768px) {
+  .cs-quickselects { display: grid; grid-template-columns: repeat(3, 1fr); overflow: visible; }
+  .cs-quickselect { min-width: 0; }
+}
+
+/* Admin: side nav + content on desktop */
+@media (min-width: 1024px) {
+  .cs-admin-layout { display: grid; grid-template-columns: 220px 1fr; gap: 36px; align-items: start; }
+}
+.cs-admin-tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 4px; }
+.cs-admin-tab { flex: 1; min-height: 44px; }
+@media (min-width: 1024px) {
+  .cs-admin-tabs { flex-direction: column; background: transparent; padding: 0; position: sticky; top: 92px; }
+  .cs-admin-tab { flex: none; width: 100%; text-align: left !important; }
+}
+.cs-admin-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (min-width: 1024px) { .cs-admin-stats { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
+
+/* Admin booking row — extra detail shown without expanding (desktop only) */
+.cs-row-extra { display: none; }
+@media (min-width: 1024px) { .cs-row-extra { display: flex; } }
+
 /* Status badges */
 .status-pending { background: rgba(251,191,36,0.12); color: #FBBF24; border: 0.5px solid rgba(251,191,36,0.3); }
 .status-accepted { background: rgba(59,130,246,0.12); color: #60A5FA; border: 0.5px solid rgba(59,130,246,0.3); }

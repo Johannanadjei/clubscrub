@@ -42,6 +42,21 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>{booking.date}</p>
         </div>
       </div>
+      {/* Desktop-only quick detail — visible without expanding */}
+      <div className="cs-row-extra" style={{ padding: '0 16px 14px', gap: 24, flexWrap: 'wrap' }}>
+        {[
+          ['Phone', booking.customer?.phone || '—'],
+          ['Start', booking.timeSlot || '—'],
+          ['Est.', formatDuration(booking.estMins || 0)],
+          ['Payment', (booking.paymentLabel || booking.payment || '—')],
+          ['Pay status', PAY_STATUS[booking.paymentStatus]?.label || 'Awaiting payment'],
+        ].map(([label, val]) => (
+          <div key={label}>
+            <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{label}</p>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>{val}</p>
+          </div>
+        ))}
+      </div>
       {expanded && (
         <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', padding: 16 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 14 }}>
@@ -127,27 +142,28 @@ export default function Admin() {
   const tabs = [['overview','Overview'],['bookings','Bookings'],['assistants','Assistants']]
 
   return (
-    <div style={{ maxWidth: 680, margin: '0 auto', minHeight: '100vh', paddingBottom: 32 }}>
+    <div className="cs-admin">
       <div style={{ padding: '20px 24px', borderBottom: '0.5px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, background: 'rgba(10,10,10,0.9)', backdropFilter: 'blur(12px)', zIndex: 10 }}>
         <Logo size="sm" />
         <span className="cs-badge">Admin</span>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 4, margin: '16px 24px' }}>
+      {/* Desktop: side nav left + content right. Mobile: top tabs + content. */}
+      <div className="cs-admin-layout" style={{ padding: '16px 24px' }}>
+      <div className="cs-admin-tabs">
         {tabs.map(([v, l]) => (
-          <button key={v} onClick={() => setTab(v)}
-            style={{ flex: 1, padding: '10px', borderRadius: 9, border: 'none', fontSize: 13, fontWeight: 500, fontFamily: 'DM Sans, sans-serif', cursor: 'pointer', transition: 'all 0.2s',
+          <button key={v} onClick={() => setTab(v)} className="cs-admin-tab"
+            style={{ padding: '10px', borderRadius: 9, border: 'none', fontSize: 13, fontWeight: 500, fontFamily: 'DM Sans, sans-serif', cursor: 'pointer', transition: 'all 0.2s',
               background: tab === v ? '#EC2461' : 'transparent', color: tab === v ? '#fff' : 'rgba(255,255,255,0.45)' }}>
             {l}
           </button>
         ))}
       </div>
 
-      <div style={{ padding: '0 24px' }}>
+      <div className="cs-admin-content">
         {tab === 'overview' && (
           <FadeUp>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+            <div className="cs-admin-stats" style={{ marginBottom: 20 }}>
               <StatCard label="Total bookings" value={bookings.length} />
               <StatCard label="Revenue" value={`GH₵ ${totalRevenue.toLocaleString()}`} />
               <StatCard label="Pending" value={pending.length} color="#FBBF24" />
@@ -216,6 +232,7 @@ export default function Admin() {
             ))}
           </FadeUp>
         )}
+      </div>
       </div>
     </div>
   )

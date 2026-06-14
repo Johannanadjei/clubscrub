@@ -33,8 +33,8 @@ function FAQItem({ q, a }) {
 
 export default function Landing() {
   return (
-    <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: 32 }}>
-      {/* NAV */}
+    <div className="cs-landing">
+      {/* NAV — logo left, Book Now right (top nav, shown on all sizes) */}
       <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', position: 'sticky', top: 0, background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(12px)', zIndex: 50, borderBottom: '0.5px solid rgba(255,255,255,0.06)' }}>
         <Logo size="md" />
         <div className="flex items-center gap-3">
@@ -46,8 +46,10 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      <section style={{ padding: '60px 24px 52px', position: 'relative', overflow: 'hidden' }}>
+      <section className="cs-hero-section">
         <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,36,97,0.12) 0%, transparent 65%)', pointerEvents: 'none' }} />
+        <div className="cs-hero">
+          <div className="cs-hero-left">
         <FadeUp>
           <span className="cs-badge mb-5">🇬🇭 Serving Accra</span>
         </FadeUp>
@@ -87,15 +89,49 @@ export default function Landing() {
             ))}
           </div>
         </FadeUp>
+          </div>
+
+          {/* Hero pricing card — desktop only */}
+          <div className="cs-hero-right">
+            <FadeUp delay={0.1}>
+              <div className="cs-card" style={{ padding: 32 }}>
+                <span className="cs-badge" style={{ marginBottom: 18 }}>Transparent pricing</span>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 18, marginBottom: 6 }}>From</p>
+                <div className="flex items-baseline gap-2" style={{ marginBottom: 4 }}>
+                  <span className="font-display italic" style={{ fontSize: 56, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>GH₵ {PRICING.base}</span>
+                </div>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', fontWeight: 300, marginBottom: 20 }}>minimum · up to {PRICING.baseHours} hours</p>
+                <Divider />
+                <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+                  <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>Each extra hour</span>
+                  <span className="font-display italic" style={{ fontSize: 22, fontWeight: 600 }}>+ GH₵ {PRICING.hourlyRate}</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
+                  {[['3 hours', `GH₵ ${PRICING.base}`], ['4 hours', `GH₵ ${PRICING.base + PRICING.hourlyRate}`], ['5 hours', `GH₵ ${PRICING.base + PRICING.hourlyRate * 2}`]].map(([h, p]) => (
+                    <div key={h} className="flex items-center justify-between" style={{ fontSize: 13 }}>
+                      <span style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{h}</span>
+                      <span style={{ color: '#fff', fontWeight: 500 }}>{p}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link to="/book">
+                  <button className="cs-btn-primary" style={{ width: '100%', justifyContent: 'center', minHeight: 48 }}>
+                    Book Now <ArrowRight size={16} />
+                  </button>
+                </Link>
+              </div>
+            </FadeUp>
+          </div>
+        </div>
       </section>
 
       <Divider />
 
       {/* PRICING */}
-      <section style={{ padding: '40px 24px' }}>
+      <section className="cs-section">
         <FadeUp>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Pricing</p>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 6 }}>Simple, <span style={{ color: '#EC2461' }}>transparent</span> pricing.</h2>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 6 }}>Simple, <span style={{ color: '#EC2461' }}>transparent</span> pricing.</h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, marginBottom: 24 }}>Pay for the time you need. Pick tasks, see the price instantly.</p>
         </FadeUp>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
@@ -125,11 +161,12 @@ export default function Landing() {
       <Divider />
 
       {/* HOW IT WORKS */}
-      <section style={{ padding: '40px 24px' }}>
+      <section className="cs-section">
         <FadeUp>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Process</p>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 24 }}>How it <span style={{ color: '#EC2461' }}>works</span></h2>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>How it <span style={{ color: '#EC2461' }}>works</span></h2>
         </FadeUp>
+        <div className="cs-steps">
         {[
           { n: '01', t: 'Pick your tasks', d: 'Choose what you need done — we estimate the time and price live.' },
           { n: '02', t: 'Pick your area & date', d: 'Tell us your area, preferred date and start time.' },
@@ -148,15 +185,16 @@ export default function Landing() {
             </div>
           </FadeUp>
         ))}
+        </div>
       </section>
 
       <Divider />
 
       {/* SERVICE AREAS */}
-      <section style={{ padding: '40px 24px' }}>
+      <section className="cs-section">
         <FadeUp>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Coverage</p>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 24 }}>Service <span style={{ color: '#EC2461' }}>areas</span></h2>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>Service <span style={{ color: '#EC2461' }}>areas</span></h2>
         </FadeUp>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           {Object.entries(ZONES).map(([k, z]) => (
@@ -178,12 +216,12 @@ export default function Landing() {
       <Divider />
 
       {/* WHAT'S INCLUDED */}
-      <section style={{ padding: '40px 24px' }}>
+      <section className="cs-section">
         <FadeUp>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 24 }}>What's <span style={{ color: '#EC2461' }}>included</span></h2>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>What's <span style={{ color: '#EC2461' }}>included</span></h2>
         </FadeUp>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div className="cs-grid-services">
           {TASK_GROUPS.map((g, i) => (
             <FadeUp key={g.id} delay={i * 0.04}>
               <div className="cs-card p-4">
@@ -220,12 +258,12 @@ export default function Landing() {
       <Divider />
 
       {/* WHY CLUBSCRUB */}
-      <section style={{ padding: '40px 24px' }}>
+      <section className="cs-section">
         <FadeUp>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 8 }}>Why <span style={{ color: '#EC2461' }}>ClubScrub?</span></h2>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 8 }}>Why <span style={{ color: '#EC2461' }}>ClubScrub?</span></h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 24, fontWeight: 300 }}>We're redefining home assistance in Ghana — blending prestige, reliability, and a fresh approach.</p>
         </FadeUp>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div className="cs-grid-2to4">
           {[
             { icon: Shield, t: 'Vetted Assistants', d: 'Selected, trained & supervised' },
             { icon: Star, t: 'Prestige Standard', d: 'Consistent, high-quality results' },
@@ -248,9 +286,9 @@ export default function Landing() {
       <Divider />
 
       {/* FAQ */}
-      <section style={{ padding: '40px 24px' }}>
+      <section className="cs-section">
         <FadeUp>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 24 }}>Frequently <span style={{ color: '#EC2461' }}>asked</span></h2>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>Frequently <span style={{ color: '#EC2461' }}>asked</span></h2>
         </FadeUp>
         {FAQ.map(f => <FAQItem key={f.q} {...f} />)}
       </section>
@@ -258,7 +296,7 @@ export default function Landing() {
       {/* CTA BANNER */}
       <section style={{ margin: '0 24px 40px' }}>
         <div style={{ background: 'rgba(236,36,97,0.1)', border: '0.5px solid rgba(236,36,97,0.25)', borderRadius: 20, padding: '40px 32px', textAlign: 'center' }}>
-          <h2 className="font-display italic" style={{ fontSize: 28, fontWeight: 600, marginBottom: 12 }}>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 600, marginBottom: 12 }}>
             Ready for a cleaner home?
           </h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', marginBottom: 24, fontWeight: 300 }}>

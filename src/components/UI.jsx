@@ -106,7 +106,7 @@ export function CustomerNav() {
     { path: '/book', icon: null, label: 'Book', primary: true },
   ]
   return (
-    <nav style={{
+    <nav className="cs-bottom-nav" style={{
       position: 'fixed', bottom: 0, left: 0, right: 0,
       background: '#141414', borderTop: '0.5px solid rgba(255,255,255,0.08)',
       display: 'flex', justifyContent: 'space-around', alignItems: 'center',
@@ -144,7 +144,7 @@ export function CustomerNav() {
 
 export function PageLayout({ children, nav = true }) {
   return (
-    <div style={{ minHeight: '100vh', maxWidth: 680, margin: '0 auto', paddingBottom: nav ? 90 : 0 }}>
+    <div className={`cs-page ${nav ? 'cs-page--nav' : ''}`}>
       {children}
       {nav && <CustomerNav />}
     </div>

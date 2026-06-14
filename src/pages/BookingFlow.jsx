@@ -95,7 +95,7 @@ function PriceBar({ estimate, onNext }) {
   return (
     <div style={{
       position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 60,
-      maxWidth: 680, margin: '0 auto',
+      maxWidth: 720, margin: '0 auto',
       background: 'rgba(20,20,20,0.96)', backdropFilter: 'blur(12px)',
       borderTop: '0.5px solid rgba(255,255,255,0.1)',
       padding: '14px 24px max(14px, env(safe-area-inset-bottom))',
@@ -142,13 +142,13 @@ function StepTasks({ data, update, onNext }) {
 
         {/* Quick selects */}
         <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 10 }}>Quick selects</p>
-        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', marginBottom: 24, paddingBottom: 4 }}>
+        <div className="cs-quickselects" style={{ marginBottom: 24 }}>
           {QUICK_SELECTS.map(q => {
             const active = isQuickActive(q)
             return (
               <motion.button key={q.id} whileTap={{ scale: 0.97 }} onClick={() => applyQuick(q)}
-                className={`cs-card ${active ? 'selected' : ''}`}
-                style={{ textAlign: 'left', padding: 14, minWidth: 180, flexShrink: 0, cursor: 'pointer', border: 'none' }}>
+                className={`cs-card cs-quickselect ${active ? 'selected' : ''}`}
+                style={{ textAlign: 'left', padding: 14, cursor: 'pointer', border: 'none' }}>
                 <div className="flex items-center gap-1.5" style={{ marginBottom: 6 }}>
                   <Sparkles size={13} style={{ color: '#EC2461' }} />
                   <span style={{ fontSize: 14, fontWeight: 500 }}>{q.label}</span>
@@ -160,11 +160,12 @@ function StepTasks({ data, update, onNext }) {
         </div>
 
         {/* Task groups */}
+        <div className="cs-task-groups">
         {TASK_GROUPS.map(g => {
           const ids = g.tasks.map(t => t.id)
           const allOn = ids.every(id => selected.includes(id))
           return (
-            <div key={g.id} className="mb-5">
+            <div key={g.id} className="cs-task-group mb-5">
               <div className="flex items-center justify-between mb-2">
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.09em' }}>{g.label}</p>
                 <button onClick={() => toggleGroup(g)}
@@ -195,6 +196,7 @@ function StepTasks({ data, update, onNext }) {
             </div>
           )
         })}
+        </div>
 
         {selected.length === 0 && (
           <div className="cs-card p-4" style={{ borderColor: 'rgba(251,191,36,0.3)', background: 'rgba(251,191,36,0.06)' }}>
@@ -528,9 +530,9 @@ export default function BookingFlow() {
   ]
 
   return (
-    <div style={{ maxWidth: 680, margin: '0 auto', minHeight: '100vh' }}>
+    <div className="cs-booking">
       {/* Header */}
-      <div style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '0.5px solid rgba(255,255,255,0.07)' }}>
+      <div className="cs-booking-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '0.5px solid rgba(255,255,255,0.07)' }}>
         <Logo size="sm" />
         <div className="flex items-center gap-3">
           <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Step {step + 1} of {STEPS.length}</span>
@@ -542,7 +544,7 @@ export default function BookingFlow() {
         </div>
       </div>
 
-      <div style={{ padding: '28px 24px' }}>
+      <div className="cs-booking-body">
         <StepIndicator step={step} total={STEPS.length} />
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
