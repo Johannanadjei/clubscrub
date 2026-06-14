@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, Briefcase, DollarSign, Star, Clock, MapPin, ChevronRight, User, AlertTriangle } from 'lucide-react'
 import { Logo, FadeUp, Avatar, Stars, Divider } from '../components/UI.jsx'
@@ -31,6 +32,10 @@ function AssistantSignup({ onComplete }) {
     <FadeUp key="0">
       <h2 className="font-display italic" style={{ fontSize: 24, fontWeight: 500, marginBottom: 6 }}>Join ClubScrub</h2>
       <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, marginBottom: 24 }}>Become a ClubScrub Assistant and earn on your schedule.</p>
+      <div style={{ marginBottom: 24, padding: '16px 20px', background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 12 }}>
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 10 }}>Before applying, please read and understand our Home Assistant Agreement.</p>
+        <Link to="/assistant-agreement" style={{ fontSize: 13, color: '#EC2461', fontWeight: 500, textDecoration: 'none' }}>Read the Home Assistant Agreement →</Link>
+      </div>
       {[
         { k: 'name', label: 'Full name', ph: 'Your full name', type: 'text' },
         { k: 'phone', label: 'Phone number', ph: '024 000 0000', type: 'tel' },
