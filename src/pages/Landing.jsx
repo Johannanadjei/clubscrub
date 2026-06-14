@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, X, ChevronDown, MapPin, Clock, Shield, Star } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
+import ServiceCarousel from '../components/ServiceCarousel.jsx'
 import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING } from '../data/index.js'
 
 const FAQ = [
@@ -86,36 +87,9 @@ export default function Landing() {
         </FadeUp>
           </div>
 
-          {/* Hero pricing card — desktop only */}
+          {/* Service category carousel — desktop only */}
           <div className="cs-hero-right">
-            <FadeUp delay={0.1}>
-              <div className="cs-card" style={{ padding: 32 }}>
-                <span className="cs-badge" style={{ marginBottom: 18 }}>Transparent pricing</span>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 18, marginBottom: 6 }}>From</p>
-                <div className="flex items-baseline gap-2" style={{ marginBottom: 4 }}>
-                  <span className="font-display italic" style={{ fontSize: 56, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>GH₵ {PRICING.base}</span>
-                </div>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', fontWeight: 300, marginBottom: 20 }}>minimum · up to {PRICING.baseHours} hours</p>
-                <Divider />
-                <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
-                  <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>Each extra hour</span>
-                  <span className="font-display italic" style={{ fontSize: 22, fontWeight: 600 }}>+ GH₵ {PRICING.hourlyRate}</span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
-                  {[['3 hours', `GH₵ ${PRICING.base}`], ['4 hours', `GH₵ ${PRICING.base + PRICING.hourlyRate}`], ['5 hours', `GH₵ ${PRICING.base + PRICING.hourlyRate * 2}`]].map(([h, p]) => (
-                    <div key={h} className="flex items-center justify-between" style={{ fontSize: 13 }}>
-                      <span style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{h}</span>
-                      <span style={{ color: '#fff', fontWeight: 500 }}>{p}</span>
-                    </div>
-                  ))}
-                </div>
-                <Link to="/book">
-                  <button className="cs-btn-primary" style={{ width: '100%', justifyContent: 'center', minHeight: 48 }}>
-                    Book Now <ArrowRight size={16} />
-                  </button>
-                </Link>
-              </div>
-            </FadeUp>
+            <ServiceCarousel />
           </div>
         </div>
       </section>
