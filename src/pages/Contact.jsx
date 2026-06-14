@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { MessageCircle, Mail, Instagram, ArrowRight } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
+import CookieNotice from '../components/CookieNotice.jsx'
 
 const CHANNELS = [
   {
@@ -114,6 +115,8 @@ export default function Contact() {
           <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>info@club-scrub.com</a>
         </div>
       </footer>
+
+      <CookieNotice />
     </div>
   )
 }

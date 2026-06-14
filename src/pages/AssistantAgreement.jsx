@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
+import CookieNotice from '../components/CookieNotice.jsx'
 
 // Home Assistant Agreement — content per Club Scrub legal brief (launch version).
 const SECTIONS = [
@@ -164,6 +165,8 @@ export default function AssistantAgreement() {
           <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>info@club-scrub.com</a>
         </div>
       </footer>
+
+      <CookieNotice />
     </div>
   )
 }

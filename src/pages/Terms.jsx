@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
+import CookieNotice from '../components/CookieNotice.jsx'
 
 // Customer Terms & Conditions — content per Club Scrub legal brief (launch version).
 // Each section: heading + ordered blocks (paragraph or bullet list).
@@ -200,6 +201,8 @@ export default function Terms() {
           <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>info@club-scrub.com</a>
         </div>
       </footer>
+
+      <CookieNotice />
     </div>
   )
 }
