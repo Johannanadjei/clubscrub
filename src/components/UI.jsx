@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, LayoutDashboard, ChevronLeft, Star } from 'lucide-react'
+import { Home, ChevronLeft, Star } from 'lucide-react'
 import { getStatusLabel } from '../data/index.js'
 
 export function Logo({ size = 'md', linkTo = '/' }) {
@@ -98,12 +98,12 @@ export function FadeUp({ children, delay = 0, className = '' }) {
 
 export function CustomerNav() {
   const loc = useLocation()
-  // Customer-facing nav: Home | Book (centre FAB) | Admin only.
-  // /dashboard and /assistant routes still exist — just not surfaced here.
+  // Customer-facing nav: Home | Book (centre FAB) only.
+  // /admin, /dashboard and /assistant routes still exist — reachable by direct
+  // URL — they're just not surfaced in the nav.
   const tabs = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/book', icon: null, label: 'Book', primary: true },
-    { path: '/admin', icon: LayoutDashboard, label: 'Admin' },
   ]
   return (
     <nav style={{
