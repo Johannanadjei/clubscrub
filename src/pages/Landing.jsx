@@ -82,7 +82,7 @@ export default function Landing() {
             </div>
             <p style={{ fontSize: 12, color: '#444', marginBottom: 8, fontWeight: 500 }}>How it adds up</p>
             <p style={{ fontSize: 12, color: '#555', marginBottom: 12, lineHeight: 1.6 }}>
-              3 hrs = GH₵ {PRICING.base} · 4 hrs = GH₵ {PRICING.base + PRICING.hourlyRate} · 5 hrs = GH₵ {PRICING.base + PRICING.hourlyRate * 2}. Extra time is rounded up to the next hour.
+              3 hrs = <strong style={{ color: '#EC2461' }}>GH₵ {PRICING.base}</strong> · 4 hrs = <strong style={{ color: '#EC2461' }}>GH₵ {PRICING.base + PRICING.hourlyRate}</strong> · 5 hrs = <strong style={{ color: '#EC2461' }}>GH₵ {PRICING.base + PRICING.hourlyRate * 2}</strong>. Extra time is rounded up to the next hour.
             </p>
             <div style={{ display: 'flex', gap: 16, paddingTop: 12, borderTop: '1px solid #f0f0f0' }}>
               <span style={{ fontSize: 12, color: '#666' }}>+GH₵ {PRICING.hourlyRate} / extra hr</span>
