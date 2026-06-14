@@ -249,11 +249,11 @@ export function generateRef() {
 // MOCK DATA (localStorage seed)
 // ---------------------------------------------------------------------------
 export const MOCK_ASSISTANTS = [
-  { id: 'a1', name: 'Abena Mensah', area: 'East Legon', zone: 'zone1', rating: 4.9, jobs: 142, avatar: 'AM', skills: ['Kitchen','Laundry','Bedrooms'], status: 'available' },
-  { id: 'a2', name: 'Esi Owusu', area: 'Osu', zone: 'zone1', rating: 4.8, jobs: 98, avatar: 'EO', skills: ['Living Areas','Bathrooms'], status: 'available' },
-  { id: 'a3', name: 'Akosua Tetteh', area: 'Spintex', zone: 'zone2', rating: 5.0, jobs: 201, avatar: 'AT', skills: ['All services'], status: 'busy' },
-  { id: 'a4', name: 'Maame Asante', area: 'Adenta', zone: 'zone2', rating: 4.7, jobs: 67, avatar: 'MA', skills: ['Kitchen','Ironing'], status: 'available' },
-  { id: 'a5', name: 'Adwoa Boateng', area: 'Cantonments', zone: 'zone1', rating: 4.9, jobs: 115, avatar: 'AB', skills: ['Bedrooms','Living Areas'], status: 'available' },
+  { id: 'a1', name: 'Abena Mensah', area: 'East Legon', rating: 4.9, jobs: 142, avatar: 'AM', skills: ['Kitchen','Laundry','Bedrooms'], status: 'available' },
+  { id: 'a2', name: 'Esi Owusu', area: 'Osu', rating: 4.8, jobs: 98, avatar: 'EO', skills: ['Living Areas','Bathrooms'], status: 'available' },
+  { id: 'a3', name: 'Akosua Tetteh', area: 'Spintex', rating: 5.0, jobs: 201, avatar: 'AT', skills: ['All services'], status: 'busy' },
+  { id: 'a4', name: 'Maame Asante', area: 'Adenta', rating: 4.7, jobs: 67, avatar: 'MA', skills: ['Kitchen','Ironing'], status: 'available' },
+  { id: 'a5', name: 'Adwoa Boateng', area: 'Cantonments', rating: 4.9, jobs: 115, avatar: 'AB', skills: ['Bedrooms','Living Areas'], status: 'available' },
 ]
 
 export const MOCK_BOOKINGS = [
@@ -261,7 +261,7 @@ export const MOCK_BOOKINGS = [
     id: 'CS-100421',
     tasks: ['Wash dishes','Clean countertops & stovetop','Tidy & declutter','Sweep / vacuum','Clean toilet','Make beds'],
     estMins: 120, estHours: 2, billedHours: 3, price: 349, total: 349,
-    zone: 'zone1', area: 'East Legon',
+    area: 'East Legon',
     date: '2026-06-20', timeSlot: 'Morning (from 8am)',
     notes: 'Please bring own cleaning cloths',
     customer: { name: 'James Osei', email: 'james@email.com', phone: '024 123 4567', address: '12 Airport Rd, East Legon' },
@@ -272,7 +272,7 @@ export const MOCK_BOOKINGS = [
     id: 'CS-100398',
     tasks: ['Wash a load','Hang / dry clothes','Fold & put away','Iron up to 25 items','Make beds','Clean toilet'],
     estMins: 195, estHours: 3.25, billedHours: 4, price: 449, total: 449,
-    zone: 'zone1', area: 'Osu',
+    area: 'Osu',
     date: '2026-06-18', timeSlot: 'Afternoon (from 1pm)',
     notes: '',
     customer: { name: 'Sarah Ampah', email: 'sarah@email.com', phone: '020 987 6543', address: '5 Oxford St, Osu' },
@@ -283,7 +283,7 @@ export const MOCK_BOOKINGS = [
     id: 'CS-100412',
     tasks: ['Wash dishes','Clean countertops & stovetop','Sweep & mop floor','Dust surfaces','Tidy & declutter','Mop floors','Clean shower / bath','Interior windows'],
     estMins: 265, estHours: 4.4, billedHours: 5, price: 549, total: 549,
-    zone: 'zone2', area: 'Spintex',
+    area: 'Spintex',
     date: '2026-06-22', timeSlot: 'Morning (from 8am)',
     notes: 'Gate code: 1234',
     customer: { name: 'David Nkrumah', email: 'david@email.com', phone: '026 555 0001', address: '8 Spintex Rd, Spintex' },
@@ -293,7 +293,7 @@ export const MOCK_BOOKINGS = [
 ]
 
 export const MOCK_JOBS = [
-  { id: 'CS-100430', area: 'East Legon', zone: 'zone1', estHours: 4, date: '2026-06-21', timeSlot: 'Morning (from 8am)', tasks: ['Wash dishes','Sweep & mop floor','Iron up to 25 items'], pay: 220, distance: '1.2 km' },
-  { id: 'CS-100431', area: 'Osu', zone: 'zone1', estHours: 3, date: '2026-06-21', timeSlot: 'Afternoon (from 1pm)', tasks: ['Clean toilet','Make beds','Fold & put away'], pay: 150, distance: '2.5 km' },
-  { id: 'CS-100432', area: 'Airport Residential', zone: 'zone1', estHours: 5, date: '2026-06-22', timeSlot: 'Morning (from 8am)', tasks: ['Kitchen','Living Areas'], pay: 280, distance: '0.8 km' },
+  { id: 'CS-100430', area: 'East Legon', estHours: 4, date: '2026-06-21', timeSlot: 'Morning (from 8am)', tasks: ['Wash dishes','Sweep & mop floor','Iron up to 25 items'], pay: 220, distance: '1.2 km' },
+  { id: 'CS-100431', area: 'Osu', estHours: 3, date: '2026-06-21', timeSlot: 'Afternoon (from 1pm)', tasks: ['Clean toilet','Make beds','Fold & put away'], pay: 150, distance: '2.5 km' },
+  { id: 'CS-100432', area: 'Airport Residential', estHours: 5, date: '2026-06-22', timeSlot: 'Morning (from 8am)', tasks: ['Kitchen','Living Areas'], pay: 280, distance: '0.8 km' },
 ]
