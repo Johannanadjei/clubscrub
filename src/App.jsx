@@ -8,6 +8,7 @@ import Admin from './pages/Admin.jsx'
 import Terms from './pages/Terms.jsx'
 import Privacy from './pages/Privacy.jsx'
 import AssistantAgreement from './pages/AssistantAgreement.jsx'
+import Contact from './pages/Contact.jsx'
 import AdminGate from './components/AdminGate.jsx'
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/assistant-agreement" element={<AssistantAgreement />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/admin" element={<AdminGate><Admin /></AdminGate>} />
     </Routes>
   )
