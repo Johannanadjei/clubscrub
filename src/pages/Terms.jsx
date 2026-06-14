@@ -3,44 +3,136 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
 
+// Customer Terms & Conditions — content per Club Scrub legal brief (launch version).
+// Each section: heading + ordered blocks (paragraph or bullet list).
 const SECTIONS = [
   {
-    h: '1. Introduction',
-    p: `ClubScrub Home Assistance ("ClubScrub", "we", "us") provides professional home assistance and light cleaning services to customers in Accra, Ghana. By booking a session with us, you ("the customer", "you") agree to these Terms & Conditions. Please read them carefully before making a booking.`,
+    h: 'About Club Scrub',
+    blocks: [
+      { type: 'p', text: 'Club Scrub provides home support services including light cleaning, tidying, dishwashing, laundry, ironing, bed changing, home organisation and similar household assistance.' },
+      { type: 'p', text: 'Club Scrub does not provide heavy-duty cleaning, construction cleaning, pest control, hazardous waste removal, or specialist restoration services.' },
+    ],
   },
   {
-    h: '2. Booking & Payment',
-    p: `A booking is confirmed only once payment has been received. All sessions are subject to a minimum booking of 3 hours at a minimum rate of GH₵ 349. Additional time is charged at GH₵ 100 per extra hour, rounded up to the next whole hour. Bookings on a Sunday attract a flat GH₵ 50 weekend surcharge. The price shown to you before payment reflects the tasks and time you have selected; we do not add hidden fees.`,
+    h: 'Booking Services',
+    blocks: [
+      { type: 'p', text: 'Customers may book services through the Club Scrub website or approved booking channels.' },
+      { type: 'p', text: 'All bookings are subject to availability.' },
+      { type: 'p', text: 'Club Scrub reserves the right to decline a booking where:' },
+      { type: 'ul', items: [
+        'The service requested falls outside our scope',
+        'The property presents health or safety risks',
+        'Required information has not been provided',
+      ] },
+    ],
   },
   {
-    h: '3. Cancellation Policy',
-    p: `Cancellations made more than 24 hours before your scheduled appointment are eligible for a full refund. Cancellations made within 24 hours of the appointment are non-refundable, as your assistant has already been scheduled. Refunds, where applicable, are processed via Mobile Money or bank transfer.`,
+    h: 'Pricing',
+    blocks: [
+      { type: 'p', text: 'Pricing is based on:' },
+      { type: 'ul', items: [
+        'A minimum booking fee of ₵349 for up to 3 hours',
+        '₵100 for each additional hour',
+        'Custom quotations for larger or specialist jobs',
+      ] },
+      { type: 'p', text: 'Estimated durations are provided as a guide only and may vary depending on the size and condition of the property.' },
+    ],
   },
   {
-    h: '4. Service Standards',
-    p: `Every ClubScrub Assistant is carefully selected, trained, and supervised before accepting jobs. We are committed to delivering consistent, high-quality home assistance. ClubScrub reserves the right to refuse or discontinue service where a working environment is unsafe, where staff are mistreated, or where the requested work falls outside the scope of our services.`,
+    h: 'Payment',
+    blocks: [
+      { type: 'p', text: 'Customers may choose:' },
+      { type: 'ul', items: ['Mobile Money', 'Debit/Credit Card', 'Cash on Completion'] },
+      { type: 'p', text: 'Where cash payment is selected, payment must be made immediately upon completion of the service.' },
+      { type: 'p', text: 'Club Scrub reserves the right to refuse future bookings where previous payments remain outstanding.' },
+    ],
   },
   {
-    h: '5. Client Responsibilities',
-    p: `You agree to provide a safe and reasonable working environment for your assistant, including access to the property at the agreed time. Harassment, abuse, or any form of mistreatment of our staff will not be tolerated and may result in immediate termination of the session without refund. Please secure any valuables and inform us of any hazards before the appointment.`,
+    h: 'Customer Responsibilities',
+    blocks: [
+      { type: 'p', text: 'Customers agree to:' },
+      { type: 'ul', items: [
+        'Provide accurate booking information',
+        'Provide safe access to the property',
+        'Secure valuables, cash, jewellery and important documents',
+        'Ensure pets are controlled where necessary',
+        'Provide working utilities including water and electricity',
+      ] },
+    ],
   },
   {
-    h: '6. Liability',
-    p: `ClubScrub is not liable for pre-existing damage, wear, or defects to your property or belongings. In the unlikely event of damage directly caused by our negligence, our total liability is limited to the value of the service fee paid for the affected booking. We are not responsible for loss arising from circumstances beyond our reasonable control.`,
+    h: 'Cancellation Policy',
+    blocks: [
+      { type: 'p', text: 'Customers may cancel:' },
+      { type: 'ul', items: [
+        'More than 24 hours before service: No charge',
+        'Less than 24 hours before service: Club Scrub may charge up to 50% of the booking value',
+      ] },
+      { type: 'p', text: 'Repeated cancellations may result in booking restrictions.' },
+    ],
   },
   {
-    h: '7. Privacy',
-    p: `We collect only the information needed to deliver your booking, such as your name, contact details, and address. Your data is used solely for service delivery and customer support. We do not sell or rent your personal information to third parties. Reasonable measures are taken to keep your data secure.`,
+    h: 'Service Limitations',
+    blocks: [
+      { type: 'p', text: 'Club Scrub does not provide:' },
+      { type: 'ul', items: [
+        'Construction cleaning',
+        'Deep restoration cleaning',
+        'Biohazard cleaning',
+        'Pest control',
+        'Exterior building cleaning',
+        'Roof cleaning',
+        'Waste disposal services',
+        'Heavy lifting services',
+      ] },
+      { type: 'p', text: 'Such requests may require a custom quotation or referral to a specialist provider.' },
+    ],
   },
   {
-    h: '8. Governing Law',
-    p: `These Terms & Conditions are governed by and construed in accordance with the laws of the Republic of Ghana. Any disputes arising from your use of our services shall be subject to the jurisdiction of the Ghanaian courts.`,
+    h: 'Damage Claims',
+    blocks: [
+      { type: 'p', text: 'Any concerns regarding damage must be reported within 24 hours of service completion.' },
+      { type: 'p', text: 'Club Scrub will investigate all claims fairly and promptly.' },
+      { type: 'p', text: 'Customers may be asked to provide photographs and supporting information.' },
+    ],
   },
   {
-    h: '9. Contact',
-    p: `For any questions about these Terms & Conditions or your booking, please contact us at info@club-scrub.com. We aim to respond to all enquiries promptly.`,
+    h: 'Limitation of Liability',
+    blocks: [
+      { type: 'p', text: "Club Scrub's liability shall not exceed the total amount paid for the relevant booking." },
+      { type: 'p', text: 'Club Scrub shall not be responsible for:' },
+      { type: 'ul', items: [
+        'Pre-existing damage',
+        'Normal wear and tear',
+        'Hidden defects',
+        'Losses resulting from inaccurate customer instructions',
+      ] },
+    ],
+  },
+  {
+    h: 'Privacy',
+    blocks: [
+      { type: 'p', text: 'Club Scrub collects customer information solely for booking, communication, service delivery and business administration purposes.' },
+      { type: 'p', text: 'Customer information will not be sold to third parties.' },
+    ],
   },
 ]
+
+function Block({ block }) {
+  if (block.type === 'ul') {
+    return (
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 12px' }}>
+        {block.items.map((item) => (
+          <li key={item} style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
+            <span style={{ color: '#EC2461', flexShrink: 0, lineHeight: 1.8 }}>•</span>
+            <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300, lineHeight: 1.8 }}>{item}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  return <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300, lineHeight: 1.8, marginBottom: 12 }}>{block.text}</p>
+}
 
 export default function Terms() {
   return (
@@ -61,7 +153,7 @@ export default function Terms() {
             Terms & <span style={{ color: '#EC2461' }}>Conditions</span>
           </h1>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, lineHeight: 1.7 }}>
-            The terms below govern your use of ClubScrub Home Assistance services in Accra, Ghana.
+            Club Scrub is your extra pair of hands at home. The terms below govern your use of Club Scrub home support services.
           </p>
         </FadeUp>
       </section>
@@ -71,10 +163,10 @@ export default function Terms() {
       {/* SECTIONS */}
       <section className="cs-section">
         {SECTIONS.map((s, i) => (
-          <FadeUp key={s.h} delay={i * 0.03}>
+          <FadeUp key={s.h} delay={Math.min(i * 0.03, 0.2)}>
             <div style={{ marginBottom: 28 }}>
-              <h2 style={{ fontSize: 16, fontWeight: 500, color: '#EC2461', marginBottom: 8 }}>{s.h}</h2>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300, lineHeight: 1.8 }}>{s.p}</p>
+              <h2 style={{ fontSize: 16, fontWeight: 500, color: '#EC2461', marginBottom: 10 }}>{s.h}</h2>
+              {s.blocks.map((b, bi) => <Block key={bi} block={b} />)}
             </div>
           </FadeUp>
         ))}
@@ -99,11 +191,9 @@ export default function Terms() {
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 12, fontWeight: 300 }}>
           © 2026 ClubScrub Home Assistance · Accra, Ghana
         </p>
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 4, fontWeight: 300 }}>
-          Professional Home Assistance, Done Right.
-        </p>
         <div className="flex justify-center gap-6 mt-4">
           <Link to="/" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Home</Link>
+          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Privacy Policy</Link>
           <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>info@club-scrub.com</a>
         </div>
       </footer>

@@ -7,11 +7,12 @@ import ServiceCarousel from '../components/ServiceCarousel.jsx'
 import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
 
 const FAQ = [
-  { q: 'How do I book a ClubScrub Assistant?', a: 'Tap "Book Now", select the tasks you need done, then your area, date and start time. The process takes under 3 minutes.' },
-  { q: 'How is the price calculated?', a: 'Pricing is based on time. The minimum booking is GH₵ 349 for up to 3 hours, then GH₵ 100 for each extra hour (rounded up). As you pick tasks, we estimate the time and show your price instantly.' },
-  { q: 'Are assistants vetted and trained?', a: 'Yes. Every ClubScrub Assistant goes through a rigorous selection, training and supervised onboarding process before accepting jobs.' },
-  { q: 'What payment methods are accepted?', a: 'Pay securely in-app by card or Mobile Money (via Paystack), or choose cash on arrival or bank transfer.' },
-  { q: 'What if I need to cancel?', a: 'You can cancel upcoming bookings from your dashboard. Cancellations more than 24 hours before your appointment are fully refunded.' },
+  { q: 'Are your staff vetted?', a: 'Yes. All Home Assistants undergo an application and screening process before joining Club Scrub.' },
+  { q: 'Do I need to provide cleaning products?', a: 'Customers may provide preferred products, or Club Scrub may supply basic products where available.' },
+  { q: 'Can I pay in cash?', a: 'Yes. Customers may choose Mobile Money, Card, or Cash on Completion.' },
+  { q: 'What areas do you cover?', a: 'Club Scrub currently serves selected areas within Accra.' },
+  { q: 'Do you provide deep cleaning?', a: 'No. Club Scrub focuses on home support, tidying, laundry, ironing and light cleaning services.' },
+  { q: 'Can I book recurring visits?', a: 'Yes. Weekly, fortnightly and custom recurring bookings are available.' },
 ]
 
 function FAQItem({ q, a }) {
@@ -282,11 +283,15 @@ export default function Landing() {
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 4, fontWeight: 300 }}>
           Professional Home Assistance, Done Right.
         </p>
-        <div className="flex justify-center gap-6 mt-4">
+        <div className="flex flex-wrap justify-center gap-6 mt-4">
           <Link to="/assistant" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Become an Assistant</Link>
           <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Terms & Conditions</Link>
+          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Privacy Policy</Link>
           <Link to="/admin" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Admin</Link>
         </div>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 20, fontWeight: 300, lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
+          Club Scrub provides light home support and refresh services. Services are not intended to replace specialist cleaning, restoration, construction cleaning, pest control, or hazardous waste removal services.
+        </p>
       </footer>
     </div>
   )
