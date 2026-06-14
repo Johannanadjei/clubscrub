@@ -71,22 +71,46 @@ export default function Landing() {
             </Link>
           </div>
 
-          {/* Compact pricing summary */}
-          <div style={{ marginTop: 40, padding: '24px', background: 'rgba(255,255,255,0.95)', borderRadius: 16 }}>
-            <p style={{ fontSize: 11, color: '#EC2461', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, fontWeight: 600 }}>Transparent pricing</p>
-            <p style={{ fontSize: 15, color: '#0a0a0a', fontWeight: 500, marginBottom: 4 }}>Simple, transparent pricing.</p>
-            <p style={{ fontSize: 13, color: '#555', fontWeight: 300, marginBottom: 16 }}>Pay for the time you need. Pick tasks, see the price instantly.</p>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 16 }}>
-              <span className="font-display italic" style={{ fontSize: 42, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>GH₵ {PRICING.base}</span>
-              <span style={{ fontSize: 13, color: '#666' }}>minimum · {PRICING.baseHours} hrs</span>
+          {/* Pricing card */}
+          <div style={{ marginTop: 40, background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '28px 24px' }}>
+
+            {/* Eyebrow */}
+            <p style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 24, fontFamily: 'DM Sans, sans-serif' }}>Transparent pricing</p>
+
+            {/* Hero price */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, marginBottom: 6 }}>
+              <span className="font-display italic" style={{ fontSize: 64, fontWeight: 700, lineHeight: 1, color: '#fff', letterSpacing: '-2px' }}>{PRICING.base}</span>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', paddingBottom: 10, fontFamily: 'DM Sans, sans-serif' }}>GH₵ · minimum</span>
             </div>
-            <p style={{ fontSize: 12, color: '#444', marginBottom: 8, fontWeight: 500 }}>How it adds up</p>
-            <p style={{ fontSize: 12, color: '#555', marginBottom: 12, lineHeight: 1.6 }}>
-              3 hrs = <strong style={{ color: '#EC2461' }}>GH₵ {PRICING.base}</strong> · 4 hrs = <strong style={{ color: '#EC2461' }}>GH₵ {PRICING.base + PRICING.hourlyRate}</strong> · 5 hrs = <strong style={{ color: '#EC2461' }}>GH₵ {PRICING.base + PRICING.hourlyRate * 2}</strong>. Extra time is rounded up to the next hour.
+
+            {/* Pink badge */}
+            <span style={{ display: 'inline-block', background: '#EC2461', color: '#fff', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '5px 12px', borderRadius: 100, marginBottom: 20, fontFamily: 'DM Sans, sans-serif' }}>{PRICING.baseHours} hours included</span>
+
+            {/* 3-column breakdown grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden', marginBottom: 20 }}>
+              {[[3, PRICING.base], [4, PRICING.base + PRICING.hourlyRate], [5, PRICING.base + PRICING.hourlyRate * 2]].map(([hrs, price]) => (
+                <div key={hrs} style={{ background: '#0a0a0a', padding: '14px 16px' }}>
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 4, fontFamily: 'DM Sans, sans-serif' }}>{hrs} hours</p>
+                  <p className="font-display" style={{ fontSize: 20, fontWeight: 600, color: '#fff' }}>
+                    <span style={{ color: '#EC2461' }}>₵</span>{price}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Note */}
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', lineHeight: 1.6, marginBottom: 20, fontFamily: 'DM Sans, sans-serif' }}>
+              Pay for the time you need. Pick your tasks, see the price instantly. Extra time rounded up to the next hour.
             </p>
-            <div style={{ display: 'flex', gap: 16, paddingTop: 12, borderTop: '1px solid #f0f0f0' }}>
-              <span style={{ fontSize: 12, color: '#666' }}>+GH₵ {PRICING.hourlyRate} / extra hr</span>
-              <span style={{ fontSize: 12, color: '#666' }}>Sun +GH₵ {SUNDAY_SURCHARGE} surcharge</span>
+
+            {/* Surcharge pills */}
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', fontFamily: 'DM Sans, sans-serif' }}>
+                +<strong style={{ color: '#fff', fontWeight: 500 }}>GH₵ {PRICING.hourlyRate}</strong> / extra hr
+              </span>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', fontFamily: 'DM Sans, sans-serif' }}>
+                Sundays +<strong style={{ color: '#fff', fontWeight: 500 }}>GH₵ {SUNDAY_SURCHARGE}</strong>
+              </span>
             </div>
           </div>
         </FadeUp>
