@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, ChevronLeft, ChevronRight, X, AlertCircle, Clock, Sparkles } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, X, AlertCircle, Clock, Sparkles, Upload } from 'lucide-react'
 import { Logo, FadeUp, PriceRow, Divider } from '../components/UI.jsx'
 import Calendar from '../components/Calendar.jsx'
 import {
@@ -13,9 +13,51 @@ import { useBookings } from '../hooks/useStore.js'
 import { payWithPaystack } from '../lib/paystack.js'
 import { sendBookingEmails } from '../lib/email.js'
 
-const STEPS = ['Tasks', 'Area', 'Date & Time', 'Summary', 'Your Info', 'Confirmed']
+const STEPS = ['Tasks', 'Share your space', 'Area', 'Date & Time', 'Summary', 'Your Info', 'Confirmed']
 
 const TIME_SLOTS = ['Morning (from 8am)', 'Afternoon (from 1pm)']
+
+// Optional media upload (Share your space step).
+const MAX_MEDIA = 6
+const MAX_VIDEO_SECONDS = 60
+const IMAGE_EXT = ['jpg', 'jpeg', 'png', 'heic', 'webp']
+const VIDEO_EXT = ['mp4', 'mov']
+
+// Direct, unsigned upload to Cloudinary. Returns the hosted URL.
+async function uploadToCloudinary(file, folderId) {
+  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+  const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+  if (!cloudName || !uploadPreset) {
+    throw new Error('Cloudinary is not configured')
+  }
+  const form = new FormData()
+  form.append('file', file)
+  form.append('upload_preset', uploadPreset)
+  form.append('folder', `clubscrub/${folderId}`)
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+    method: 'POST',
+    body: form,
+  })
+  if (!res.ok) throw new Error('Upload failed')
+  const json = await res.json()
+  return json.secure_url || json.url
+}
+
+// Read a video's duration (seconds) from its file. Resolves 0 if unreadable.
+function getVideoDuration(file) {
+  return new Promise((resolve) => {
+    try {
+      const url = URL.createObjectURL(file)
+      const v = document.createElement('video')
+      v.preload = 'metadata'
+      v.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(v.duration || 0) }
+      v.onerror = () => { URL.revokeObjectURL(url); resolve(0) }
+      v.src = url
+    } catch {
+      resolve(0)
+    }
+  })
+}
 
 // Payment options. `online` routes through Paystack (card + Mobile Money);
 // the others are settled manually and recorded with a payment status.
@@ -208,7 +250,196 @@ function StepTasks({ data, update, onNext }) {
   )
 }
 
-// STEP 2: Area
+// STEP 2: Share your space (optional) — upload photos/videos to Cloudinary
+function StepMedia({ data, setData, onBack, onNext }) {
+  const [dragging, setDragging] = useState(false)
+  const [notice, setNotice] = useState('')
+  const inputRef = useRef(null)
+  const counter = useRef(0)
+
+  const media = data.media || []
+  const uploadedCount = media.filter(m => m.status === 'done').length
+  const atMax = media.length >= MAX_MEDIA
+
+  // Apply a change to the media list and keep mediaUrls in sync for the booking.
+  const commit = (updater) => setData(p => {
+    const nextMedia = updater(p.media || [])
+    return {
+      ...p,
+      media: nextMedia,
+      mediaUrls: nextMedia.filter(m => m.status === 'done' && m.url).map(m => m.url),
+    }
+  })
+
+  const startUpload = (file, kind, preview) => {
+    const id = `m${++counter.current}`
+    commit(prev => [...prev, { id, name: file.name, kind, preview, status: 'uploading', progress: 0, url: '' }])
+    // fetch() can't report upload progress, so we advance a gentle indicator
+    // while the request is in flight and snap to 100% on completion.
+    const timer = setInterval(() => {
+      commit(prev => prev.map(m =>
+        m.id === id && m.status === 'uploading' && m.progress < 90
+          ? { ...m, progress: m.progress + 10 } : m))
+    }, 200)
+    uploadToCloudinary(file, data.mediaFolderId)
+      .then(url => {
+        clearInterval(timer)
+        commit(prev => prev.map(m => m.id === id ? { ...m, status: 'done', progress: 100, url } : m))
+      })
+      .catch(() => {
+        clearInterval(timer)
+        commit(prev => prev.map(m => m.id === id ? { ...m, status: 'error', progress: 100 } : m))
+        setNotice("One of your files didn't upload. Please remove it and try again.")
+      })
+  }
+
+  const addFiles = async (fileList) => {
+    setNotice('')
+    const incoming = Array.from(fileList || [])
+    if (!incoming.length) return
+    const remaining = MAX_MEDIA - (data.media || []).length
+    if (remaining <= 0) { setNotice(`You can upload up to ${MAX_MEDIA} files.`); return }
+    const toAdd = incoming.slice(0, remaining)
+    if (incoming.length > remaining) {
+      setNotice(`You can upload up to ${MAX_MEDIA} files — we added the first ${remaining}.`)
+    }
+    for (const file of toAdd) {
+      const ext = (file.name.split('.').pop() || '').toLowerCase()
+      const isImage = IMAGE_EXT.includes(ext) || file.type.startsWith('image/')
+      const isVideo = VIDEO_EXT.includes(ext) || file.type.startsWith('video/')
+      if (!isImage && !isVideo) {
+        setNotice('Only images (jpg, png, heic, webp) and videos (mp4, mov) are allowed.')
+        continue
+      }
+      if (isVideo) {
+        const duration = await getVideoDuration(file)
+        if (duration > MAX_VIDEO_SECONDS) {
+          setNotice('Videos must be 60 seconds or shorter.')
+          continue
+        }
+      }
+      let preview = ''
+      try { preview = URL.createObjectURL(file) } catch { preview = '' }
+      startUpload(file, isVideo ? 'video' : 'image', preview)
+    }
+  }
+
+  const removeFile = (id) => {
+    const target = (data.media || []).find(m => m.id === id)
+    if (target?.preview) { try { URL.revokeObjectURL(target.preview) } catch { /* ignore */ } }
+    commit(prev => prev.filter(m => m.id !== id))
+    setNotice('')
+  }
+
+  const openPicker = () => { if (!atMax) inputRef.current?.click() }
+
+  return (
+    <FadeUp>
+      <div className="mb-6">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+          <h2 className="font-display italic" style={{ fontSize: 26, fontWeight: 500 }}>Share your space</h2>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', border: '0.5px solid rgba(255,255,255,0.2)', borderRadius: 20, padding: '2px 10px' }}>Optional</span>
+        </div>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>
+          Help your assistant prepare — photos protect everyone and lead to better service.
+        </p>
+      </div>
+
+      {/* Drop zone */}
+      <div
+        onClick={openPicker}
+        onDragOver={e => { e.preventDefault(); if (!atMax) setDragging(true) }}
+        onDragLeave={e => { e.preventDefault(); setDragging(false) }}
+        onDrop={e => { e.preventDefault(); setDragging(false); if (!atMax) addFiles(e.dataTransfer.files) }}
+        role="button" tabIndex={0}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPicker() } }}
+        style={{
+          border: `1.5px dashed ${dragging ? '#EC2461' : 'rgba(255,255,255,0.18)'}`,
+          background: dragging ? 'rgba(236,36,97,0.07)' : 'rgba(255,255,255,0.02)',
+          borderRadius: 14, padding: '30px 20px', textAlign: 'center',
+          cursor: atMax ? 'not-allowed' : 'pointer', opacity: atMax ? 0.5 : 1,
+          transition: 'all 0.2s ease', minHeight: 44,
+        }}>
+        <Upload size={26} style={{ color: dragging ? '#EC2461' : 'rgba(255,255,255,0.4)', display: 'block', margin: '0 auto 10px' }} />
+        <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>
+          {atMax ? 'Maximum of 6 files added' : 'Tap to upload or drag files here'}
+        </p>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+          Images (jpg, png, heic, webp) or video (mp4, mov, max 60s) · up to {MAX_MEDIA} files
+        </p>
+        <input ref={inputRef} type="file" accept="image/*,video/*,.heic,.mov" multiple
+          style={{ display: 'none' }}
+          onChange={e => { addFiles(e.target.files); e.target.value = '' }} />
+      </div>
+
+      {notice && (
+        <p style={{ fontSize: 12, color: '#FBBF24', marginTop: 10, fontWeight: 300 }}>{notice}</p>
+      )}
+
+      {/* Thumbnails */}
+      {media.length > 0 && (
+        <>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', margin: '20px 0 10px' }}>
+            {media.length} / {MAX_MEDIA} added
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            {media.map(m => (
+              <div key={m.id} style={{ position: 'relative', aspectRatio: '1 / 1', borderRadius: 10, overflow: 'hidden', background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.08)' }}>
+                {m.kind === 'video'
+                  ? <video src={m.preview || m.url} muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : <img src={m.preview || m.url} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+
+                {/* Uploading / error overlay */}
+                {m.status !== 'done' && (
+                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 10 }}>
+                    {m.status === 'error' ? (
+                      <p style={{ fontSize: 11, color: '#EC2461', textAlign: 'center', fontWeight: 400 }}>Upload failed</p>
+                    ) : (
+                      <>
+                        <div style={{ width: '80%', height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.2)', overflow: 'hidden' }}>
+                          <div style={{ width: `${m.progress}%`, height: '100%', background: '#EC2461', transition: 'width 0.2s ease' }} />
+                        </div>
+                        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', marginTop: 6 }}>{m.progress}%</span>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* Video badge */}
+                {m.kind === 'video' && m.status === 'done' && (
+                  <span style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 9, color: '#fff', background: 'rgba(0,0,0,0.6)', borderRadius: 4, padding: '1px 5px', letterSpacing: '0.05em' }}>VIDEO</span>
+                )}
+
+                {/* Remove */}
+                <button onClick={(e) => { e.stopPropagation(); removeFile(m.id) }} aria-label={`Remove ${m.name}`}
+                  style={{ position: 'absolute', top: 5, right: 5, width: 30, height: 30, borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,0.65)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <X size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+        <button className="cs-btn-ghost" onClick={onBack} style={{ minHeight: 48, padding: '0 18px' }}>
+          <ChevronLeft size={16} /> Back
+        </button>
+        <button onClick={onNext} className="cs-btn-ghost"
+          style={{ flex: 1, minHeight: 48, justifyContent: 'center', color: 'rgba(255,255,255,0.55)' }}>
+          Skip for now
+        </button>
+        <button className="cs-btn-primary" onClick={onNext} disabled={uploadedCount < 1}
+          style={{ flex: 1, minHeight: 48, justifyContent: 'center', opacity: uploadedCount < 1 ? 0.4 : 1, cursor: uploadedCount < 1 ? 'not-allowed' : 'pointer' }}>
+          Continue <ChevronRight size={16} />
+        </button>
+      </div>
+    </FadeUp>
+  )
+}
+
+// STEP 3: Area
 function StepArea({ data, update, onBack, onNext }) {
   const [search, setSearch] = useState('')
   const filtered = allAreas.filter((a) => a.toLowerCase().includes(search.toLowerCase()))
@@ -237,7 +468,7 @@ function StepArea({ data, update, onBack, onNext }) {
   )
 }
 
-// STEP 3: Date & Time
+// STEP 4: Date & Time
 function StepDate({ data, update, onBack, onNext }) {
   const sundaySelected = isSunday(data.date)
   return (
@@ -265,7 +496,7 @@ function StepDate({ data, update, onBack, onNext }) {
   )
 }
 
-// STEP 4: Summary
+// STEP 5: Summary
 function StepSummary({ data, onBack, onNext }) {
   const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   const labels = taskLabels(data.tasks || [])
@@ -312,7 +543,7 @@ function StepSummary({ data, onBack, onNext }) {
   )
 }
 
-// STEP 5: Customer info + payment
+// STEP 6: Customer info + payment
 function StepInfo({ data, update, onBack, onNext, submitting, error }) {
   const info = data.customer || {}
   const set = (k, v) => update({ customer: { ...info, [k]: v } })
@@ -373,7 +604,7 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
   )
 }
 
-// STEP 6: Confirmed
+// STEP 7: Confirmed
 function StepConfirmed({ data, bookingRef, onBookAnother }) {
   const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   return (
@@ -411,7 +642,7 @@ function StepConfirmed({ data, bookingRef, onBookAnother }) {
 
 export default function BookingFlow() {
   const [step, setStep] = useState(0)
-  const [data, setData] = useState({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '' })
+  const [data, setData] = useState(() => ({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '', media: [], mediaUrls: [], mediaFolderId: generateRef() }))
   const [bookingRef, setBookingRef] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -424,7 +655,7 @@ export default function BookingFlow() {
 
   // Reset the whole flow back to step 1 for a fresh booking.
   const resetFlow = () => {
-    setData({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '' })
+    setData({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '', media: [], mediaUrls: [], mediaFolderId: generateRef() })
     setBookingRef('')
     setError('')
     setSubmitting(false)
@@ -447,6 +678,7 @@ export default function BookingFlow() {
       zone: data.zone, area: data.area,
       date: data.date, timeSlot: data.timeSlot,
       notes: data.notes,
+      mediaUrls: data.mediaUrls || [],
       customer: data.customer,
       payment: payOption.id,
       paymentLabel: payOption.label,
@@ -519,6 +751,7 @@ export default function BookingFlow() {
 
   const steps = [
     <StepTasks data={data} update={update} onNext={next} />,
+    <StepMedia data={data} setData={setData} onBack={back} onNext={next} />,
     <StepArea data={data} update={update} onBack={back} onNext={next} />,
     <StepDate data={data} update={update} onBack={back} onNext={next} />,
     <StepSummary data={data} onBack={back} onNext={next} />,
