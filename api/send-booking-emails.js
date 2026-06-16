@@ -82,6 +82,7 @@ function buildAdminEmailHtml(booking) {
       ${row('Name', escapeHtml(customer.name || '—'))}
       ${row('Phone', escapeHtml(customer.phone || '—'))}
       ${row('Email', escapeHtml(customer.email || '—'))}
+      ${row('Address', escapeHtml(customer.address || '—'))}
     </table>
 
     <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);margin:24px 0 8px;">Booking</div>

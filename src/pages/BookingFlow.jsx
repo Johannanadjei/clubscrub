@@ -558,13 +558,20 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
         {[
           { k: 'name', label: 'Full name', ph: 'e.g. Kwame Asante', type: 'text' },
           { k: 'email', label: 'Email address', ph: 'you@email.com', type: 'email' },
-          { k: 'phone', label: 'Phone number', ph: '024 000 0000', type: 'tel' },
-          { k: 'address', label: 'Home address', ph: 'House no., street, area', type: 'text' },
-        ].map(({ k, label, ph, type }) => (
+          { k: 'phone', label: 'Phone number', ph: '024 000 0000', type: 'tel', required: true },
+          { k: 'address', label: 'Property address', ph: 'e.g. 5 Liberation Road, Airport Residential Area', type: 'text', required: true },
+        ].map(({ k, label, ph, type, required }) => (
           <div key={k} style={{ marginBottom: 14 }}>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>{label}</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+              {label}{required && <span style={{ color: '#EC2461' }}> *</span>}
+            </p>
             <input className="cs-input" type={type} placeholder={ph} value={info[k] || ''}
               onChange={e => set(k, e.target.value)} />
+            {k === 'address' && (
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 6, fontWeight: 300 }}>
+                Your assistant will confirm the exact location before arrival.
+              </p>
+            )}
             {k === 'address' && addressBrief && (
               <p style={{ fontSize: 12, color: '#FBBF24', marginTop: 6, fontWeight: 300 }}>
                 Your address looks a bit brief. Adding a landmark or street name helps your assistant find you easily.
@@ -598,7 +605,7 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
       )}
       <NavButtons onBack={onBack} onNext={onNext}
         nextLabel={submitting ? 'Processing…' : nextLabel}
-        nextDisabled={!valid || submitting} />
+        nextDisabled={!valid || !data.customer.phone || !data.customer.address || submitting} />
     </FadeUp>
   )
 }
