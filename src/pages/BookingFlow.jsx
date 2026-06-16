@@ -11,7 +11,6 @@ import {
 } from '../data/index.js'
 import { useBookings } from '../hooks/useStore.js'
 import { payWithPaystack } from '../lib/paystack.js'
-import { sendBookingEmails } from '../lib/email.js'
 
 const STEPS = ['Tasks', 'Share your space', 'Area', 'Date & Time', 'Summary', 'Your Info', 'Confirmed']
 
@@ -697,8 +696,13 @@ export default function BookingFlow() {
     setBookingRef(ref)
     setSubmitting(false)
     next()
-    // Side effect — never blocks the confirmed booking (falls back to console).
-    sendBookingEmails(booking)
+    // Notify admin — fire and forget. Never blocks or surfaces errors to the
+    // customer; the confirmed booking is already saved.
+    fetch('/api/send-booking-emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(booking),
+    }).catch(() => {})
   }
 
   const confirm = async () => {
