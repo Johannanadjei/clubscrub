@@ -5,7 +5,7 @@ import { ArrowRight, Check, X, ChevronDown, MapPin, Clock, Shield, Star } from '
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
 import ResetCarousel from '../components/ResetCarousel.jsx'
 import CookieNotice from '../components/CookieNotice.jsx'
-import { ZONES, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
+import { ZONES, EXCLUDED_TASKS, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
 
 function AccordionRow({ section }) {
   const [open, setOpen] = React.useState(false)
@@ -260,13 +260,20 @@ export default function Landing() {
             <AccordionRow key={section.num} section={section} />
           ))}
         </div>
+      </section>
 
-        {/* Not included */}
-        <div style={{ marginTop: 32, padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '0.5px solid rgba(255,255,255,0.06)', borderRadius: 12 }}>
-          <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>Not included</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {['Construction cleaning', 'Pest control', 'Exterior windows', 'Biohazard removal', 'Heavy lifting', 'Roof cleaning'].map(item => (
-              <span key={item} style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 100, padding: '4px 14px', fontWeight: 300 }}>{item}</span>
+      {/* WHAT'S NOT INCLUDED */}
+      <section style={{ padding: '0 24px 40px' }}>
+        <div className="cs-card p-5" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Not included</p>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', marginBottom: 16, fontWeight: 300, lineHeight: 1.6 }}>
+            ClubScrub focuses on light home upkeep and household support. Specialist or deep-cleaning services are not included.
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {EXCLUDED_TASKS.map(t => (
+              <span key={t} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 8, fontSize: 11, padding: '4px 10px', color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>
+                {t}
+              </span>
             ))}
           </div>
         </div>
