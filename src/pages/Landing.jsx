@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, X, ChevronDown, MapPin, Clock, Shield, Star } from 'lucide-react'
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
-import ServiceCarousel from '../components/ServiceCarousel.jsx'
+import ResetCarousel from '../components/ResetCarousel.jsx'
 import CookieNotice from '../components/CookieNotice.jsx'
 import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
 
@@ -35,6 +35,7 @@ function FAQItem({ q, a }) {
 }
 
 export default function Landing() {
+  const navigate = useNavigate()
   return (
     <div className="cs-landing">
       {/* NAV — logo left, Book Now right (top nav, shown on all sizes) */}
@@ -53,16 +54,16 @@ export default function Landing() {
       <section className="cs-hero-section">
         <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,36,97,0.12) 0%, transparent 65%)', pointerEvents: 'none' }} />
         <FadeUp>
-          <span className="cs-badge mb-5">🇬🇭 Serving Accra</span>
+          <span className="cs-badge mb-5">🇬🇭 Private Home Assistance · Accra</span>
         </FadeUp>
         <FadeUp delay={0.05}>
           <h1 className="font-display italic" style={{ fontSize: 'clamp(36px, 8vw, 52px)', lineHeight: 1.12, fontWeight: 600, marginBottom: 20 }}>
-            Professional Home<br />Assistance, <span style={{ color: '#EC2461' }}>Done Right.</span>
+            Your home,<br /><span style={{ color: '#EC2461' }}>always at its finest.</span>
           </h1>
         </FadeUp>
         <FadeUp delay={0.1}>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 460, marginBottom: 36, fontWeight: 300 }}>
-            Pick the tasks you need done — we estimate the time and price instantly. Trained assistants. Clear pricing. No hidden costs.
+            Private Home Assistants for Ghana's most discerning households. Book a Signature Reset and come home to something better.
           </p>
         </FadeUp>
         <FadeUp delay={0.15}>
@@ -119,9 +120,14 @@ export default function Landing() {
         </FadeUp>
       </section>
 
-      {/* SERVICE CAROUSEL — full-width, all screen sizes */}
-      <section className="cs-carousel-section">
-        <ServiceCarousel />
+      {/* SIGNATURE RESETS — premium room-based bundles */}
+      <section className="cs-section">
+        <FadeUp>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
+          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 8 }}>Signature Home <span style={{ color: '#EC2461' }}>Resets</span></h2>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 24, fontWeight: 300 }}>Every space. Perfectly presented.</p>
+        </FadeUp>
+        <ResetCarousel onSelect={() => navigate('/book')} />
       </section>
 
       <Divider />
@@ -134,10 +140,9 @@ export default function Landing() {
         </FadeUp>
         <div className="cs-steps">
         {[
-          { n: '01', t: 'Pick your tasks', d: 'Choose what you need done — we estimate the time and price live.' },
-          { n: '02', t: 'Pick your area & date', d: 'Tell us your area, preferred date and start time.' },
-          { n: '03', t: 'Confirm & pay', d: 'Pay securely by card or Mobile Money, or choose cash on arrival.' },
-          { n: '04', t: 'Relax', d: 'Receive your booking reference. We assign your assistant and handle the rest.' },
+          { n: '01', t: 'Choose your Reset', d: 'Select from our Signature Resets or build your own' },
+          { n: '02', t: 'Choose your time', d: 'Pick a date and arrival window that suits your schedule' },
+          { n: '03', t: 'Come home to perfection', d: 'Your assistant arrives, cares for your home, and leaves it transformed' },
         ].map((s, i) => (
           <FadeUp key={s.n} delay={i * 0.04}>
             <div className="flex gap-4 mb-5">

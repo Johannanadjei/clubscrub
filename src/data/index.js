@@ -147,6 +147,55 @@ export const QUICK_SELECTS = [
   },
 ]
 
+// ---------------------------------------------------------------------------
+// SIGNATURE RESETS — premium, room-based bundles shown on the landing page.
+// Each Reset is a curated set of tasks presented as a polished landscape card.
+// ---------------------------------------------------------------------------
+export const RESETS = [
+  {
+    id: 'kitchen',
+    name: 'Kitchen Reset',
+    description: 'A beautifully presented kitchen, ready for the day ahead.',
+    tasks: ['Wash dishes', 'Clean countertops & stovetop', 'Clean sink', 'Wipe appliance exteriors', 'Empty bin', 'Sweep & mop floor', 'Tidy & declutter'],
+    img: '/resets/kitchen.jpg',
+  },
+  {
+    id: 'bedroom',
+    name: 'Bedroom Reset',
+    description: 'A calm, hotel-inspired bedroom experience.',
+    tasks: ['Make beds', 'Change bed linen', 'Fold & put away clothes', 'Dust surfaces', 'Sweep & mop floor', 'Tidy & declutter'],
+    img: '/resets/bedroom.jpg',
+  },
+  {
+    id: 'bathroom',
+    name: 'Bathroom Reset',
+    description: 'A polished, spa-standard bathroom.',
+    tasks: ['Clean toilet', 'Clean sink & mirror', 'Clean shower / bath', 'Arrange towels', 'Sweep & mop floor'],
+    img: '/resets/bathroom.jpg',
+  },
+  {
+    id: 'living',
+    name: 'Living Space Reset',
+    description: 'A welcoming, guest-ready living environment.',
+    tasks: ['Dust surfaces', 'Tidy & declutter', 'Sweep & mop floor', 'Arrange soft furnishings'],
+    img: '/resets/living.jpg',
+  },
+  {
+    id: 'full',
+    name: 'Full Home Reset',
+    description: 'Our complete Signature Reset — every room, every detail.',
+    tasks: ['Wash dishes', 'Clean countertops & stovetop', 'Clean sink', 'Sweep & mop floor', 'Make beds', 'Change bed linen', 'Fold & put away clothes', 'Dust surfaces', 'Clean toilet', 'Clean shower / bath', 'Tidy & declutter'],
+    img: '/resets/full.jpg',
+  },
+  {
+    id: 'guest',
+    name: 'Guest Ready Reset',
+    description: 'Perfect before guests arrive, events, or hosting.',
+    tasks: ['Tidy & declutter', 'Dust surfaces', 'Sweep & mop floor', 'Clean toilet', 'Clean sink & mirror', 'Wash dishes', 'Clean countertops & stovetop', 'Arrange soft furnishings'],
+    img: '/resets/guest.jpg',
+  },
+]
+
 export const EXCLUDED_TASKS = [
   'Deep cleaning','Heavy grease removal','Oven interior cleaning',
   'Fridge deep cleaning','Tile/grout scrubbing','Hand washing large laundry loads',
