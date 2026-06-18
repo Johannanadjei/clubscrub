@@ -44,6 +44,7 @@ export default function Landing() {
         <div className="flex items-center gap-3">
           <Link to="/assistant" className="cs-nav-hide-mobile" style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', textDecoration: 'none' }}>Become an Assistant</Link>
           <Link to="/contact" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Contact</Link>
+          <Link to="/membership" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Membership</Link>
           <Link to="/book">
             <button className="cs-btn-primary cs-nav-btn">Book Now</button>
           </Link>
@@ -289,6 +290,7 @@ export default function Landing() {
         </p>
         <div className="flex flex-wrap justify-center gap-6 mt-4">
           <Link to="/assistant" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Become an Assistant</Link>
+          <Link to="/membership" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Membership</Link>
           <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Terms & Conditions</Link>
           <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacy Policy</Link>
           <Link to="/assistant-agreement" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Home Assistant Agreement</Link>
