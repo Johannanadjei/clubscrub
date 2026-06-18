@@ -144,7 +144,7 @@ function PricingFeedback({ estimate }) {
           <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}>
             Estimated duration: {formatDuration(estimate.mins)}
           </span>
-          <span className="font-display italic" style={{ fontSize: 28, fontWeight: 600, color: '#EC2461', lineHeight: 1, whiteSpace: 'nowrap' }}>
+          <span className="font-display italic" style={{ fontSize: 32, fontWeight: 600, color: '#EC2461', lineHeight: 1, whiteSpace: 'nowrap' }}>
             From GH₵ {estimate.price.toLocaleString()}
           </span>
         </div>
@@ -187,9 +187,6 @@ function StepTasks({ data, update, onNext }) {
     <div style={{ maxWidth: 560, margin: '0 auto' }}>
       {/* Header */}
       <FadeUp>
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 14, fontFamily: 'DM Sans, sans-serif' }}>
-          Step 1 of 5
-        </p>
         <h1 className="font-display italic" style={{ fontSize: 36, fontWeight: 500, color: '#fff', lineHeight: 1.1, marginBottom: 10 }}>
           Your Home Reset
         </h1>
@@ -214,7 +211,7 @@ function StepTasks({ data, update, onNext }) {
                   data-selected={isSel}
                 >
                   <div style={{ minWidth: 0 }}>
-                    <p className="font-display italic" style={{ fontSize: 20, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 4 }}>
+                    <p className="font-display italic" style={{ fontSize: 22, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 4 }}>
                       {r.name}
                     </p>
                     <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.45 }}>
@@ -227,7 +224,7 @@ function StepTasks({ data, update, onNext }) {
                         <Check size={14} color="#fff" />
                       </div>
                     ) : (
-                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 300, whiteSpace: 'nowrap' }}>
                         {r.timeRange}
                       </span>
                     )}
@@ -244,13 +241,13 @@ function StepTasks({ data, update, onNext }) {
         })}
       </div>
 
-      {/* Custom — add individual services on top of (or instead of) a reset */}
-      <div style={{ marginTop: 12 }}>
+      {/* Custom — customise individual services on top of (or instead of) a reset */}
+      <div>
         <button
           type="button"
           onClick={() => setCustomOpen(o => !o)}
-          style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 400, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', padding: '6px 0', minHeight: 32 }}>
-          {customOpen ? '– Hide individual services' : '+ Add individual services'}
+          style={{ display: 'block', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 400, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', margin: '24px 0', padding: 0, minHeight: 32 }}>
+          {customOpen ? 'hide individual services' : 'or customise individual services'}
         </button>
 
         {/* Pricing also appears here when tasks are chosen without a reset */}
@@ -309,12 +306,19 @@ function StepTasks({ data, update, onNext }) {
         </AnimatePresence>
       </div>
 
-      {/* Continue — disabled until a reset (or task) is chosen; pulses on enable */}
+      {/* Continue — disabled until a reset (or task) is chosen; pulses on enable.
+          Disabled reads as a quiet outlined button; enabled is full pink. */}
       <button
         className={`cs-btn-primary ${enabled ? 'cs-pulse-once' : ''}`}
         onClick={onNext}
         disabled={!enabled}
-        style={{ width: '100%', justifyContent: 'center', minHeight: 52, marginTop: 28, opacity: enabled ? 1 : 0.35, cursor: enabled ? 'pointer' : 'not-allowed' }}>
+        style={{
+          width: '100%', justifyContent: 'center', minHeight: 52, marginTop: 0,
+          background: enabled ? '#EC2461' : 'transparent',
+          border: enabled ? 'none' : '0.5px solid rgba(255,255,255,0.15)',
+          color: enabled ? '#fff' : 'rgba(255,255,255,0.25)',
+          cursor: enabled ? 'pointer' : 'not-allowed',
+        }}>
         Continue <ChevronRight size={16} />
       </button>
     </div>
