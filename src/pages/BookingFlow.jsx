@@ -12,7 +12,9 @@ import {
 import { useBookings } from '../hooks/useStore.js'
 import { payWithPaystack } from '../lib/paystack.js'
 
-const STEPS = ['Tasks', 'Share your space', 'Area', 'Date & Time', 'Summary', 'Your Info', 'Confirmed']
+// The six customer-facing steps, in order. The post-booking confirmation
+// screen is intentionally NOT included — it isn't a numbered step.
+const STEPS = ['Your Home Reset', 'Share your space', 'Your area', 'Date & time', 'Your details', 'Summary & confirm']
 
 const TIME_SLOTS = ['Morning (from 8am)', 'Afternoon (from 1pm)']
 
@@ -571,13 +573,15 @@ function StepDate({ data, update, onBack, onNext }) {
   )
 }
 
-// STEP 5: Summary
-function StepSummary({ data, onBack, onNext }) {
+// STEP 6: Summary & confirm — final review; the confirm/pay action fires here.
+function StepSummary({ data, onBack, onNext, submitting, error }) {
   const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   const labels = taskLabels(data.tasks || [])
+  const selectedPay = PAYMENT_OPTIONS.find(o => o.id === data.payment)
+  const nextLabel = selectedPay?.online ? `Pay GH₵ ${est.total.toLocaleString()} & confirm` : 'Confirm booking'
   return (
     <FadeUp>
-      <StepTitle title="Booking summary" sub="Review your booking before continuing." />
+      <StepTitle title="Summary & confirm" sub="Review your booking before confirming." />
       <div className="cs-card p-5 mb-4">
         <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
         <PriceRow label="Area" value={data.area} />
@@ -607,26 +611,42 @@ function StepSummary({ data, onBack, onNext }) {
           </div>
         </div>
       )}
+      {selectedPay && (
+        <div className="cs-card p-4 mb-4">
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Payment method</p>
+          <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 2 }}>{selectedPay.label}</p>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{selectedPay.sub}</p>
+        </div>
+      )}
       <div className="cs-card p-4 mb-4" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Important reminder</p>
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.6 }}>
           ClubScrub focuses on light home upkeep. Deep cleaning and specialist services are not included.
         </p>
       </div>
-      <NavButtons onBack={onBack} onNext={onNext} nextLabel="Enter your details" />
+      {error && (
+        <div role="alert" aria-live="polite" className="cs-card p-4 mb-4"
+          style={{ borderColor: 'rgba(236,36,97,0.4)', background: 'rgba(236,36,97,0.06)' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+            <AlertCircle size={16} style={{ color: '#EC2461', flexShrink: 0, marginTop: 1 }} />
+            <p style={{ fontSize: 13, color: '#EC2461', fontWeight: 300 }}>{error}</p>
+          </div>
+        </div>
+      )}
+      <NavButtons onBack={onBack} onNext={onNext}
+        nextLabel={submitting ? 'Processing…' : nextLabel}
+        nextDisabled={submitting} />
     </FadeUp>
   )
 }
 
-// STEP 6: Customer info + payment
-function StepInfo({ data, update, onBack, onNext, submitting, error }) {
+// STEP 5: Your details — customer info + payment selection. The booking is
+// confirmed on the next step (Summary & confirm), so Continue just advances.
+function StepInfo({ data, update, onBack, onNext }) {
   const info = data.customer || {}
   const set = (k, v) => update({ customer: { ...info, [k]: v } })
-  const selectedPay = PAYMENT_OPTIONS.find(o => o.id === data.payment)
   const addressBrief = info.address && info.address.trim().length > 0 && info.address.trim().length < 10
   const valid = info.name && info.email && info.phone && info.address && data.payment
-  const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
-  const nextLabel = selectedPay?.online ? `Pay GH₵ ${est.total.toLocaleString()} & confirm` : 'Confirm booking'
   return (
     <FadeUp>
       <StepTitle title="Your information" sub="We'll use this to confirm and coordinate your booking." />
@@ -670,23 +690,12 @@ function StepInfo({ data, update, onBack, onNext, submitting, error }) {
             onClick={() => update({ payment: o.id })} />
         ))}
       </div>
-      {error && (
-        <div role="alert" aria-live="polite" className="cs-card p-4 mb-4"
-          style={{ borderColor: 'rgba(236,36,97,0.4)', background: 'rgba(236,36,97,0.06)' }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-            <AlertCircle size={16} style={{ color: '#EC2461', flexShrink: 0, marginTop: 1 }} />
-            <p style={{ fontSize: 13, color: '#EC2461', fontWeight: 300 }}>{error}</p>
-          </div>
-        </div>
-      )}
-      <NavButtons onBack={onBack} onNext={onNext}
-        nextLabel={submitting ? 'Processing…' : nextLabel}
-        nextDisabled={!valid || !data.customer.phone || !data.customer.address || submitting} />
+      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!valid} />
     </FadeUp>
   )
 }
 
-// STEP 7: Confirmed
+// Final screen: Confirmed — shown after booking; not part of the 6-step counter.
 function StepConfirmed({ data, bookingRef, onBookAnother }) {
   const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
   return (
@@ -841,8 +850,8 @@ export default function BookingFlow() {
     <StepMedia data={data} setData={setData} onBack={back} onNext={next} />,
     <StepArea data={data} update={update} onBack={back} onNext={next} />,
     <StepDate data={data} update={update} onBack={back} onNext={next} />,
-    <StepSummary data={data} onBack={back} onNext={next} />,
-    <StepInfo data={data} update={update} onBack={back} onNext={confirm} submitting={submitting} error={error} />,
+    <StepInfo data={data} update={update} onBack={back} onNext={next} />,
+    <StepSummary data={data} onBack={back} onNext={confirm} submitting={submitting} error={error} />,
     <StepConfirmed data={data} bookingRef={bookingRef} onBookAnother={resetFlow} />,
   ]
 
@@ -852,8 +861,10 @@ export default function BookingFlow() {
       <div className="cs-booking-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '0.5px solid rgba(255,255,255,0.07)' }}>
         <Logo size="sm" />
         <div className="flex items-center gap-3">
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Step {step + 1} of {STEPS.length}</span>
-          {step < STEPS.length - 1 && (
+          {step < STEPS.length && (
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Step {step + 1} of {STEPS.length}</span>
+          )}
+          {step < STEPS.length && (
             <button onClick={() => navigate('/')} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', display: 'flex' }}>
               <X size={18} />
             </button>
@@ -862,7 +873,7 @@ export default function BookingFlow() {
       </div>
 
       <div className="cs-booking-body">
-        <StepIndicator step={step} total={STEPS.length} />
+        {step < STEPS.length && <StepIndicator step={step} total={STEPS.length} />}
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
             {steps[step]}
