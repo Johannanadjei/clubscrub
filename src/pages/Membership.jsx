@@ -31,6 +31,7 @@ const TIERS = [
     description: 'Three Signature Resets per week. For homes that are always in use.',
     benefits: ['Priority booking', 'Familiar assistant', 'Preferred scheduling', 'Home profile preferences', 'Concierge support'],
     popular: false,
+    comingSoon: true,
   },
   {
     label: 'Platinum',
@@ -38,6 +39,7 @@ const TIERS = [
     description: 'A fully bespoke home assistance programme tailored to your household.',
     benefits: ['Custom schedule', 'Dedicated assistant', 'Home management notes', 'Concierge support', 'White-glove service'],
     popular: false,
+    comingSoon: true,
   },
 ]
 
@@ -84,7 +86,67 @@ function EnquireButton({ tier, popular }) {
   )
 }
 
+// Plain-language explanations for each benefit, shown in a tooltip.
+const TOOLTIPS = {
+  'Priority booking': 'Your session time is always protected and reserved for you first.',
+  'Familiar assistant': 'The same assistant visits your home every time.',
+  'Preferred scheduling': 'Same day, same time, every week — automatically reserved.',
+  'Home profile preferences': 'Your preferences, product choices and access notes stored — no explaining yourself twice.',
+  'Concierge support': 'Direct WhatsApp line to the ClubScrub team for anything you need.',
+}
+
+// A benefit row with an optional info tooltip. The "i" toggles on tap and
+// shows on hover/focus, so it works on touch and keyboard alike.
+function BenefitItem({ label }) {
+  const [show, setShow] = useState(false)
+  const tip = TOOLTIPS[label]
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+      <Check size={14} style={{ color: '#EC2461', flexShrink: 0, marginTop: 2 }} />
+      <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.5 }}>{label}</span>
+      {tip && (
+        <span style={{ position: 'relative', display: 'inline-flex', marginTop: 2 }}>
+          <button
+            type="button"
+            aria-label={`More about ${label}`}
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+            onFocus={() => setShow(true)}
+            onBlur={() => setShow(false)}
+            onClick={() => setShow((s) => !s)}
+            style={{
+              width: 16, height: 16, borderRadius: '50%', background: '#EC2461',
+              color: '#fff', fontSize: 10, fontWeight: 700, fontStyle: 'italic',
+              fontFamily: 'Georgia, serif', lineHeight: 1, padding: 0, border: 'none',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', flexShrink: 0, WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            i
+          </button>
+          {show && (
+            <span
+              role="tooltip"
+              style={{
+                position: 'absolute', bottom: 'calc(100% + 8px)', left: '50%',
+                transform: 'translateX(-50%)', background: '#1a1a1a',
+                border: '0.5px solid rgba(255,255,255,0.15)', borderRadius: 8,
+                padding: '8px 12px', fontSize: 12, color: 'rgba(255,255,255,0.85)',
+                width: 200, textAlign: 'center', zIndex: 10, pointerEvents: 'none',
+                lineHeight: 1.5, fontWeight: 300,
+              }}
+            >
+              {tip}
+            </span>
+          )}
+        </span>
+      )}
+    </div>
+  )
+}
+
 function TierCard({ tier }) {
+  const soon = tier.comingSoon
   return (
     <div
       style={{
@@ -92,8 +154,26 @@ function TierCard({ tier }) {
         background: '#111',
         border: tier.popular ? '1.5px solid #EC2461' : '0.5px solid rgba(255,255,255,0.1)',
         borderRadius: 20, padding: 32,
+        opacity: soon ? 0.5 : 1,
+        overflow: soon ? 'hidden' : 'visible',
+        pointerEvents: soon ? 'none' : 'auto',
       }}
     >
+      {/* Coming-soon watermark — diagonal, faint, contained by overflow:hidden */}
+      {soon && (
+        <span
+          style={{
+            position: 'absolute', top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%) rotate(-20deg)',
+            fontSize: 18, fontWeight: 700, color: 'rgba(255,255,255,0.08)',
+            letterSpacing: '0.2em', textTransform: 'uppercase', whiteSpace: 'nowrap',
+            zIndex: 3, pointerEvents: 'none',
+          }}
+        >
+          Coming Soon
+        </span>
+      )}
+
       {tier.popular && (
         <span
           style={{
@@ -119,16 +199,29 @@ function TierCard({ tier }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 28 }}>
         {tier.benefits.map((b) => (
-          <div key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <Check size={14} style={{ color: '#EC2461', flexShrink: 0, marginTop: 2 }} />
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.5 }}>{b}</span>
-          </div>
+          <BenefitItem key={b} label={b} />
         ))}
       </div>
 
       {/* Push CTA to the bottom so cards align regardless of benefit count */}
       <div style={{ marginTop: 'auto' }}>
-        <EnquireButton tier={tier.label} popular={tier.popular} />
+        {soon ? (
+          <button
+            type="button"
+            disabled
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '100%', minHeight: 48, padding: '13px 20px', borderRadius: 12,
+              background: 'transparent', border: '0.5px solid rgba(255,255,255,0.15)',
+              color: 'rgba(255,255,255,0.3)', fontFamily: 'DM Sans, sans-serif',
+              fontSize: 14, fontWeight: 500, cursor: 'not-allowed', boxSizing: 'border-box',
+            }}
+          >
+            Coming Soon
+          </button>
+        ) : (
+          <EnquireButton tier={tier.label} popular={tier.popular} />
+        )}
       </div>
     </div>
   )
