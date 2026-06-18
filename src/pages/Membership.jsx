@@ -12,57 +12,58 @@ const enquireHref = (tier) =>
 
 const TIERS = [
   {
-    label: 'Bronze',
-    price: '₵999',
+    label: 'Club Member',
+    price: '₵1,499',
     priceNote: 'per month',
-    tagline: 'YOUR HOME PROFESSIONALLY MAINTAINED EVERY WEEK.',
-    description: 'Designed for busy households who want the confidence of a home that never falls behind.',
+    tagline: 'YOUR HOME. ALWAYS READY.',
+    description: 'Designed for busy professionals, families and homeowners who want the convenience of a regularly maintained home without the hassle of repeatedly booking appointments.',
     benefits: [
-      '1 Home Reset per week',
-      'Up to 3 hours per visit',
+      'Reserved weekly appointment',
+      'Preferred scheduling window',
       'Priority booking access',
-      'Preferred scheduling windows',
-      'Home preferences stored',
+      'Home preferences stored and remembered',
       'Dedicated WhatsApp support',
+      'Priority access to peak-demand booking periods',
       '10% off additional bookings',
     ],
     smallPrint: 'Members receive priority access to high-demand booking slots before non-members.',
-    cta: 'Become a Bronze Member',
+    cta: 'Become a Member',
     popular: false,
+    comingSoon: false,
   },
   {
-    label: 'Silver',
-    price: '₵1,799',
-    priceNote: 'per month',
-    tagline: 'TWICE-WEEKLY SUPPORT FOR A CONSISTENTLY REFRESHED HOME.',
-    description: 'Perfect for active households, families, entertainers and professionals who want their home maintained to a higher standard throughout the week.',
-    benefits: [
-      '2 Home Resets per week',
-      'Up to 3 hours per visit',
-      'Priority booking access',
-      'Preferred scheduling windows',
-      'Preferred assistant where available',
-      'Home preferences stored',
-      'Dedicated WhatsApp support',
-      '15% off additional bookings',
-    ],
-    smallPrint: 'Members receive priority access to high-demand booking slots before non-members.',
-    cta: 'Become a Silver Member',
-    popular: true,
-  },
-  {
-    label: 'Gold',
-    tagline: 'Three Resets Per Week',
-    description: 'Three Signature Resets per week. For homes that are always in use.',
-    benefits: ['Priority booking', 'Familiar assistant', 'Preferred scheduling', 'Home profile preferences', 'Concierge support'],
+    label: 'Signature Membership',
+    price: '',
+    priceNote: '',
+    tagline: 'COMING SOON.',
+    description: 'For households requiring multiple scheduled visits per week and enhanced home assistance services.',
+    benefits: [],
+    smallPrint: '',
+    cta: 'Coming Soon',
     popular: false,
     comingSoon: true,
   },
   {
-    label: 'Platinum',
-    tagline: 'Custom Home Assistance',
-    description: 'A fully bespoke home assistance programme tailored to your household.',
-    benefits: ['Custom schedule', 'Dedicated assistant', 'Home management notes', 'Concierge support', 'White-glove service'],
+    label: 'Concierge Membership',
+    price: '',
+    priceNote: '',
+    tagline: 'COMING SOON.',
+    description: 'A premium home assistance experience with priority scheduling, enhanced support and concierge-style service.',
+    benefits: [],
+    smallPrint: '',
+    cta: 'Coming Soon',
+    popular: false,
+    comingSoon: true,
+  },
+  {
+    label: 'Private Household Membership',
+    price: '',
+    priceNote: '',
+    tagline: 'COMING SOON.',
+    description: 'A fully tailored home management experience designed for larger homes and high-touch support requirements.',
+    benefits: [],
+    smallPrint: '',
+    cta: 'Coming Soon',
     popular: false,
     comingSoon: true,
   },
@@ -113,11 +114,13 @@ function EnquireButton({ tier, label, popular }) {
 
 // Plain-language explanations for each benefit, shown in a tooltip.
 const TOOLTIPS = {
-  'Priority booking access': 'Your session time is always protected and reserved for you first.',
-  'Preferred scheduling windows': 'Same day, same time, every week — automatically reserved.',
-  'Preferred assistant where available': 'The same assistant visits your home whenever scheduling allows.',
-  'Home preferences stored': 'Your preferences, product choices and access notes stored — no explaining yourself twice.',
+  'Reserved weekly appointment': 'Your appointment time is reserved for you every week — no need to rebook.',
+  'Preferred scheduling window': 'Same day, same time, every week — automatically reserved for you.',
+  'Priority booking access': 'Your session is always protected and reserved for you first.',
+  'Home preferences stored and remembered': 'Your preferences, product choices and access notes stored — no explaining yourself twice.',
   'Dedicated WhatsApp support': 'Direct WhatsApp line to the ClubScrub team for anything you need.',
+  'Priority access to peak-demand booking periods': 'First access to high-demand slots including weekends and public holidays.',
+  '10% off additional bookings': 'Discount applied automatically to any bookings outside your included weekly visit.',
 }
 
 // A benefit row with an optional info tooltip. The "i" toggles on tap and
@@ -306,7 +309,7 @@ export default function Membership() {
         </FadeUp>
         <FadeUp delay={0.1}>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, maxWidth: 520, fontWeight: 300 }}>
-            Enjoy regularly scheduled Home Resets, priority access to booking slots and exclusive member savings. ClubScrub Memberships are designed for households that value consistency, convenience and a beautifully maintained home.
+            Enjoy the convenience of a reserved weekly appointment, priority access to booking slots and a home that stays consistently refreshed, organised and guest-ready.
           </p>
         </FadeUp>
       </section>
