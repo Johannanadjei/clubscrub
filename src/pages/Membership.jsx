@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Check, ArrowRight, MessageCircle } from 'lucide-react'
-import { Logo, FadeUp, Divider } from '../components/UI.jsx'
+import { Logo, FadeUp } from '../components/UI.jsx'
 import CookieNotice from '../components/CookieNotice.jsx'
 
 const WHATSAPP = 'https://wa.me/233597207741'
@@ -13,16 +13,41 @@ const enquireHref = (tier) =>
 const TIERS = [
   {
     label: 'Bronze',
-    tagline: 'Weekly Reset',
-    description: 'One Signature Home Reset per week. Your home, consistently refreshed.',
-    benefits: ['Priority booking', 'Familiar assistant', 'Preferred scheduling'],
+    price: '₵999',
+    priceNote: 'per month',
+    tagline: 'YOUR HOME PROFESSIONALLY MAINTAINED EVERY WEEK.',
+    description: 'Designed for busy households who want the confidence of a home that never falls behind.',
+    benefits: [
+      '1 Home Reset per week',
+      'Up to 3 hours per visit',
+      'Priority booking access',
+      'Preferred scheduling windows',
+      'Home preferences stored',
+      'Dedicated WhatsApp support',
+      '10% off additional bookings',
+    ],
+    smallPrint: 'Members receive priority access to high-demand booking slots before non-members.',
+    cta: 'Become a Bronze Member',
     popular: false,
   },
   {
     label: 'Silver',
-    tagline: 'Twice Weekly Reset',
-    description: 'Two Signature Resets per week. The standard for busy households.',
-    benefits: ['Priority booking', 'Familiar assistant', 'Preferred scheduling', 'Home profile preferences'],
+    price: '₵1,799',
+    priceNote: 'per month',
+    tagline: 'TWICE-WEEKLY SUPPORT FOR A CONSISTENTLY REFRESHED HOME.',
+    description: 'Perfect for active households, families, entertainers and professionals who want their home maintained to a higher standard throughout the week.',
+    benefits: [
+      '2 Home Resets per week',
+      'Up to 3 hours per visit',
+      'Priority booking access',
+      'Preferred scheduling windows',
+      'Preferred assistant where available',
+      'Home preferences stored',
+      'Dedicated WhatsApp support',
+      '15% off additional bookings',
+    ],
+    smallPrint: 'Members receive priority access to high-demand booking slots before non-members.',
+    cta: 'Become a Silver Member',
     popular: true,
   },
   {
@@ -52,7 +77,7 @@ const INCLUDES = [
 
 // Tier CTA. Silver is full pink; the rest are outlined and invert to
 // white-on-black on hover. Hover is purely visual — the link works on tap.
-function EnquireButton({ tier, popular }) {
+function EnquireButton({ tier, label, popular }) {
   const [hover, setHover] = useState(false)
   const base = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
@@ -81,18 +106,18 @@ function EnquireButton({ tier, popular }) {
       onFocus={() => setHover(true)}
       onBlur={() => setHover(false)}
     >
-      Enquire about {tier} <ArrowRight size={15} />
+      {label || `Enquire about ${tier}`} <ArrowRight size={15} />
     </a>
   )
 }
 
 // Plain-language explanations for each benefit, shown in a tooltip.
 const TOOLTIPS = {
-  'Priority booking': 'Your session time is always protected and reserved for you first.',
-  'Familiar assistant': 'The same assistant visits your home every time.',
-  'Preferred scheduling': 'Same day, same time, every week — automatically reserved.',
-  'Home profile preferences': 'Your preferences, product choices and access notes stored — no explaining yourself twice.',
-  'Concierge support': 'Direct WhatsApp line to the ClubScrub team for anything you need.',
+  'Priority booking access': 'Your session time is always protected and reserved for you first.',
+  'Preferred scheduling windows': 'Same day, same time, every week — automatically reserved.',
+  'Preferred assistant where available': 'The same assistant visits your home whenever scheduling allows.',
+  'Home preferences stored': 'Your preferences, product choices and access notes stored — no explaining yourself twice.',
+  'Dedicated WhatsApp support': 'Direct WhatsApp line to the ClubScrub team for anything you need.',
 }
 
 // A benefit row with an optional info tooltip. The "i" toggles on tap and
@@ -195,15 +220,31 @@ function TierCard({ tier }) {
         <p style={{ fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.6)', marginTop: 6, marginBottom: 16, fontFamily: 'DM Sans, sans-serif' }}>
           {tier.tagline}
         </p>
+        {tier.price && (
+          <>
+            <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, color: '#fff', lineHeight: 1, marginBottom: 4 }}>
+              {tier.price}
+            </p>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 300, marginBottom: 16 }}>
+              {tier.priceNote}
+            </p>
+          </>
+        )}
         <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, fontWeight: 300, marginBottom: 20 }}>
           {tier.description}
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 28 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: tier.smallPrint ? 0 : 28 }}>
           {tier.benefits.map((b) => (
             <BenefitItem key={b} label={b} />
           ))}
         </div>
+
+        {tier.smallPrint && (
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', marginTop: 8, marginBottom: 24, lineHeight: 1.5 }}>
+            {tier.smallPrint}
+          </p>
+        )}
 
         {/* Push CTA to the bottom so cards align regardless of benefit count */}
         <div style={{ marginTop: 'auto' }}>
@@ -222,7 +263,7 @@ function TierCard({ tier }) {
               Coming Soon
             </button>
           ) : (
-            <EnquireButton tier={tier.label} popular={tier.popular} />
+            <EnquireButton tier={tier.label} label={tier.cta} popular={tier.popular} />
           )}
         </div>
       </div>
@@ -254,13 +295,18 @@ export default function Membership() {
           </p>
         </FadeUp>
         <FadeUp delay={0.05}>
-          <h1 className="font-display italic" style={{ fontSize: 'clamp(34px, 9vw, 48px)', lineHeight: 1.12, fontWeight: 600, color: '#fff', marginBottom: 18 }}>
-            A home always at its finest.
+          <h1 className="font-display italic" style={{ fontSize: 'clamp(34px, 9vw, 48px)', lineHeight: 1.12, fontWeight: 600, color: '#fff', marginBottom: 10 }}>
+            Memberships
           </h1>
         </FadeUp>
+        <FadeUp delay={0.08}>
+          <p className="font-display italic" style={{ fontSize: 'clamp(20px, 5vw, 24px)', color: '#fff', fontWeight: 500, lineHeight: 1.2, marginBottom: 18 }}>
+            Your home. Always ready.
+          </p>
+        </FadeUp>
         <FadeUp delay={0.1}>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, maxWidth: 480, fontWeight: 300 }}>
-            For households that expect consistent excellence. Choose a membership and your home is always ready.
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, maxWidth: 520, fontWeight: 300 }}>
+            Enjoy regularly scheduled Home Resets, priority access to booking slots and exclusive member savings. ClubScrub Memberships are designed for households that value consistency, convenience and a beautifully maintained home.
           </p>
         </FadeUp>
       </section>
@@ -276,7 +322,19 @@ export default function Membership() {
         </div>
       </section>
 
-      <Divider />
+      {/* LUXURY CALLOUT */}
+      <section style={{ padding: '0 24px' }}>
+        <FadeUp>
+          <div style={{ background: 'rgba(255,255,255,0.03)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 32, textAlign: 'center', marginTop: 48, marginBottom: 48 }}>
+            <p className="font-display italic" style={{ fontSize: 22, color: '#fff', lineHeight: 1.4 }}>
+              Priority scheduling. Exclusive savings. A home that stays beautifully maintained.
+            </p>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', marginTop: 12, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7, fontWeight: 300 }}>
+              Members receive first access to high-demand appointment times, preferred scheduling windows and discounts on any additional bookings beyond their included Home Resets.
+            </p>
+          </div>
+        </FadeUp>
+      </section>
 
       {/* EVERY MEMBERSHIP INCLUDES */}
       <section className="cs-section">
