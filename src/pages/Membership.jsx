@@ -154,18 +154,18 @@ function TierCard({ tier }) {
         background: '#111',
         border: tier.popular ? '1.5px solid #EC2461' : '0.5px solid rgba(255,255,255,0.1)',
         borderRadius: 20, padding: 32,
-        opacity: soon ? 0.5 : 1,
+        opacity: soon ? 0.35 : 1,
         overflow: soon ? 'hidden' : 'visible',
         pointerEvents: soon ? 'none' : 'auto',
       }}
     >
-      {/* Coming-soon watermark — diagonal, faint, contained by overflow:hidden */}
+      {/* Coming-soon watermark — diagonal, kept crisp outside the blurred content */}
       {soon && (
         <span
           style={{
             position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%, -50%) rotate(-20deg)',
-            fontSize: 18, fontWeight: 700, color: 'rgba(255,255,255,0.08)',
+            fontSize: 22, fontWeight: 700, color: 'rgba(255,255,255,0.15)',
             letterSpacing: '0.2em', textTransform: 'uppercase', whiteSpace: 'nowrap',
             zIndex: 3, pointerEvents: 'none',
           }}
@@ -174,54 +174,57 @@ function TierCard({ tier }) {
         </span>
       )}
 
-      {tier.popular && (
-        <span
-          style={{
-            position: 'absolute', top: 20, right: 20,
-            background: '#EC2461', color: '#fff', fontSize: 10, fontWeight: 600,
-            letterSpacing: '0.08em', textTransform: 'uppercase',
-            padding: '5px 12px', borderRadius: 100, fontFamily: 'DM Sans, sans-serif',
-          }}
-        >
-          Most popular
-        </span>
-      )}
-
-      <p className="font-display italic" style={{ fontSize: 28, fontWeight: 500, color: '#fff', lineHeight: 1.1 }}>
-        {tier.label}
-      </p>
-      <p style={{ fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.6)', marginTop: 6, marginBottom: 16, fontFamily: 'DM Sans, sans-serif' }}>
-        {tier.tagline}
-      </p>
-      <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, fontWeight: 300, marginBottom: 20 }}>
-        {tier.description}
-      </p>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 28 }}>
-        {tier.benefits.map((b) => (
-          <BenefitItem key={b} label={b} />
-        ))}
-      </div>
-
-      {/* Push CTA to the bottom so cards align regardless of benefit count */}
-      <div style={{ marginTop: 'auto' }}>
-        {soon ? (
-          <button
-            type="button"
-            disabled
+      {/* Card content — blurred when coming soon, leaving card shape + watermark crisp */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', filter: soon ? 'blur(2.5px)' : 'none' }}>
+        {tier.popular && (
+          <span
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: '100%', minHeight: 48, padding: '13px 20px', borderRadius: 12,
-              background: 'transparent', border: '0.5px solid rgba(255,255,255,0.15)',
-              color: 'rgba(255,255,255,0.3)', fontFamily: 'DM Sans, sans-serif',
-              fontSize: 14, fontWeight: 500, cursor: 'not-allowed', boxSizing: 'border-box',
+              position: 'absolute', top: 20, right: 20,
+              background: '#EC2461', color: '#fff', fontSize: 10, fontWeight: 600,
+              letterSpacing: '0.08em', textTransform: 'uppercase',
+              padding: '5px 12px', borderRadius: 100, fontFamily: 'DM Sans, sans-serif',
             }}
           >
-            Coming Soon
-          </button>
-        ) : (
-          <EnquireButton tier={tier.label} popular={tier.popular} />
+            Most popular
+          </span>
         )}
+
+        <p className="font-display italic" style={{ fontSize: 28, fontWeight: 500, color: '#fff', lineHeight: 1.1 }}>
+          {tier.label}
+        </p>
+        <p style={{ fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.6)', marginTop: 6, marginBottom: 16, fontFamily: 'DM Sans, sans-serif' }}>
+          {tier.tagline}
+        </p>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, fontWeight: 300, marginBottom: 20 }}>
+          {tier.description}
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 28 }}>
+          {tier.benefits.map((b) => (
+            <BenefitItem key={b} label={b} />
+          ))}
+        </div>
+
+        {/* Push CTA to the bottom so cards align regardless of benefit count */}
+        <div style={{ marginTop: 'auto' }}>
+          {soon ? (
+            <button
+              type="button"
+              disabled
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '100%', minHeight: 48, padding: '13px 20px', borderRadius: 12,
+                background: 'transparent', border: '0.5px solid rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.3)', fontFamily: 'DM Sans, sans-serif',
+                fontSize: 14, fontWeight: 500, cursor: 'not-allowed', boxSizing: 'border-box',
+              }}
+            >
+              Coming Soon
+            </button>
+          ) : (
+            <EnquireButton tier={tier.label} popular={tier.popular} />
+          )}
+        </div>
       </div>
     </div>
   )
