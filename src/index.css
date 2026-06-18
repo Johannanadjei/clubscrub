@@ -174,6 +174,36 @@ body {
   .cs-booking-body { padding: 44px 48px; }
 }
 
+/* Step 1 — Signature Reset selection rows (luxury, full-width, stacked) */
+.cs-reset-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: #111;
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.cs-reset-row:hover { border-color: rgba(255,255,255,0.2); background: #161616; }
+.cs-reset-row[data-selected="true"] {
+  border: 1.5px solid #EC2461;
+  background: rgba(236,36,97,0.06);
+}
+.cs-reset-row[data-selected="true"]:hover { background: rgba(236,36,97,0.08); }
+
+/* Continue button — one-shot pulse the moment it becomes enabled */
+@keyframes cs-pulse-once {
+  0%   { box-shadow: 0 0 0 0 rgba(236,36,97,0.45); }
+  100% { box-shadow: 0 0 0 16px rgba(236,36,97,0); }
+}
+.cs-pulse-once { animation: cs-pulse-once 0.9s ease-out 1; }
+
 /* Task groups: single column on mobile, two columns on desktop */
 .cs-task-groups > .cs-task-group { margin-bottom: 20px; }
 @media (min-width: 768px) {

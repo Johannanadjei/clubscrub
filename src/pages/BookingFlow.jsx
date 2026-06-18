@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, ChevronLeft, ChevronRight, X, AlertCircle, Clock, Sparkles, Upload } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, X, AlertCircle, Upload } from 'lucide-react'
 import { Logo, FadeUp, PriceRow, Divider } from '../components/UI.jsx'
 import Calendar from '../components/Calendar.jsx'
 import {
-  ZONES, TASK_GROUPS, QUICK_SELECTS, EXCLUDED_TASKS,
+  ZONES, TASK_GROUPS, RESETS, EXCLUDED_TASKS,
   calcEstimate, calcBooking, formatDuration, formatDate, taskLabels,
   isSaturday, isSunday, SUNDAY_SURCHARGE, generateRef,
 } from '../data/index.js'
@@ -128,44 +128,51 @@ function NavButtons({ onBack, onNext, nextLabel = 'Continue', nextDisabled }) {
   )
 }
 
-// Live, sticky price/time bar for the tasks step.
-function PriceBar({ estimate, onNext }) {
+// Inline pricing feedback — slides in (height animation) once tasks are chosen.
+// Always-visible; replaces the old sticky price bar / pricing modal.
+function PricingFeedback({ estimate }) {
   return (
-    <div style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 60,
-      maxWidth: 720, margin: '0 auto',
-      background: 'rgba(20,20,20,0.96)', backdropFilter: 'blur(12px)',
-      borderTop: '0.5px solid rgba(255,255,255,0.1)',
-      padding: '14px 24px max(14px, env(safe-area-inset-bottom))',
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-    }}>
-      <div>
-        <div className="flex items-center gap-1.5" style={{ marginBottom: 2 }}>
-          <Clock size={13} style={{ color: 'rgba(255,255,255,0.4)' }} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>
-            Est. {formatDuration(estimate.mins)}{estimate.mins < 180 ? ' · min. 3h' : ''}
+    <motion.div
+      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+      animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      style={{ overflow: 'hidden' }}
+    >
+      <div style={{ background: '#000', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: 12, padding: '16px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12 }}>
+          <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}>
+            Estimated duration: {formatDuration(estimate.mins)}
+          </span>
+          <span className="font-display italic" style={{ fontSize: 28, fontWeight: 600, color: '#EC2461', lineHeight: 1, whiteSpace: 'nowrap' }}>
+            From GH₵ {estimate.price.toLocaleString()}
           </span>
         </div>
-        <p className="font-display italic" style={{ fontSize: 24, fontWeight: 600, color: '#EC2461', lineHeight: 1 }}>
-          GH₵ {estimate.price.toLocaleString()}
+        <div style={{ height: '0.5px', background: 'rgba(255,255,255,0.1)', margin: '14px 0' }} />
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 300, lineHeight: 1.5 }}>
+          Final price confirmed at booking. Sunday surcharge +GH₵ {SUNDAY_SURCHARGE}.
         </p>
       </div>
-      <button className="cs-btn-primary" onClick={onNext} style={{ minHeight: 48, padding: '0 24px', justifyContent: 'center' }}>
-        Continue <ChevronRight size={16} />
-      </button>
-    </div>
+    </motion.div>
   )
 }
 
-// STEP 1: Tasks (quick selects + groups + select all) — drives pricing
+// STEP 1: Your Home Reset — pick a Signature Reset (drives pricing). Tasks can
+// be fine-tuned via the optional "Add individual services" panel below.
 function StepTasks({ data, update, onNext }) {
+  const [customOpen, setCustomOpen] = useState(false)
+
   const selected = data.tasks || []
+  const resetId = data.resetId || ''
   const has = (id) => selected.includes(id)
   const toggle = (id) => update({ tasks: has(id) ? selected.filter(t => t !== id) : [...selected, id] })
 
-  const applyQuick = (q) => update({ tasks: [...q.tasks] })
-  const isQuickActive = (q) =>
-    q.tasks.length === selected.length && q.tasks.every(t => selected.includes(t))
+  // Selecting a reset maps its real task ids into booking data (pricing engine
+  // is untouched). Selecting again clears it. Only one reset selectable at once.
+  const selectReset = (r) =>
+    resetId === r.id
+      ? update({ resetId: '', tasks: [] })
+      : update({ resetId: r.id, tasks: [...r.taskIds] })
 
   const toggleGroup = (g) => {
     const ids = g.tasks.map(t => t.id)
@@ -173,79 +180,144 @@ function StepTasks({ data, update, onNext }) {
     update({ tasks: allOn ? selected.filter(t => !ids.includes(t)) : [...new Set([...selected, ...ids])] })
   }
 
+  const estimate = calcEstimate(selected)
+  const enabled = selected.length > 0
+
   return (
-    <FadeUp>
-      <div style={{ paddingBottom: 96 }}>
-        <StepTitle title="What do you need done?" sub="Pick tasks and we'll estimate the time and price live." />
+    <div style={{ maxWidth: 560, margin: '0 auto' }}>
+      {/* Header */}
+      <FadeUp>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 14, fontFamily: 'DM Sans, sans-serif' }}>
+          Step 1 of 5
+        </p>
+        <h1 className="font-display italic" style={{ fontSize: 36, fontWeight: 500, color: '#fff', lineHeight: 1.1, marginBottom: 10 }}>
+          Your Home Reset
+        </h1>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.6, marginBottom: 32 }}>
+          Choose a Signature Reset. Your price is calculated instantly.
+        </p>
+      </FadeUp>
 
-        {/* Quick selects */}
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 10 }}>Quick selects</p>
-        <div className="cs-quickselects" style={{ marginBottom: 24 }}>
-          {QUICK_SELECTS.map(q => {
-            const active = isQuickActive(q)
-            return (
-              <motion.button key={q.id} whileTap={{ scale: 0.97 }} onClick={() => applyQuick(q)}
-                className={`cs-card cs-quickselect ${active ? 'selected' : ''}`}
-                style={{ textAlign: 'left', padding: 14, cursor: 'pointer', border: 'none' }}>
-                <div className="flex items-center gap-1.5" style={{ marginBottom: 6 }}>
-                  <Sparkles size={13} style={{ color: '#EC2461' }} />
-                  <span style={{ fontSize: 14, fontWeight: 500 }}>{q.label}</span>
-                </div>
-                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{q.sub}</p>
-              </motion.button>
-            )
-          })}
-        </div>
-
-        {/* Task groups */}
-        <div className="cs-task-groups">
-        {TASK_GROUPS.map(g => {
-          const ids = g.tasks.map(t => t.id)
-          const allOn = ids.every(id => selected.includes(id))
+      {/* Reset selection rows — stacked, staggered reveal */}
+      <div>
+        {RESETS.map((r, i) => {
+          const isSel = resetId === r.id
           return (
-            <div key={g.id} className="cs-task-group mb-5">
-              <div className="flex items-center justify-between mb-2">
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.09em' }}>{g.label}</p>
-                <button onClick={() => toggleGroup(g)}
-                  style={{ background: 'transparent', border: 'none', color: '#EC2461', fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', minHeight: 32, padding: '0 4px' }}>
-                  {allOn ? 'Clear all' : 'Select all'}
-                </button>
-              </div>
-              <div className="cs-card">
-                {g.tasks.map((t, i) => (
-                  <div key={t.id} onClick={() => toggle(t.id)}
-                    className="flex items-center justify-between cursor-pointer"
-                    style={{ padding: '12px 16px', minHeight: 48, borderBottom: i < g.tasks.length - 1 ? '0.5px solid rgba(255,255,255,0.06)' : 'none' }}>
-                    <div>
-                      <span style={{ fontSize: 14, fontWeight: 300 }}>{t.label}</span>
-                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginLeft: 8 }}>{formatDuration(t.mins)}</span>
-                    </div>
-                    <div style={{
-                      width: 22, height: 22, borderRadius: 6,
-                      background: has(t.id) ? '#EC2461' : 'transparent',
-                      border: has(t.id) ? 'none' : '1px solid rgba(255,255,255,0.2)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                    }}>
-                      {has(t.id) && <Check size={12} color="#fff" />}
-                    </div>
+            <FadeUp key={r.id} delay={i * 0.05}>
+              <div style={{ marginBottom: 12 }}>
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.99 }}
+                  onClick={() => selectReset(r)}
+                  aria-pressed={isSel}
+                  className="cs-reset-row"
+                  data-selected={isSel}
+                >
+                  <div style={{ minWidth: 0 }}>
+                    <p className="font-display italic" style={{ fontSize: 20, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 4 }}>
+                      {r.name}
+                    </p>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.45 }}>
+                      {r.description}
+                    </p>
                   </div>
-                ))}
+                  <div style={{ flexShrink: 0 }}>
+                    {isSel ? (
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#EC2461', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Check size={14} color="#fff" />
+                      </div>
+                    ) : (
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                        {r.timeRange}
+                      </span>
+                    )}
+                  </div>
+                </motion.button>
+
+                {/* Pricing feedback slides in directly below the selected reset */}
+                <AnimatePresence initial={false}>
+                  {isSel && <PricingFeedback key="pricing" estimate={estimate} />}
+                </AnimatePresence>
               </div>
-            </div>
+            </FadeUp>
           )
         })}
-        </div>
-
-        {selected.length === 0 && (
-          <div className="cs-card p-4" style={{ borderColor: 'rgba(251,191,36,0.3)', background: 'rgba(251,191,36,0.06)' }}>
-            <p style={{ fontSize: 13, color: '#FBBF24', fontWeight: 300, lineHeight: 1.6 }}>
-              You haven't selected any tasks. You can still continue — your assistant will confirm priorities before the appointment. The minimum 3-hour booking applies.
-            </p>
-          </div>
-        )}
       </div>
-      <PriceBar estimate={calcEstimate(selected)} onNext={onNext} />
-    </FadeUp>
+
+      {/* Custom — add individual services on top of (or instead of) a reset */}
+      <div style={{ marginTop: 12 }}>
+        <button
+          type="button"
+          onClick={() => setCustomOpen(o => !o)}
+          style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 400, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', padding: '6px 0', minHeight: 32 }}>
+          {customOpen ? '– Hide individual services' : '+ Add individual services'}
+        </button>
+
+        {/* Pricing also appears here when tasks are chosen without a reset */}
+        <AnimatePresence initial={false}>
+          {!resetId && enabled && <PricingFeedback key="pricing-custom" estimate={estimate} />}
+        </AnimatePresence>
+
+        <AnimatePresence initial={false}>
+          {customOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="cs-task-groups" style={{ marginTop: 16 }}>
+                {TASK_GROUPS.map(g => {
+                  const ids = g.tasks.map(t => t.id)
+                  const allOn = ids.every(id => selected.includes(id))
+                  return (
+                    <div key={g.id} className="cs-task-group mb-5">
+                      <div className="flex items-center justify-between mb-2">
+                        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.09em' }}>{g.label}</p>
+                        <button onClick={() => toggleGroup(g)}
+                          style={{ background: 'transparent', border: 'none', color: '#EC2461', fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', minHeight: 32, padding: '0 4px' }}>
+                          {allOn ? 'Clear all' : 'Select all'}
+                        </button>
+                      </div>
+                      <div className="cs-card">
+                        {g.tasks.map((t, i) => (
+                          <div key={t.id} onClick={() => toggle(t.id)}
+                            className="flex items-center justify-between cursor-pointer"
+                            style={{ padding: '12px 16px', minHeight: 48, borderBottom: i < g.tasks.length - 1 ? '0.5px solid rgba(255,255,255,0.06)' : 'none' }}>
+                            <div>
+                              <span style={{ fontSize: 14, fontWeight: 300 }}>{t.label}</span>
+                              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginLeft: 8 }}>{formatDuration(t.mins)}</span>
+                            </div>
+                            <div style={{
+                              width: 22, height: 22, borderRadius: 6,
+                              background: has(t.id) ? '#EC2461' : 'transparent',
+                              border: has(t.id) ? 'none' : '1px solid rgba(255,255,255,0.2)',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
+                            }}>
+                              {has(t.id) && <Check size={12} color="#fff" />}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Continue — disabled until a reset (or task) is chosen; pulses on enable */}
+      <button
+        className={`cs-btn-primary ${enabled ? 'cs-pulse-once' : ''}`}
+        onClick={onNext}
+        disabled={!enabled}
+        style={{ width: '100%', justifyContent: 'center', minHeight: 52, marginTop: 28, opacity: enabled ? 1 : 0.35, cursor: enabled ? 'pointer' : 'not-allowed' }}>
+        Continue <ChevronRight size={16} />
+      </button>
+    </div>
   )
 }
 

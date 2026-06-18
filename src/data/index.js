@@ -157,6 +157,9 @@ export const RESETS = [
     name: 'Kitchen Reset',
     description: 'A beautifully presented kitchen, ready for the day ahead.',
     tasks: ['Wash dishes', 'Clean countertops & stovetop', 'Clean sink', 'Wipe appliance exteriors', 'Empty bin', 'Sweep & mop floor', 'Tidy & declutter'],
+    // Real task ids drive the (unchanged) pricing engine via calcEstimate().
+    taskIds: ['k_dishes', 'k_counters', 'k_sink', 'k_cabinets', 'k_microwave', 'k_floor', 'k_trash'],
+    timeRange: '~2–3 hrs',
     img: '/resets/kitchen.jpg',
   },
   {
@@ -164,6 +167,8 @@ export const RESETS = [
     name: 'Bedroom Reset',
     description: 'A calm, hotel-inspired bedroom experience.',
     tasks: ['Make beds', 'Change bed linen', 'Fold & put away clothes', 'Dust surfaces', 'Sweep & mop floor', 'Tidy & declutter'],
+    taskIds: ['b_make', 'b_linens', 'l_fold', 'b_dust', 'b_floor', 'b_mop', 'b_tidy'],
+    timeRange: '~2–3 hrs',
     img: '/resets/bedroom.jpg',
   },
   {
@@ -171,6 +176,8 @@ export const RESETS = [
     name: 'Bathroom Reset',
     description: 'A polished, spa-standard bathroom.',
     tasks: ['Clean toilet', 'Clean sink & mirror', 'Clean shower / bath', 'Arrange towels', 'Sweep & mop floor'],
+    taskIds: ['ba_toilet', 'ba_sink', 'ba_mirror', 'ba_shower', 'ba_floor', 'ba_restock'],
+    timeRange: '~1–2 hrs',
     img: '/resets/bathroom.jpg',
   },
   {
@@ -178,6 +185,8 @@ export const RESETS = [
     name: 'Living Space Reset',
     description: 'A welcoming, guest-ready living environment.',
     tasks: ['Dust surfaces', 'Tidy & declutter', 'Sweep & mop floor', 'Arrange soft furnishings'],
+    taskIds: ['lv_dust', 'lv_tidy', 'lv_vacuum', 'lv_mop', 'lv_tables', 'lv_glass'],
+    timeRange: '~1–2 hrs',
     img: '/resets/living.jpg',
   },
   {
@@ -185,6 +194,8 @@ export const RESETS = [
     name: 'Full Home Reset',
     description: 'Our complete Signature Reset — every room, every detail.',
     tasks: ['Wash dishes', 'Clean countertops & stovetop', 'Clean sink', 'Sweep & mop floor', 'Make beds', 'Change bed linen', 'Fold & put away clothes', 'Dust surfaces', 'Clean toilet', 'Clean shower / bath', 'Tidy & declutter'],
+    taskIds: ['k_dishes', 'k_counters', 'k_sink', 'k_floor', 'b_make', 'b_linens', 'l_fold', 'b_dust', 'b_mop', 'ba_toilet', 'ba_shower', 'ba_floor', 'lv_dust', 'lv_tidy', 'lv_vacuum', 'lv_mop'],
+    timeRange: '~4–5 hrs',
     img: '/resets/full.jpg',
   },
   {
@@ -192,6 +203,8 @@ export const RESETS = [
     name: 'Guest Ready Reset',
     description: 'Perfect before guests arrive, events, or hosting.',
     tasks: ['Tidy & declutter', 'Dust surfaces', 'Sweep & mop floor', 'Clean toilet', 'Clean sink & mirror', 'Wash dishes', 'Clean countertops & stovetop', 'Arrange soft furnishings'],
+    taskIds: ['lv_tidy', 'lv_dust', 'lv_vacuum', 'lv_mop', 'ba_toilet', 'ba_sink', 'ba_mirror', 'k_dishes', 'k_counters', 'lv_tables'],
+    timeRange: '~2–3 hrs',
     img: '/resets/guest.jpg',
   },
 ]
