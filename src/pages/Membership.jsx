@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Check, ArrowRight, MessageCircle } from 'lucide-react'
+import { Check, ArrowRight } from 'lucide-react'
 import { Logo, FadeUp } from '../components/UI.jsx'
 import CookieNotice from '../components/CookieNotice.jsx'
 
@@ -76,9 +76,10 @@ const INCLUDES = [
   { t: 'Concierge support', d: 'Direct WhatsApp line to our team' },
 ]
 
-// Tier CTA. Silver is full pink; the rest are outlined and invert to
-// white-on-black on hover. Hover is purely visual — the link works on tap.
-function EnquireButton({ tier, label, popular }) {
+// Tier CTA. `to` routes internally (Link); otherwise it opens a WhatsApp
+// enquiry. The popular variant is full pink; the rest are outlined and invert
+// to white-on-black on hover. Hover is purely visual — the link works on tap.
+function EnquireButton({ tier, label, popular, to }) {
   const [hover, setHover] = useState(false)
   const base = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
@@ -96,18 +97,30 @@ function EnquireButton({ tier, label, popular }) {
         color: hover ? '#0A0A0A' : '#fff',
         border: `0.5px solid ${hover ? '#fff' : 'rgba(255,255,255,0.2)'}`,
       }
+  const hoverProps = {
+    onMouseEnter: () => setHover(true),
+    onMouseLeave: () => setHover(false),
+    onFocus: () => setHover(true),
+    onBlur: () => setHover(false),
+  }
+  const content = <>{label || `Enquire about ${tier}`} <ArrowRight size={15} /></>
+
+  if (to) {
+    return (
+      <Link to={to} style={style} {...hoverProps}>
+        {content}
+      </Link>
+    )
+  }
   return (
     <a
       href={enquireHref(tier)}
       target="_blank"
       rel="noopener noreferrer"
       style={style}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onFocus={() => setHover(true)}
-      onBlur={() => setHover(false)}
+      {...hoverProps}
     >
-      {label || `Enquire about ${tier}`} <ArrowRight size={15} />
+      {content}
     </a>
   )
 }
@@ -266,7 +279,7 @@ function TierCard({ tier }) {
               Coming Soon
             </button>
           ) : (
-            <EnquireButton tier={tier.label} label={tier.cta} popular={tier.popular} />
+            <EnquireButton tier={tier.label} label={tier.cta} popular={tier.popular} to="/membership/apply" />
           )}
         </div>
       </div>
@@ -365,16 +378,16 @@ export default function Membership() {
       <section style={{ margin: '0 24px 40px' }}>
         <div style={{ background: 'rgba(236,36,97,0.1)', border: '0.5px solid rgba(236,36,97,0.25)', borderRadius: 20, padding: '40px 32px', textAlign: 'center' }}>
           <h2 className="font-display italic" style={{ fontSize: 'clamp(26px, 6vw, 32px)', fontWeight: 600, marginBottom: 12 }}>
-            Membership is by enquiry
+            Membership is by application
           </h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, fontWeight: 300, maxWidth: 460, margin: '0 auto 24px' }}>
-            Contact us on WhatsApp to discuss your household's needs and we'll recommend the right tier for you.
+            Membership is by application. Complete our short application form and we'll be in touch within 24 hours.
           </p>
-          <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+          <Link to="/membership/apply" style={{ textDecoration: 'none' }}>
             <button className="cs-btn-primary" style={{ fontSize: 15, padding: '15px 32px' }}>
-              <MessageCircle size={18} /> Chat with us on WhatsApp <ArrowRight size={16} />
+              Apply for membership <ArrowRight size={16} />
             </button>
-          </a>
+          </Link>
         </div>
       </section>
 

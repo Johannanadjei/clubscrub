@@ -10,6 +10,7 @@ import Privacy from './pages/Privacy.jsx'
 import AssistantAgreement from './pages/AssistantAgreement.jsx'
 import Contact from './pages/Contact.jsx'
 import Membership from './pages/Membership.jsx'
+import MembershipApply from './pages/MembershipApply.jsx'
 import NotFound from './pages/NotFound.jsx'
 import AdminGate from './components/AdminGate.jsx'
 
@@ -25,6 +26,7 @@ export default function App() {
       <Route path="/assistant-agreement" element={<AssistantAgreement />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/membership" element={<Membership />} />
+      <Route path="/membership/apply" element={<MembershipApply />} />
       <Route path="/admin" element={<AdminGate><Admin /></AdminGate>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
