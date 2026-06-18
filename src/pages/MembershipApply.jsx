@@ -21,7 +21,15 @@ const SUPPORT_OPTIONS = [
   'Guest preparation',
 ]
 const FREQUENCIES = ['Weekly', 'Twice weekly', 'As needed']
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+// Short pill label → full day name stored in form state.
+const DAYS = [
+  { short: 'Mon', full: 'Monday' },
+  { short: 'Tue', full: 'Tuesday' },
+  { short: 'Wed', full: 'Wednesday' },
+  { short: 'Thu', full: 'Thursday' },
+  { short: 'Fri', full: 'Friday' },
+  { short: 'Sat', full: 'Saturday' },
+]
 const TIMES = ['Morning (8am–12pm)', 'Afternoon (12pm–4pm)', 'Flexible']
 
 // Optional media upload — mirrors the booking flow (Cloudinary unsigned upload).
@@ -102,7 +110,7 @@ export default function MembershipApply() {
   const [form, setForm] = useState({
     name: '', email: '', phone: '',
     area: '', propertyType: '', size: '', householdSize: '',
-    support: [], frequency: '', day: '', time: '', notes: '',
+    support: [], frequency: '', preferredDays: [], time: '', notes: '',
   })
   const [media, setMedia] = useState([])
   const [errors, setErrors] = useState({})
@@ -111,6 +119,7 @@ export default function MembershipApply() {
   const [done, setDone] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [mediaNotice, setMediaNotice] = useState('')
+  const [dayNote, setDayNote] = useState('')
   const inputRef = useRef(null)
   const counter = useRef(0)
 
@@ -125,6 +134,35 @@ export default function MembershipApply() {
       support: p.support.includes(opt) ? p.support.filter((s) => s !== opt) : [...p.support, opt],
     }))
     if (errors.support) setErrors((e) => ({ ...e, support: '' }))
+  }
+
+  // Changing frequency resets the day picker — the cap and "As needed" hide
+  // mean prior selections may no longer be valid.
+  const setFrequency = (v) => {
+    setForm((p) => ({ ...p, frequency: v, preferredDays: [] }))
+    setDayNote('')
+    setErrors((e) => ({ ...e, frequency: '', preferredDays: '' }))
+  }
+
+  // Day picker adapts to frequency: Weekly = single (radio), Twice weekly =
+  // toggle capped at 2, As needed = hidden (picker not rendered).
+  const toggleDay = (day) => {
+    setDayNote('')
+    if (errors.preferredDays) setErrors((e) => ({ ...e, preferredDays: '' }))
+    setForm((p) => {
+      const selected = p.preferredDays
+      const has = selected.includes(day)
+      if (p.frequency === 'Weekly') {
+        return { ...p, preferredDays: has ? [] : [day] }
+      }
+      // Twice weekly
+      if (has) return { ...p, preferredDays: selected.filter((d) => d !== day) }
+      if (selected.length >= 2) {
+        setDayNote('Maximum 2 days for twice weekly')
+        return p
+      }
+      return { ...p, preferredDays: [...selected, day] }
+    })
   }
 
   const startUpload = (file, kind, preview) => {
@@ -194,6 +232,9 @@ export default function MembershipApply() {
     if (!form.area) e.area = 'Please select your area'
     if (!form.propertyType) e.propertyType = 'Please select a property type'
     if (form.support.length === 0) e.support = 'Please select at least one type of support'
+    if ((form.frequency === 'Weekly' || form.frequency === 'Twice weekly') && form.preferredDays.length === 0) {
+      e.preferredDays = 'Please select your preferred day' + (form.frequency === 'Twice weekly' ? 's' : '')
+    }
     return e
   }
 
@@ -219,7 +260,7 @@ export default function MembershipApply() {
         householdSize: form.householdSize,
         support: form.support,
         frequency: form.frequency,
-        day: form.day,
+        preferredDays: form.frequency === 'As needed' ? [] : form.preferredDays,
         time: form.time,
         notes: form.notes.trim(),
         mediaUrls: media.filter((m) => m.status === 'done' && m.url).map((m) => m.url),
@@ -358,11 +399,46 @@ export default function MembershipApply() {
                     </Field>
                   </div>
                   <Field label="Preferred frequency">
-                    <Select value={form.frequency} onChange={(e) => set('frequency', e.target.value)} options={FREQUENCIES} placeholder="Select frequency" />
+                    <Select value={form.frequency} onChange={(e) => setFrequency(e.target.value)} options={FREQUENCIES} placeholder="Select frequency" />
                   </Field>
-                  <Field label="Preferred day">
-                    <Select value={form.day} onChange={(e) => set('day', e.target.value)} options={DAYS} placeholder="Select day" />
-                  </Field>
+                  {(form.frequency === 'Weekly' || form.frequency === 'Twice weekly') && (
+                    <div data-error={!!errors.preferredDays}>
+                      <Field
+                        label={form.frequency === 'Twice weekly' ? 'Preferred days' : 'Preferred day'}
+                        required
+                        hint={form.frequency === 'Twice weekly' ? 'Select exactly 2 days' : 'Select 1 day'}
+                        error={errors.preferredDays}
+                      >
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                          {DAYS.map(({ short, full }) => {
+                            const selected = form.preferredDays.includes(full)
+                            return (
+                              <button
+                                key={full}
+                                type="button"
+                                onClick={() => toggleDay(full)}
+                                aria-pressed={selected}
+                                style={{
+                                  minWidth: 56, minHeight: 44, padding: '10px 16px', borderRadius: 100,
+                                  fontFamily: 'DM Sans, sans-serif', fontSize: 14, fontWeight: 500,
+                                  cursor: 'pointer', boxSizing: 'border-box', WebkitTapHighlightColor: 'transparent',
+                                  transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease',
+                                  background: selected ? '#EC2461' : 'rgba(255,255,255,0.02)',
+                                  color: selected ? '#fff' : 'rgba(255,255,255,0.6)',
+                                  border: `0.5px solid ${selected ? '#EC2461' : 'rgba(255,255,255,0.2)'}`,
+                                }}
+                              >
+                                {short}
+                              </button>
+                            )
+                          })}
+                        </div>
+                        {dayNote && (
+                          <p style={{ fontSize: 12, color: '#FBBF24', marginTop: 8, fontWeight: 300 }}>{dayNote}</p>
+                        )}
+                      </Field>
+                    </div>
+                  )}
                   <Field label="Preferred time">
                     <Select value={form.time} onChange={(e) => set('time', e.target.value)} options={TIMES} placeholder="Select time" />
                   </Field>

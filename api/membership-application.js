@@ -76,7 +76,7 @@ function buildEmailHtml(app) {
     <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);margin:24px 0 8px;">Preferences</div>
     <table style="width:100%;border-collapse:collapse;">
       ${row('Frequency', escapeHtml(app.frequency || '—'))}
-      ${row('Preferred day', escapeHtml(app.day || '—'))}
+      ${row('Preferred days', escapeHtml(Array.isArray(app.preferredDays) && app.preferredDays.length ? app.preferredDays.join(', ') : '—'))}
       ${row('Preferred time', escapeHtml(app.time || '—'))}
     </table>
 
