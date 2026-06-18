@@ -71,7 +71,7 @@ export default function Calendar({ value, onChange }) {
       {/* Weekday labels */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 6 }}>
         {WEEKDAYS.map((w, i) => (
-          <div key={i} style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 500, paddingBottom: 2 }}>
+          <div key={i} style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.6)', fontWeight: 500, paddingBottom: 2 }}>
             {w}
           </div>
         ))}
@@ -137,11 +137,11 @@ export default function Calendar({ value, onChange }) {
       <div className="flex items-center gap-4 mt-3" style={{ flexWrap: 'wrap' }}>
         <div className="flex items-center gap-1.5">
           <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#EC2461', display: 'inline-block' }} />
-          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
             Sunday · weekend surcharge +GH₵ {SUNDAY_SURCHARGE}
           </span>
         </div>
-        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', fontWeight: 300, textDecoration: 'line-through' }}>
+        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontWeight: 300, textDecoration: 'line-through' }}>
           Saturday · closed
         </span>
       </div>

@@ -15,7 +15,7 @@ export default function NotFound() {
         <h1 className="font-display italic" style={{ fontSize: 28, fontWeight: 500, marginBottom: 10 }}>Page not found</h1>
       </FadeUp>
       <FadeUp delay={0.1}>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, lineHeight: 1.7, maxWidth: 360, marginBottom: 28 }}>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.7, maxWidth: 360, marginBottom: 28 }}>
           The page you're looking for doesn't exist or has been moved.
         </p>
       </FadeUp>

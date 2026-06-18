@@ -18,7 +18,7 @@ function BookingCard({ booking, assistant, onCancel, onRebook }) {
         <div className="flex items-start justify-between mb-3">
           <div>
             <p style={{ fontWeight: 500, fontSize: 15, marginBottom: 4 }}>Home assistance</p>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
               {booking.tasks?.length || 0} task{(booking.tasks?.length || 0) === 1 ? '' : 's'} · est. {formatDuration(booking.estMins || 0)} · {booking.area}
             </p>
           </div>
@@ -26,27 +26,27 @@ function BookingCard({ booking, assistant, onCancel, onRebook }) {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <Calendar size={13} style={{ color: 'rgba(255,255,255,0.35)' }} />
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{booking.date}</span>
+            <Calendar size={13} style={{ color: 'rgba(255,255,255,0.6)' }} />
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>{booking.date}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Clock size={13} style={{ color: 'rgba(255,255,255,0.35)' }} />
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{booking.timeSlot}</span>
+            <Clock size={13} style={{ color: 'rgba(255,255,255,0.6)' }} />
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>{booking.timeSlot}</span>
           </div>
         </div>
         <div className="flex items-center justify-between mt-3">
           <span className="font-display italic" style={{ fontSize: 20, fontWeight: 600, color: '#EC2461' }}>
             GH₵ {booking.total?.toLocaleString()}
           </span>
-          <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.3)', transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
+          <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.6)', transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
         </div>
       </div>
 
       {expanded && (
         <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', padding: '16px' }}>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Booking details</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Booking details</p>
           <div className="flex items-center gap-2 mb-2">
-            <MapPin size={13} style={{ color: 'rgba(255,255,255,0.35)' }} />
+            <MapPin size={13} style={{ color: 'rgba(255,255,255,0.6)' }} />
             <span style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.6)' }}>{booking.area}</span>
           </div>
           {assistant && (
@@ -57,15 +57,15 @@ function BookingCard({ booking, assistant, onCancel, onRebook }) {
           )}
           {booking.tasks?.length > 0 && (
             <div className="mb-3">
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 6 }}>Tasks</p>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 6 }}>Tasks</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                 {booking.tasks.map(t => (
-                  <span key={t} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 7, fontSize: 11, padding: '3px 9px', color: 'rgba(255,255,255,0.45)' }}>{t}</span>
+                  <span key={t} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 7, fontSize: 11, padding: '3px 9px', color: 'rgba(255,255,255,0.7)' }}>{t}</span>
                 ))}
               </div>
             </div>
           )}
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>Ref</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>Ref</p>
           <p style={{ fontSize: 13, fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', color: '#EC2461' }}>{booking.id}</p>
           <Divider />
           <div className="flex gap-2">
@@ -76,7 +76,7 @@ function BookingCard({ booking, assistant, onCancel, onRebook }) {
             )}
             {canCancel && (
               <button onClick={() => onCancel(booking.id)}
-                style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '12px', fontSize: 13, color: 'rgba(255,255,255,0.45)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '12px', fontSize: 13, color: 'rgba(255,255,255,0.7)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <X size={14} /> Cancel
               </button>
             )}
@@ -107,7 +107,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <Logo size="sm" />
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', marginTop: 4, fontWeight: 300 }}>Your bookings</p>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 4, fontWeight: 300 }}>Your bookings</p>
             </div>
             <button className="cs-btn-primary" onClick={() => navigate('/book')} style={{ padding: '10px 18px', fontSize: 13 }}>
               + New booking
@@ -125,7 +125,7 @@ export default function Dashboard() {
             ].map(({ label, val, color }) => (
               <div key={label} className="cs-card p-3 text-center">
                 <p style={{ fontSize: 18, fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontWeight: 600, color }}>{val}</p>
-                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 2 }}>{label}</p>
+                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 2 }}>{label}</p>
               </div>
             ))}
           </div>
@@ -137,7 +137,7 @@ export default function Dashboard() {
             {[['upcoming','Upcoming'], ['past','Past']].map(([v, l]) => (
               <button key={v} onClick={() => setTab(v)}
                 style={{ flex: 1, padding: '10px', borderRadius: 9, border: 'none', fontSize: 14, fontWeight: 500, fontFamily: 'DM Sans, sans-serif', cursor: 'pointer', transition: 'all 0.2s',
-                  background: tab === v ? '#EC2461' : 'transparent', color: tab === v ? '#fff' : 'rgba(255,255,255,0.45)' }}>
+                  background: tab === v ? '#EC2461' : 'transparent', color: tab === v ? '#fff' : 'rgba(255,255,255,0.7)' }}>
                 {l}
               </button>
             ))}
@@ -151,7 +151,7 @@ export default function Dashboard() {
             <div className="cs-card p-8 text-center">
               <Calendar size={32} style={{ color: 'rgba(255,255,255,0.2)', margin: '0 auto 12px' }} />
               <p style={{ fontSize: 15, fontWeight: 400, marginBottom: 6 }}>No {tab} bookings</p>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontWeight: 300, marginBottom: 20 }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontWeight: 300, marginBottom: 20 }}>
                 {tab === 'upcoming' ? 'Book your first ClubScrub assistant today.' : 'Your completed bookings will appear here.'}
               </p>
               {tab === 'upcoming' && (

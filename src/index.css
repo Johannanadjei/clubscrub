@@ -10,7 +10,7 @@
   --surface: #141414;
   --surface2: #1C1C1C;
   --border: rgba(255,255,255,0.08);
-  --muted: rgba(255,255,255,0.45);
+  --muted: rgba(255,255,255,0.7);
   --soft: rgba(255,255,255,0.72);
 }
 
@@ -241,7 +241,7 @@ body {
 .status-accepted { background: rgba(59,130,246,0.12); color: #60A5FA; border: 0.5px solid rgba(59,130,246,0.3); }
 .status-inprogress { background: rgba(236,36,97,0.12); color: #EC2461; border: 0.5px solid rgba(236,36,97,0.3); }
 .status-completed { background: rgba(34,197,94,0.12); color: #4ADE80; border: 0.5px solid rgba(34,197,94,0.3); }
-.status-cancelled { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.45); border: 0.5px solid rgba(255,255,255,0.1); }
+.status-cancelled { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 0.5px solid rgba(255,255,255,0.1); }
 
 /* Responsive top nav */
 .cs-nav { padding: 16px 20px; }

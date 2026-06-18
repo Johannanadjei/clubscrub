@@ -58,12 +58,12 @@ export default function AdminGate({ children }) {
           <h1 className="font-display italic" style={{ fontSize: 28, fontWeight: 600, textAlign: 'center', marginBottom: 6 }}>
             Admin Access
           </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, textAlign: 'center', marginBottom: 24 }}>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', fontWeight: 300, textAlign: 'center', marginBottom: 24 }}>
             Enter the team password to continue.
           </p>
 
           <form onSubmit={submit}>
-            <label htmlFor="admin-password" style={{ display: 'block', fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+            <label htmlFor="admin-password" style={{ display: 'block', fontSize: 11, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
               Password
             </label>
             <input

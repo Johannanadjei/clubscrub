@@ -8,7 +8,7 @@ import { formatDuration } from '../data/index.js'
 const PAY_STATUS = {
   paid: { label: 'Paid', color: '#4ADE80' },
   cash_on_arrival: { label: 'Cash on arrival', color: '#FBBF24' },
-  pending: { label: 'Awaiting payment', color: 'rgba(255,255,255,0.5)' },
+  pending: { label: 'Awaiting payment', color: 'rgba(255,255,255,0.72)' },
 }
 
 function StatCard({ label, value, sub, color = '#EC2461' }) {
@@ -16,7 +16,7 @@ function StatCard({ label, value, sub, color = '#EC2461' }) {
     <div className="cs-card p-4">
       <p style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontWeight: 600, fontSize: 28, color }}>{value}</p>
       <p style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>{label}</p>
-      {sub && <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 2, fontWeight: 300 }}>{sub}</p>}
+      {sub && <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 2, fontWeight: 300 }}>{sub}</p>}
     </div>
   )
 }
@@ -33,13 +33,13 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
             <p style={{ fontWeight: 500, fontSize: 14 }}>{booking.id}</p>
             <StatusBadge status={booking.status} />
           </div>
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>
             {booking.customer?.name} · {booking.tasks?.length || 0} task{(booking.tasks?.length || 0) === 1 ? '' : 's'} · {booking.area}
           </p>
         </div>
         <div style={{ textAlign: 'right' }}>
           <p className="font-display italic" style={{ fontSize: 17, fontWeight: 600, color: '#EC2461' }}>GH₵ {booking.total?.toLocaleString()}</p>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>{booking.date}</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>{booking.date}</p>
         </div>
       </div>
       {/* Desktop-only quick detail — visible without expanding */}
@@ -52,7 +52,7 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
           ['Pay status', PAY_STATUS[booking.paymentStatus]?.label || 'Awaiting payment'],
         ].map(([label, val]) => (
           <div key={label}>
-            <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{label}</p>
+            <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{label}</p>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>{val}</p>
           </div>
         ))}
@@ -61,28 +61,28 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
         <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.07)', padding: 16 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 14 }}>
             <div>
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 3 }}>Customer</p>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 3 }}>Customer</p>
               <p style={{ fontSize: 13, fontWeight: 300 }}>{booking.customer?.name}</p>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>{booking.customer?.phone}</p>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>{booking.customer?.phone}</p>
             </div>
             <div>
-              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 3 }}>Service</p>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 3 }}>Service</p>
               <p style={{ fontSize: 13, fontWeight: 300 }}>{booking.tasks?.length || 0} tasks · est. {formatDuration(booking.estMins || 0)}</p>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>{booking.timeSlot}</p>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>{booking.timeSlot}</p>
             </div>
           </div>
           <div className="mb-3">
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 3 }}>Payment</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 3 }}>Payment</p>
             <p style={{ fontSize: 13, fontWeight: 300 }}>
               {booking.paymentLabel || booking.payment || '—'}
               {' · '}
-              <span style={{ color: PAY_STATUS[booking.paymentStatus]?.color || 'rgba(255,255,255,0.5)' }}>
+              <span style={{ color: PAY_STATUS[booking.paymentStatus]?.color || 'rgba(255,255,255,0.72)' }}>
                 {PAY_STATUS[booking.paymentStatus]?.label || 'Awaiting payment'}
               </span>
             </p>
           </div>
           <div className="mb-3">
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 6 }}>Assigned assistant</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginBottom: 6 }}>Assigned assistant</p>
             {assigned ? (
               <div className="flex items-center gap-2">
                 <Avatar initials={assigned.avatar} size={28} />
@@ -118,7 +118,7 @@ function AdminBookingRow({ booking, assistants, onAssign, onUpdate }) {
             )}
             {!['completed','cancelled'].includes(booking.status) && (
               <button onClick={() => onUpdate(booking.id, { status: 'cancelled' })}
-                style={{ background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '11px 16px', fontSize: 13, color: 'rgba(255,255,255,0.45)', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+                style={{ background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '11px 16px', fontSize: 13, color: 'rgba(255,255,255,0.7)', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
                 Cancel
               </button>
             )}
@@ -154,7 +154,7 @@ export default function Admin() {
         {tabs.map(([v, l]) => (
           <button key={v} onClick={() => setTab(v)} className="cs-admin-tab"
             style={{ padding: '10px', borderRadius: 9, border: 'none', fontSize: 13, fontWeight: 500, fontFamily: 'DM Sans, sans-serif', cursor: 'pointer', transition: 'all 0.2s',
-              background: tab === v ? '#EC2461' : 'transparent', color: tab === v ? '#fff' : 'rgba(255,255,255,0.45)' }}>
+              background: tab === v ? '#EC2461' : 'transparent', color: tab === v ? '#fff' : 'rgba(255,255,255,0.7)' }}>
             {l}
           </button>
         ))}
@@ -172,10 +172,10 @@ export default function Admin() {
               <StatCard label="Assistants" value={assistants.length} />
             </div>
 
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Pending bookings requiring action</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Pending bookings requiring action</p>
             {pending.length === 0 ? (
               <div className="cs-card p-5 text-center">
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', fontWeight: 300 }}>No pending bookings</p>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>No pending bookings</p>
               </div>
             ) : pending.slice(0, 3).map(b => (
               <AdminBookingRow key={b.id} booking={b} assistants={assistants}
@@ -187,7 +187,7 @@ export default function Admin() {
 
         {tab === 'bookings' && (
           <FadeUp>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>All bookings ({bookings.length})</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>All bookings ({bookings.length})</p>
             {bookings.map(b => (
               <AdminBookingRow key={b.id} booking={b} assistants={assistants}
                 onAssign={(id, aid) => updateBooking(id, { assistant: aid })}
@@ -198,7 +198,7 @@ export default function Admin() {
 
         {tab === 'assistants' && (
           <FadeUp>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Assistants ({assistants.length})</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Assistants ({assistants.length})</p>
             {assistants.map(a => (
               <div key={a.id} className="cs-card p-4 mb-3">
                 <div className="flex items-center gap-3 mb-3">
@@ -207,24 +207,24 @@ export default function Admin() {
                     <p style={{ fontWeight: 500, fontSize: 15 }}>{a.name}</p>
                     <div className="flex items-center gap-2">
                       <Stars rating={a.rating} />
-                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>{a.jobs} jobs</span>
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>{a.jobs} jobs</span>
                     </div>
                   </div>
                   <span style={{ marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 20,
                     background: a.status === 'available' ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)',
-                    color: a.status === 'available' ? '#4ADE80' : 'rgba(255,255,255,0.35)',
+                    color: a.status === 'available' ? '#4ADE80' : 'rgba(255,255,255,0.6)',
                     border: `0.5px solid ${a.status === 'available' ? 'rgba(74,222,128,0.25)' : 'rgba(255,255,255,0.08)'}` }}>
                     {a.status === 'available' ? 'Available' : 'Busy'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-2">
-                  <MapPin size={13} style={{ color: 'rgba(255,255,255,0.35)' }} />
-                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{a.area}</span>
+                  <MapPin size={13} style={{ color: 'rgba(255,255,255,0.6)' }} />
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', fontWeight: 300 }}>{a.area}</span>
                 </div>
                 {a.skills && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                     {a.skills.map(s => (
-                      <span key={s} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 7, fontSize: 11, padding: '3px 9px', color: 'rgba(255,255,255,0.4)' }}>{s}</span>
+                      <span key={s} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 7, fontSize: 11, padding: '3px 9px', color: 'rgba(255,255,255,0.65)' }}>{s}</span>
                     ))}
                   </div>
                 )}

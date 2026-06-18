@@ -46,7 +46,7 @@ export default function CookieNotice() {
       </p>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
         <button className="cs-btn-primary" onClick={accept} style={{ padding: '8px 18px', fontSize: 13 }}>Got it</button>
-        <Link to="/privacy" style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>Learn more</Link>
+        <Link to="/privacy" style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>Learn more</Link>
       </div>
     </div>
   )

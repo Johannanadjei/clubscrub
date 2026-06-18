@@ -43,7 +43,7 @@ export function BackButton({ label = 'Back' }) {
   return (
     <button onClick={() => navigate(-1)}
       className="flex items-center gap-1.5 text-sm font-light mb-6"
-      style={{ color: 'rgba(255,255,255,0.5)' }}>
+      style={{ color: 'rgba(255,255,255,0.72)' }}>
       <ChevronLeft size={16} /> {label}
     </button>
   )
@@ -60,7 +60,7 @@ export function Stars({ rating }) {
 export function SectionLabel({ children }) {
   return (
     <p className="text-xs font-medium uppercase tracking-widest mb-3"
-      style={{ color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em' }}>
+      style={{ color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em' }}>
       {children}
     </p>
   )
@@ -131,8 +131,8 @@ export function CustomerNav() {
         return (
           <Link key={t.path} to={t.path}
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, textDecoration: 'none' }}>
-            <Icon size={20} color={active ? '#EC2461' : 'rgba(255,255,255,0.4)'} />
-            <span style={{ fontSize: 10, color: active ? '#EC2461' : 'rgba(255,255,255,0.35)', fontWeight: active ? 500 : 400 }}>
+            <Icon size={20} color={active ? '#EC2461' : 'rgba(255,255,255,0.65)'} />
+            <span style={{ fontSize: 10, color: active ? '#EC2461' : 'rgba(255,255,255,0.6)', fontWeight: active ? 500 : 400 }}>
               {t.label}
             </span>
           </Link>
@@ -163,7 +163,7 @@ export function PriceRow({ label, value, accent, small }) {
 export function InfoBox({ title, children }) {
   return (
     <div className="cs-card p-4">
-      {title && <p className="text-xs font-medium uppercase tracking-widest mb-3" style={{ color: 'rgba(255,255,255,0.35)' }}>{title}</p>}
+      {title && <p className="text-xs font-medium uppercase tracking-widest mb-3" style={{ color: 'rgba(255,255,255,0.6)' }}>{title}</p>}
       {children}
     </div>
   )

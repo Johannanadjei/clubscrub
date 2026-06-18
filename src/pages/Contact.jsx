@@ -37,7 +37,7 @@ function ContactCard({ icon: Icon, label, value, href, external }) {
           <Icon size={20} style={{ color: '#EC2461' }} />
         </div>
         <p style={{ fontSize: 15, fontWeight: 500, color: '#fff', marginBottom: 4 }}>{label}</p>
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{value}</p>
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', fontWeight: 300 }}>{value}</p>
       </div>
     </a>
   )
@@ -60,7 +60,7 @@ export default function Contact() {
           <h1 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 8 }}>
             Get in <span style={{ color: '#EC2461' }}>touch</span>
           </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.7 }}>
             We're here to help. Reach us through any of the channels below.
           </p>
         </FadeUp>
@@ -82,7 +82,7 @@ export default function Contact() {
       {/* LOCATION */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Where we work</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Where we work</p>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', fontWeight: 300, lineHeight: 1.8 }}>
             Based in Accra, Ghana — serving Cantonments, Labone, Airport Residential Area, Roman Ridge, East Airport, Osu, Dzorwulu, East Legon, Trasacco Valley, Airport Hills and Spintex.
           </p>
@@ -105,14 +105,14 @@ export default function Contact() {
       {/* FOOTER */}
       <footer style={{ padding: '32px 24px', borderTop: '0.5px solid rgba(255,255,255,0.07)', textAlign: 'center' }}>
         <Logo size="sm" />
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 12, fontWeight: 300 }}>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 12, fontWeight: 300 }}>
           © 2026 ClubScrub Home Assistance · Accra, Ghana
         </p>
         <div className="flex flex-wrap justify-center gap-6 mt-4">
-          <Link to="/" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Home</Link>
-          <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Terms & Conditions</Link>
-          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Privacy Policy</Link>
-          <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>info@club-scrub.com</a>
+          <Link to="/" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Home</Link>
+          <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Terms & Conditions</Link>
+          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacy Policy</Link>
+          <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>info@club-scrub.com</a>
         </div>
       </footer>
 

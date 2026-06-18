@@ -23,7 +23,7 @@ function FAQItem({ q, a }) {
       <button onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-4 text-left">
         <span style={{ fontSize: 14, fontWeight: 400 }}>{q}</span>
-        <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.4)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
+        <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.65)', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s', flexShrink: 0 }} />
       </button>
       {open && (
         <div style={{ padding: '0 16px 16px', fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontWeight: 300 }}>
@@ -42,7 +42,7 @@ export default function Landing() {
       <nav className="cs-nav" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(12px)', zIndex: 50, borderBottom: '0.5px solid rgba(255,255,255,0.06)' }}>
         <Logo size="md" />
         <div className="flex items-center gap-3">
-          <Link to="/assistant" className="cs-nav-hide-mobile" style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>Become an Assistant</Link>
+          <Link to="/assistant" className="cs-nav-hide-mobile" style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', textDecoration: 'none' }}>Become an Assistant</Link>
           <Link to="/contact" style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>Contact</Link>
           <Link to="/book">
             <button className="cs-btn-primary cs-nav-btn">Book Now</button>
@@ -79,12 +79,12 @@ export default function Landing() {
           <div style={{ marginTop: 40, background: '#000', border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '28px 24px' }}>
 
             {/* Eyebrow */}
-            <p style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 24, fontFamily: 'DM Sans, sans-serif' }}>Transparent pricing</p>
+            <p style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', marginBottom: 24, fontFamily: 'DM Sans, sans-serif' }}>Transparent pricing</p>
 
             {/* Hero price */}
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, marginBottom: 6 }}>
               <span className="font-display italic" style={{ fontSize: 64, fontWeight: 700, lineHeight: 1, color: '#fff', letterSpacing: '-2px' }}>{PRICING.base}</span>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', paddingBottom: 10, fontFamily: 'DM Sans, sans-serif' }}>GH₵ · minimum</span>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', paddingBottom: 10, fontFamily: 'DM Sans, sans-serif' }}>GH₵ · minimum</span>
             </div>
 
             {/* Pink badge */}
@@ -94,7 +94,7 @@ export default function Landing() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 12, overflow: 'hidden', marginBottom: 20 }}>
               {[[3, PRICING.base], [4, PRICING.base + PRICING.hourlyRate], [5, PRICING.base + PRICING.hourlyRate * 2]].map(([hrs, price]) => (
                 <div key={hrs} style={{ background: '#000', padding: '14px 16px' }}>
-                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 4, fontFamily: 'DM Sans, sans-serif' }}>{hrs} hours</p>
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginBottom: 4, fontFamily: 'DM Sans, sans-serif' }}>{hrs} hours</p>
                   <p className="font-display" style={{ fontSize: 20, fontWeight: 600, color: '#fff' }}>
                     <span style={{ color: '#EC2461' }}>₵</span>{price}
                   </p>
@@ -103,16 +103,16 @@ export default function Landing() {
             </div>
 
             {/* Note */}
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', lineHeight: 1.6, marginBottom: 20, fontFamily: 'DM Sans, sans-serif' }}>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginBottom: 20, fontFamily: 'DM Sans, sans-serif' }}>
               Pay for the time you need. Pick your tasks, see the price instantly. Extra time rounded up to the next hour.
             </p>
 
             {/* Surcharge pills */}
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', fontFamily: 'DM Sans, sans-serif' }}>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.72)', background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', fontFamily: 'DM Sans, sans-serif' }}>
                 +<strong style={{ color: '#fff', fontWeight: 500 }}>GH₵ {PRICING.hourlyRate}</strong> / extra hr
               </span>
-              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', fontFamily: 'DM Sans, sans-serif' }}>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.72)', background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', fontFamily: 'DM Sans, sans-serif' }}>
                 Sundays +<strong style={{ color: '#fff', fontWeight: 500 }}>GH₵ {SUNDAY_SURCHARGE}</strong>
               </span>
             </div>
@@ -123,9 +123,9 @@ export default function Landing() {
       {/* SIGNATURE RESETS — premium room-based bundles */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
           <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 8 }}>Signature Home <span style={{ color: '#EC2461' }}>Resets</span></h2>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 24, fontWeight: 300 }}>Every space. Perfectly presented.</p>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', marginBottom: 24, fontWeight: 300 }}>Every space. Perfectly presented.</p>
         </FadeUp>
         <ResetCarousel onSelect={() => navigate('/book')} />
       </section>
@@ -135,7 +135,7 @@ export default function Landing() {
       {/* HOW IT WORKS */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Process</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Process</p>
           <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>How it <span style={{ color: '#EC2461' }}>works</span></h2>
         </FadeUp>
         <div className="cs-steps">
@@ -151,7 +151,7 @@ export default function Landing() {
               </div>
               <div>
                 <p style={{ fontWeight: 500, marginBottom: 4, fontSize: 14 }}>{s.t}</p>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', fontWeight: 300, lineHeight: 1.6 }}>{s.d}</p>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.6 }}>{s.d}</p>
               </div>
             </div>
           </FadeUp>
@@ -164,7 +164,7 @@ export default function Landing() {
       {/* SERVICE AREAS */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Coverage</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Coverage</p>
           <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>Service <span style={{ color: '#EC2461' }}>areas</span></h2>
         </FadeUp>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -186,7 +186,7 @@ export default function Landing() {
       {/* WHAT'S INCLUDED */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
           <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>What's <span style={{ color: '#EC2461' }}>included</span></h2>
         </FadeUp>
         <div className="cs-grid-services">
@@ -197,7 +197,7 @@ export default function Landing() {
                 {g.tasks.map(t => (
                   <div key={t.id} className="flex items-start gap-2 mb-1.5">
                     <Check size={12} style={{ color: '#EC2461', marginTop: 2, flexShrink: 0 }} />
-                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{t.label}</span>
+                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.72)', fontWeight: 300 }}>{t.label}</span>
                   </div>
                 ))}
               </div>
@@ -209,13 +209,13 @@ export default function Landing() {
       {/* WHAT'S NOT INCLUDED */}
       <section style={{ padding: '0 24px 40px' }}>
         <div className="cs-card p-5" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Not included</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Not included</p>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', marginBottom: 16, fontWeight: 300, lineHeight: 1.6 }}>
             ClubScrub focuses on light home upkeep and household support. Specialist or deep-cleaning services are not included.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {EXCLUDED_TASKS.map(t => (
-              <span key={t} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 8, fontSize: 11, padding: '4px 10px', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+              <span key={t} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 8, fontSize: 11, padding: '4px 10px', color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>
                 {t}
               </span>
             ))}
@@ -229,7 +229,7 @@ export default function Landing() {
       <section className="cs-section">
         <FadeUp>
           <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 8 }}>Why <span style={{ color: '#EC2461' }}>ClubScrub?</span></h2>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 24, fontWeight: 300 }}>We're redefining home assistance in Ghana — blending prestige, reliability, and a fresh approach.</p>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', marginBottom: 24, fontWeight: 300 }}>We're redefining home assistance in Ghana — blending prestige, reliability, and a fresh approach.</p>
         </FadeUp>
         <div className="cs-grid-2to4">
           {[
@@ -244,7 +244,7 @@ export default function Landing() {
                   <Icon size={16} style={{ color: '#EC2461' }} />
                 </div>
                 <p style={{ fontSize: 13, fontWeight: 500, marginBottom: 3 }}>{t}</p>
-                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{d}</p>
+                <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>{d}</p>
               </div>
             </FadeUp>
           ))}
@@ -281,19 +281,19 @@ export default function Landing() {
       {/* FOOTER */}
       <footer style={{ padding: '32px 24px', borderTop: '0.5px solid rgba(255,255,255,0.07)', textAlign: 'center' }}>
         <Logo size="sm" />
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 12, fontWeight: 300 }}>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 12, fontWeight: 300 }}>
           © 2026 ClubScrub Home Assistance · Accra, Ghana
         </p>
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 4, fontWeight: 300 }}>
           Professional Home Assistance, Done Right.
         </p>
         <div className="flex flex-wrap justify-center gap-6 mt-4">
-          <Link to="/assistant" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Become an Assistant</Link>
-          <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Terms & Conditions</Link>
-          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Privacy Policy</Link>
-          <Link to="/assistant-agreement" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Home Assistant Agreement</Link>
-          <Link to="/contact" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Contact Us</Link>
-          <Link to="/admin" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Admin</Link>
+          <Link to="/assistant" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Become an Assistant</Link>
+          <Link to="/terms" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Terms & Conditions</Link>
+          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacy Policy</Link>
+          <Link to="/assistant-agreement" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Home Assistant Agreement</Link>
+          <Link to="/contact" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Contact Us</Link>
+          <Link to="/admin" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Admin</Link>
         </div>
         <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', marginTop: 20, fontWeight: 300, lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
           Club Scrub provides light home support and refresh services. Services are not intended to replace specialist cleaning, restoration, construction cleaning, pest control, or hazardous waste removal services.

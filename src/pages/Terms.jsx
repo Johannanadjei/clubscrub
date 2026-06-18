@@ -152,11 +152,11 @@ export default function Terms() {
       {/* HEADER */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Last updated: June 2026</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Last updated: June 2026</p>
           <h1 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 8 }}>
             Terms & <span style={{ color: '#EC2461' }}>Conditions</span>
           </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.7 }}>
             Club Scrub is your extra pair of hands at home. The terms below govern your use of Club Scrub home support services.
           </p>
         </FadeUp>
@@ -192,13 +192,13 @@ export default function Terms() {
       {/* FOOTER */}
       <footer style={{ padding: '32px 24px', borderTop: '0.5px solid rgba(255,255,255,0.07)', textAlign: 'center' }}>
         <Logo size="sm" />
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 12, fontWeight: 300 }}>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 12, fontWeight: 300 }}>
           © 2026 ClubScrub Home Assistance · Accra, Ghana
         </p>
         <div className="flex justify-center gap-6 mt-4">
-          <Link to="/" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Home</Link>
-          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>Privacy Policy</Link>
-          <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}>info@club-scrub.com</a>
+          <Link to="/" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Home</Link>
+          <Link to="/privacy" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>Privacy Policy</Link>
+          <a href="mailto:info@club-scrub.com" style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>info@club-scrub.com</a>
         </div>
       </footer>
 

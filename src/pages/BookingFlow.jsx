@@ -88,7 +88,7 @@ function StepTitle({ title, sub }) {
   return (
     <div className="mb-6">
       <h2 className="font-display italic" style={{ fontSize: 26, fontWeight: 500, marginBottom: 6 }}>{title}</h2>
-      {sub && <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>{sub}</p>}
+      {sub && <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', fontWeight: 300 }}>{sub}</p>}
     </div>
   )
 }
@@ -100,7 +100,7 @@ function OptionCard({ label, sub, selected, onClick }) {
       style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 44 }}>
       <div>
         <p style={{ fontWeight: 500, fontSize: 15, marginBottom: 3 }}>{label}</p>
-        {sub && <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{sub}</p>}
+        {sub && <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>{sub}</p>}
       </div>
       <div style={{
         width: 22, height: 22, borderRadius: '50%',
@@ -151,7 +151,7 @@ function PricingFeedback({ estimate }) {
           </span>
         </div>
         <div style={{ height: '0.5px', background: 'rgba(255,255,255,0.1)', margin: '14px 0' }} />
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 300, lineHeight: 1.5 }}>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', fontWeight: 300, lineHeight: 1.5 }}>
           Final price confirmed at booking. Sunday surcharge +GH₵ {SUNDAY_SURCHARGE}.
         </p>
       </div>
@@ -192,7 +192,7 @@ function StepTasks({ data, update, onNext }) {
         <h1 className="font-display italic" style={{ fontSize: 36, fontWeight: 500, color: '#fff', lineHeight: 1.1, marginBottom: 10 }}>
           Your Home Reset
         </h1>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.6, marginBottom: 32 }}>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.6, marginBottom: 32 }}>
           Choose a Signature Reset. Your price is calculated instantly.
         </p>
       </FadeUp>
@@ -216,7 +216,7 @@ function StepTasks({ data, update, onNext }) {
                     <p className="font-display italic" style={{ fontSize: 22, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 4 }}>
                       {r.name}
                     </p>
-                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.45 }}>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.45 }}>
                       {r.description}
                     </p>
                   </div>
@@ -226,7 +226,7 @@ function StepTasks({ data, update, onNext }) {
                         <Check size={14} color="#fff" />
                       </div>
                     ) : (
-                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 300, whiteSpace: 'nowrap' }}>
+                      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 300, whiteSpace: 'nowrap' }}>
                         {r.timeRange}
                       </span>
                     )}
@@ -248,7 +248,7 @@ function StepTasks({ data, update, onNext }) {
         <button
           type="button"
           onClick={() => setCustomOpen(o => !o)}
-          style={{ display: 'block', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 400, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', margin: '24px 0', padding: 0, minHeight: 32 }}>
+          style={{ display: 'block', background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.65)', fontSize: 13, fontWeight: 400, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', margin: '24px 0', padding: 0, minHeight: 32 }}>
           {customOpen ? 'hide individual services' : 'or customise individual services'}
         </button>
 
@@ -273,7 +273,7 @@ function StepTasks({ data, update, onNext }) {
                   return (
                     <div key={g.id} className="cs-task-group mb-5">
                       <div className="flex items-center justify-between mb-2">
-                        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.09em' }}>{g.label}</p>
+                        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.09em' }}>{g.label}</p>
                         <button onClick={() => toggleGroup(g)}
                           style={{ background: 'transparent', border: 'none', color: '#EC2461', fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', minHeight: 32, padding: '0 4px' }}>
                           {allOn ? 'Clear all' : 'Select all'}
@@ -286,7 +286,7 @@ function StepTasks({ data, update, onNext }) {
                             style={{ padding: '12px 16px', minHeight: 48, borderBottom: i < g.tasks.length - 1 ? '0.5px solid rgba(255,255,255,0.06)' : 'none' }}>
                             <div>
                               <span style={{ fontSize: 14, fontWeight: 300 }}>{t.label}</span>
-                              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginLeft: 8 }}>{formatDuration(t.mins)}</span>
+                              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginLeft: 8 }}>{formatDuration(t.mins)}</span>
                             </div>
                             <div style={{
                               width: 22, height: 22, borderRadius: 6,
@@ -417,7 +417,7 @@ function StepMedia({ data, setData, onBack, onNext }) {
           <h2 className="font-display italic" style={{ fontSize: 26, fontWeight: 500 }}>Share your space</h2>
           <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', border: '0.5px solid rgba(255,255,255,0.2)', borderRadius: 20, padding: '2px 10px' }}>Optional</span>
         </div>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', fontWeight: 300 }}>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.72)', fontWeight: 300 }}>
           Help your assistant prepare — photos protect everyone and lead to better service.
         </p>
       </div>
@@ -437,11 +437,11 @@ function StepMedia({ data, setData, onBack, onNext }) {
           cursor: atMax ? 'not-allowed' : 'pointer', opacity: atMax ? 0.5 : 1,
           transition: 'all 0.2s ease', minHeight: 44,
         }}>
-        <Upload size={26} style={{ color: dragging ? '#EC2461' : 'rgba(255,255,255,0.4)', display: 'block', margin: '0 auto 10px' }} />
+        <Upload size={26} style={{ color: dragging ? '#EC2461' : 'rgba(255,255,255,0.65)', display: 'block', margin: '0 auto 10px' }} />
         <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>
           {atMax ? 'Maximum of 6 files added' : 'Tap to upload or drag files here'}
         </p>
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>
           Images (jpg, png, heic, webp) or video (mp4, mov, max 60s) · up to {MAX_MEDIA} files
         </p>
         <input ref={inputRef} type="file" accept="image/*,video/*,.heic,.mov" multiple
@@ -456,7 +456,7 @@ function StepMedia({ data, setData, onBack, onNext }) {
       {/* Thumbnails */}
       {media.length > 0 && (
         <>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', margin: '20px 0 10px' }}>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', margin: '20px 0 10px' }}>
             {media.length} / {MAX_MEDIA} added
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
@@ -533,8 +533,8 @@ function StepArea({ data, update, onBack, onNext }) {
         ))}
         {filtered.length === 0 && (
           <div className="cs-card p-5 text-center">
-            <AlertCircle size={20} style={{ color: 'rgba(255,255,255,0.3)', margin: '0 auto 8px' }} />
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+            <AlertCircle size={20} style={{ color: 'rgba(255,255,255,0.6)', margin: '0 auto 8px' }} />
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>
               We currently do not service this location.
             </p>
           </div>
@@ -552,7 +552,7 @@ function StepDate({ data, update, onBack, onNext }) {
     <FadeUp>
       <StepTitle title="Pick a date & time" sub="Choose when you'd like your assistant to arrive." />
       <div className="cs-card p-5 mb-4">
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14 }}>Date</p>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14 }}>Date</p>
         <Calendar value={data.date} onChange={(d) => update({ date: d })} />
       </div>
       {sundaySelected && (
@@ -563,7 +563,7 @@ function StepDate({ data, update, onBack, onNext }) {
         </div>
       )}
       <div className="cs-card p-5 mb-4">
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Preferred start</p>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Preferred start</p>
         {TIME_SLOTS.map(s => (
           <OptionCard key={s} label={s} selected={data.timeSlot === s} onClick={() => update({ timeSlot: s })} />
         ))}
@@ -603,7 +603,7 @@ function StepSummary({ data, onBack, onNext, submitting, error }) {
       </div>
       {labels.length > 0 && (
         <div className="cs-card p-4 mb-4">
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>Selected tasks ({labels.length})</p>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 10 }}>Selected tasks ({labels.length})</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {labels.map(t => (
               <span key={t} style={{ background: 'rgba(236,36,97,0.1)', border: '0.5px solid rgba(236,36,97,0.2)', color: '#EC2461', fontSize: 11, padding: '3px 10px', borderRadius: 8 }}>{t}</span>
@@ -613,14 +613,14 @@ function StepSummary({ data, onBack, onNext, submitting, error }) {
       )}
       {selectedPay && (
         <div className="cs-card p-4 mb-4">
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Payment method</p>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Payment method</p>
           <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 2 }}>{selectedPay.label}</p>
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300 }}>{selectedPay.sub}</p>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300 }}>{selectedPay.sub}</p>
         </div>
       )}
       <div className="cs-card p-4 mb-4" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Important reminder</p>
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Important reminder</p>
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.6 }}>
           ClubScrub focuses on light home upkeep. Deep cleaning and specialist services are not included.
         </p>
       </div>
@@ -658,13 +658,13 @@ function StepInfo({ data, update, onBack, onNext }) {
           { k: 'address', label: 'Property address', ph: 'e.g. 5 Liberation Road, Airport Residential Area', type: 'text', required: true },
         ].map(({ k, label, ph, type, required }) => (
           <div key={k} style={{ marginBottom: 14 }}>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
               {label}{required && <span style={{ color: '#EC2461' }}> *</span>}
             </p>
             <input className="cs-input" type={type} placeholder={ph} value={info[k] || ''}
               onChange={e => set(k, e.target.value)} />
             {k === 'address' && (
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 6, fontWeight: 300 }}>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', marginTop: 6, fontWeight: 300 }}>
                 Your assistant will confirm the exact location before arrival.
               </p>
             )}
@@ -676,14 +676,14 @@ function StepInfo({ data, update, onBack, onNext }) {
           </div>
         ))}
         <div>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>Access instructions</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>Access instructions</p>
           <textarea className="cs-input" style={{ height: 70, resize: 'none' }}
             placeholder="Gate codes, pets, special access instructions…"
             value={info.notes || ''} onChange={e => set('notes', e.target.value)} />
         </div>
       </div>
       <div className="mb-4">
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Payment method</p>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Payment method</p>
         {PAYMENT_OPTIONS.map(o => (
           <OptionCard key={o.id} label={o.label} sub={o.sub}
             selected={data.payment === o.id}
@@ -712,7 +712,7 @@ function StepConfirmed({ data, bookingRef, onBookAnother }) {
         </p>
       </div>
       <div className="cs-card p-5 mb-4">
-        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>Booking reference</p>
+        <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>Booking reference</p>
         <p className="font-display italic" style={{ fontSize: 28, fontWeight: 600, color: '#EC2461', marginBottom: 16 }}>{bookingRef}</p>
         <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
         <PriceRow label="Area" value={data.area} />
@@ -862,10 +862,10 @@ export default function BookingFlow() {
         <Logo size="sm" />
         <div className="flex items-center gap-3">
           {step < STEPS.length && (
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Step {step + 1} of {STEPS.length}</span>
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Step {step + 1} of {STEPS.length}</span>
           )}
           {step < STEPS.length && (
-            <button onClick={() => navigate('/')} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', display: 'flex' }}>
+            <button onClick={() => navigate('/')} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', display: 'flex' }}>
               <X size={18} />
             </button>
           )}
