@@ -5,7 +5,43 @@ import { ArrowRight, Check, X, ChevronDown, MapPin, Clock, Shield, Star } from '
 import { Logo, FadeUp, Divider } from '../components/UI.jsx'
 import ResetCarousel from '../components/ResetCarousel.jsx'
 import CookieNotice from '../components/CookieNotice.jsx'
-import { ZONES, TASK_GROUPS, EXCLUDED_TASKS, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
+import { ZONES, PRICING, SUNDAY_SURCHARGE } from '../data/index.js'
+
+function AccordionRow({ section }) {
+  const [open, setOpen] = React.useState(false)
+  return (
+    <div style={{ borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{ width: '100%', background: 'none', border: 'none', padding: '22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', gap: 16 }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', width: 20, textAlign: 'right', flexShrink: 0 }}>{section.num}</span>
+          <span className="font-display italic" style={{ fontSize: 22, color: open ? '#EC2461' : '#fff', transition: 'color 200ms', textAlign: 'left' }}>{section.name}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 300, opacity: open ? 0 : 1, transition: 'opacity 200ms' }}>{section.count} services</span>
+          <div style={{ width: 28, height: 28, borderRadius: '50%', border: open ? '0.5px solid #EC2461' : '0.5px solid rgba(255,255,255,0.15)', background: open ? '#EC2461' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 200ms', flexShrink: 0 }}>
+            <span style={{ color: '#fff', fontSize: 16, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform 200ms', display: 'block', marginTop: open ? '-1px' : '0' }}>+</span>
+          </div>
+        </div>
+      </button>
+      {open && (
+        <div style={{ paddingBottom: 28, paddingLeft: 40 }}>
+          <p className="font-display italic" style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontWeight: 400, lineHeight: 1.6 }}>{section.desc}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.07)', borderRadius: 12, overflow: 'hidden' }}>
+            {section.items.map(item => (
+              <div key={item} style={{ background: '#0a0a0a', padding: '14px 18px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#EC2461', flexShrink: 0, marginTop: 7 }} />
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.5 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 const FAQ = [
   { q: 'Are your staff vetted?', a: 'Yes. All Home Assistants undergo an application and screening process before joining Club Scrub.' },
@@ -184,41 +220,53 @@ export default function Landing() {
 
       <Divider />
 
-      {/* WHAT'S INCLUDED */}
+      {/* WHAT'S INCLUDED ACCORDION */}
       <section className="cs-section">
         <FadeUp>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Services</p>
-          <h2 className="font-display italic cs-h2" style={{ fontWeight: 500, marginBottom: 24 }}>What's <span style={{ color: '#EC2461' }}>included</span></h2>
+          <p style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#EC2461', marginBottom: 16, fontWeight: 500 }}>Every Reset</p>
+          <h2 className="font-display italic" style={{ fontSize: 38, fontWeight: 600, color: '#fff', lineHeight: 1.15, marginBottom: 8 }}>What's included.</h2>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', marginBottom: 40, fontWeight: 300, lineHeight: 1.6 }}>Every space cared for, to a consistent standard.</p>
         </FadeUp>
-        <div className="cs-grid-services">
-          {TASK_GROUPS.map((g, i) => (
-            <FadeUp key={g.id} delay={i * 0.04}>
-              <div className="cs-card p-4">
-                <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 8, color: 'rgba(255,255,255,0.8)' }}>{g.label}</p>
-                {g.tasks.map(t => (
-                  <div key={t.id} className="flex items-start gap-2 mb-1.5">
-                    <Check size={12} style={{ color: '#EC2461', marginTop: 2, flexShrink: 0 }} />
-                    <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.72)', fontWeight: 300 }}>{t.label}</span>
-                  </div>
-                ))}
-              </div>
-            </FadeUp>
+
+        {/* Accordion */}
+        <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+          {[
+            {
+              num: '01', name: 'Kitchen Reset', count: 8,
+              desc: 'A beautifully presented kitchen, ready for the day ahead.',
+              items: ['Wash dishes & utensils', 'Clean countertops & stovetop', 'Scrub sink', 'Wipe cabinet fronts', 'Clean microwave', 'Sweep & mop floor', 'Take out trash', 'General organisation'],
+            },
+            {
+              num: '02', name: 'Bedroom Reset', count: 8,
+              desc: 'A calm, hotel-inspired bedroom experience.',
+              items: ['Make beds to hotel standard', 'Change bed linen', 'Dust all surfaces', 'Tidy & organise', 'Sweep & vacuum floor', 'Mop floor', 'Fold & put away clothes', 'Cushion arrangement'],
+            },
+            {
+              num: '03', name: 'Bathroom Reset', count: 8,
+              desc: 'A polished, spa-standard bathroom.',
+              items: ['Clean & sanitise toilet', 'Clean sink & counter', 'Polish mirror', 'Clean shower & bath', 'Present towels', 'Sweep & mop floor', 'Restock & tidy', 'Empty bin'],
+            },
+            {
+              num: '04', name: 'Living Space Reset', count: 8,
+              desc: 'A welcoming, guest-ready living environment.',
+              items: ['Dust all surfaces', 'Tidy & declutter', 'Sweep & vacuum', 'Mop floors', 'Wipe tables & surfaces', 'Clean glass & mirrors', 'Arrange soft furnishings', 'Presentation styling'],
+            },
+            {
+              num: '05', name: 'Laundry & Ironing', count: 6,
+              desc: 'Washing, folding and ironing — always fresh and ready.',
+              items: ['Wash a load', 'Hang or dry clothes', 'Fold & put away', 'Iron up to 10 items', 'Iron up to 25 items', 'Iron bed linens'],
+            },
+          ].map((section) => (
+            <AccordionRow key={section.num} section={section} />
           ))}
         </div>
-      </section>
 
-      {/* WHAT'S NOT INCLUDED */}
-      <section style={{ padding: '0 24px 40px' }}>
-        <div className="cs-card p-5" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>Not included</p>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', marginBottom: 16, fontWeight: 300, lineHeight: 1.6 }}>
-            ClubScrub focuses on light home upkeep and household support. Specialist or deep-cleaning services are not included.
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {EXCLUDED_TASKS.map(t => (
-              <span key={t} style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 8, fontSize: 11, padding: '4px 10px', color: 'rgba(255,255,255,0.65)', fontWeight: 300 }}>
-                {t}
-              </span>
+        {/* Not included */}
+        <div style={{ marginTop: 32, padding: '18px 22px', background: 'rgba(255,255,255,0.02)', border: '0.5px solid rgba(255,255,255,0.06)', borderRadius: 12 }}>
+          <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>Not included</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {['Construction cleaning', 'Pest control', 'Exterior windows', 'Biohazard removal', 'Heavy lifting', 'Roof cleaning'].map(item => (
+              <span key={item} style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 100, padding: '4px 14px', fontWeight: 300 }}>{item}</span>
             ))}
           </div>
         </div>

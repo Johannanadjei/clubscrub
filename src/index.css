@@ -141,9 +141,6 @@ body {
 .cs-grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
 @media (min-width: 768px) { .cs-grid-2 { grid-template-columns: 1fr 1fr; } }
 
-.cs-grid-services { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-@media (min-width: 1024px) { .cs-grid-services { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-
 .cs-reset-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
 @media (min-width: 768px) { .cs-reset-grid { grid-template-columns: 1fr 1fr; gap: 18px; } }
 
