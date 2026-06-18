@@ -201,7 +201,7 @@ function StepTasks({ data, update, onNext }) {
           const isSel = resetId === r.id
           return (
             <FadeUp key={r.id} delay={i * 0.05}>
-              <div style={{ marginBottom: 12 }}>
+              <div style={{ marginBottom: 16 }}>
                 <motion.button
                   type="button"
                   whileTap={{ scale: 0.99 }}
