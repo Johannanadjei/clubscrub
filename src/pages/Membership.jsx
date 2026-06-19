@@ -128,6 +128,9 @@ function EnquireButton({ tier, label, popular, to }) {
 
 // Plain-language explanations for each benefit, shown in a tooltip.
 const TOOLTIPS = {
+  '1 Reset per week at your preferred time': 'One Signature or Full Home Reset every week, scheduled at your chosen day and time.',
+  'Choice of Signature Reset or Full Home Reset': 'Choose from Kitchen, Bedroom, Bathroom or Living Space Resets at ₵1,499/month, or upgrade to the Full Home Reset at ₵2,000/month.',
+  '10% off additional bookings via WhatsApp': 'Book any extra Resets at a 10% member discount by messaging us on WhatsApp with your member number.',
   'Reserved weekly appointment': 'Your appointment time is reserved for you every week — no need to rebook.',
   'Preferred scheduling window': 'Same day, same time, every week — automatically reserved for you.',
   'Priority booking access': 'Your session is always protected and reserved for you first.',

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Landing from './pages/Landing.jsx'
 import BookingFlow from './pages/BookingFlow.jsx'
 import Dashboard from './pages/Dashboard.jsx'
@@ -14,9 +14,21 @@ import MembershipApply from './pages/MembershipApply.jsx'
 import NotFound from './pages/NotFound.jsx'
 import AdminGate from './components/AdminGate.jsx'
 
+// Scrolls to the top of the page on every route change. Placed as a sibling
+// of <Routes> (not inside it — Routes only accepts <Route> children).
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/book" element={<BookingFlow />} />
       <Route path="/dashboard" element={<Dashboard />} />
@@ -29,6 +41,7 @@ export default function App() {
       <Route path="/membership/apply" element={<MembershipApply />} />
       <Route path="/admin" element={<AdminGate><Admin /></AdminGate>} />
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }
