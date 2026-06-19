@@ -18,9 +18,14 @@ const SUPPORT_OPTIONS = [
   'Bathroom care',
   'Laundry & ironing',
   'Home organisation',
-  'Guest preparation',
 ]
 const FREQUENCIES = ['Weekly', 'Twice weekly', 'As needed']
+// Membership monthly price by chosen Reset type, used for the live price card.
+const RESET_PRICES = { signature: 1499, full: 2000 }
+const RESET_CHOICES = [
+  { id: 'signature', label: 'Signature Reset (Kitchen, Bedroom, Bathroom or Living Space)', note: '₵1,499/month' },
+  { id: 'full', label: 'Full Home Reset', note: '₵2,000/month' },
+]
 // Short pill label → full day name stored in form state.
 const DAYS = [
   { short: 'Mon', full: 'Monday' },
@@ -110,7 +115,7 @@ export default function MembershipApply() {
   const [form, setForm] = useState({
     name: '', email: '', phone: '',
     area: '', propertyType: '', size: '', householdSize: '',
-    support: [], frequency: '', preferredDays: [], time: '', notes: '',
+    support: [], resetChoice: '', frequency: '', preferredDays: [], time: '', notes: '',
   })
   const [media, setMedia] = useState([])
   const [errors, setErrors] = useState({})
@@ -259,6 +264,8 @@ export default function MembershipApply() {
         size: form.size,
         householdSize: form.householdSize,
         support: form.support,
+        resetChoice: form.resetChoice,
+        resetPrice: form.resetChoice ? RESET_PRICES[form.resetChoice] : null,
         frequency: form.frequency,
         preferredDays: form.frequency === 'As needed' ? [] : form.preferredDays,
         time: form.time,
@@ -398,6 +405,38 @@ export default function MembershipApply() {
                       </div>
                     </Field>
                   </div>
+                  <Field label="Which Reset would you like?">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      {RESET_CHOICES.map((opt) => {
+                        const checked = form.resetChoice === opt.id
+                        return (
+                          <label key={opt.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '11px 0', cursor: 'pointer', minHeight: 44, WebkitTapHighlightColor: 'transparent' }}>
+                            <input type="radio" name="resetChoice" checked={checked} onChange={() => set('resetChoice', opt.id)}
+                              style={{ width: 20, height: 20, accentColor: '#EC2461', flexShrink: 0, cursor: 'pointer', marginTop: 1 }} />
+                            <span style={{ fontSize: 14, color: checked ? '#fff' : 'rgba(255,255,255,0.75)', fontWeight: 300, lineHeight: 1.4 }}>
+                              {opt.label} <span style={{ color: '#EC2461' }}>· {opt.note}</span>
+                            </span>
+                          </label>
+                        )
+                      })}
+                    </div>
+                    {form.resetChoice && (
+                      <div style={{ background: 'rgba(236,36,97,0.06)', border: '0.5px solid rgba(236,36,97,0.3)', borderRadius: 12, padding: '16px 20px', marginTop: 12 }}>
+                        <p style={{ fontSize: 11, color: '#EC2461', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 500, marginBottom: 6, fontFamily: 'DM Sans, sans-serif' }}>
+                          Your membership
+                        </p>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
+                          <span className="font-display italic" style={{ fontSize: 36, fontWeight: 600, color: '#fff', lineHeight: 1 }}>
+                            ₵{RESET_PRICES[form.resetChoice].toLocaleString()}
+                          </span>
+                          <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>/month</span>
+                        </div>
+                        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.5 }}>
+                          Includes 1 Reset per week at your preferred time. Additional Resets available at 10% member discount via WhatsApp.
+                        </p>
+                      </div>
+                    )}
+                  </Field>
                   <Field label="Preferred frequency">
                     <Select value={form.frequency} onChange={(e) => setFrequency(e.target.value)} options={FREQUENCIES} placeholder="Select frequency" />
                   </Field>

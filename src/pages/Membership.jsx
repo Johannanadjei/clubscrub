@@ -13,20 +13,21 @@ const enquireHref = (tier) =>
 const TIERS = [
   {
     label: 'Club Member',
-    price: '₵1,499',
+    price: 'From ₵1,499',
     priceNote: 'per month',
+    priceSecondary: 'Full Home Reset from ₵2,000/month',
     tagline: 'YOUR HOME. ALWAYS READY.',
-    description: 'Designed for busy professionals, families and homeowners who want the convenience of a regularly maintained home without the hassle of repeatedly booking appointments.',
+    description: 'One Signature Reset per week at your preferred time. Choose from Kitchen, Bedroom, Bathroom or Living Space Resets. Full Home Reset available at ₵2,000/month.',
     benefits: [
-      'Reserved weekly appointment',
-      'Preferred scheduling window',
+      '1 Reset per week at your preferred time',
+      'Choice of Signature Reset or Full Home Reset',
       'Priority booking access',
+      'Preferred scheduling window',
       'Home preferences stored and remembered',
       'Dedicated WhatsApp support',
-      'Priority access to peak-demand booking periods',
-      '10% off additional bookings',
+      '10% off additional bookings via WhatsApp',
     ],
-    smallPrint: 'Members receive priority access to high-demand booking slots before non-members.',
+    smallPrint: 'Signature Resets from ₵1,499/month · Full Home Reset ₵2,000/month · Once weekly at your preferred time · Additional bookings at 10% member discount via WhatsApp with your member number.',
     cta: 'Become a Member',
     popular: false,
     comingSoon: false,
@@ -241,9 +242,14 @@ function TierCard({ tier }) {
             <p className="font-display italic" style={{ fontSize: 32, fontWeight: 600, color: '#fff', lineHeight: 1, marginBottom: 4 }}>
               {tier.price}
             </p>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 300, marginBottom: 16 }}>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 300, marginBottom: tier.priceSecondary ? 6 : 16 }}>
               {tier.priceNote}
             </p>
+            {tier.priceSecondary && (
+              <p style={{ fontSize: 13, color: '#EC2461', fontWeight: 400, marginBottom: 16 }}>
+                {tier.priceSecondary}
+              </p>
+            )}
           </>
         )}
         <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, fontWeight: 300, marginBottom: 20 }}>

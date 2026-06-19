@@ -198,15 +198,6 @@ export const RESETS = [
     timeRange: '~4–5 hrs',
     img: '/resets/full.jpg',
   },
-  {
-    id: 'guest',
-    name: 'Guest Ready Reset',
-    description: 'Perfect before guests arrive, events, or hosting.',
-    tasks: ['Tidy & declutter', 'Dust surfaces', 'Sweep & mop floor', 'Clean toilet', 'Clean sink & mirror', 'Wash dishes', 'Clean countertops & stovetop', 'Arrange soft furnishings'],
-    taskIds: ['lv_tidy', 'lv_dust', 'lv_vacuum', 'lv_mop', 'ba_toilet', 'ba_sink', 'ba_mirror', 'k_dishes', 'k_counters', 'lv_tables'],
-    timeRange: '~2–3 hrs',
-    img: '/resets/guest.jpg',
-  },
 ]
 
 export const EXCLUDED_TASKS = [
