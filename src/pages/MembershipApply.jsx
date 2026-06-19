@@ -11,31 +11,89 @@ const AREAS = [...ZONES].sort((a, b) => a.localeCompare(b))
 const PROPERTY_TYPES = ['Apartment', 'House', 'Townhouse', 'Villa', 'Other']
 const SIZES = ['Studio', '1-2 Bedrooms', '3-4 Bedrooms', '5+ Bedrooms']
 const HOUSEHOLD_SIZES = ['1 person', '2 people', '3-4 people', '5+ people']
-const SUPPORT_OPTIONS = [
-  'General home maintenance',
-  'Kitchen care',
-  'Bedroom & linen',
-  'Bathroom care',
-  'Laundry & ironing',
-  'Home organisation',
-]
-const FREQUENCIES = ['Weekly', 'Twice weekly', 'As needed']
-// Membership monthly price by chosen Reset type, used for the live price card.
+// Membership monthly price by chosen Reset type, attached to the application.
 const RESET_PRICES = { signature: 1499, full: 2000 }
-const RESET_CHOICES = [
-  { id: 'signature', label: 'Signature Reset (Kitchen, Bedroom, Bathroom or Living Space)', note: '₵1,499/month' },
-  { id: 'full', label: 'Full Home Reset', note: '₵2,000/month' },
-]
-// Short pill label → full day name stored in form state.
+// Short pill label → full day name stored in form state. Mon–Fri only
+// (no Saturday — Saturdays are closed).
 const DAYS = [
   { short: 'Mon', full: 'Monday' },
   { short: 'Tue', full: 'Tuesday' },
   { short: 'Wed', full: 'Wednesday' },
   { short: 'Thu', full: 'Thursday' },
   { short: 'Fri', full: 'Friday' },
-  { short: 'Sat', full: 'Saturday' },
 ]
 const TIMES = ['Morning (8am–12pm)', 'Afternoon (12pm–4pm)', 'Flexible']
+
+// What's included accordion — mirrors the landing page so applicants know
+// exactly what each Reset covers.
+const ACCORDION_SECTIONS = [
+  {
+    num: '01', name: 'Kitchen Reset', count: 8,
+    time: '~2h 45m – 3h 45m',
+    desc: 'A beautifully presented kitchen, ready for the day ahead.',
+    items: ['Wash dishes & utensils', 'Clean countertops & stovetop', 'Scrub sink', 'Wipe cabinet fronts', 'Clean microwave', 'Sweep & mop floor', 'Take out trash', 'General organisation'],
+  },
+  {
+    num: '02', name: 'Bedroom Reset', count: 8,
+    time: '~2h 45m – 3h 45m',
+    desc: 'A calm, hotel-inspired bedroom experience.',
+    items: ['Make beds to hotel standard', 'Change bed linen', 'Dust all surfaces', 'Tidy & organise', 'Sweep & vacuum floor', 'Mop floor', 'Fold & put away clothes', 'Cushion arrangement'],
+  },
+  {
+    num: '03', name: 'Bathroom Reset', count: 8,
+    time: '~2h 45m – 3h 45m',
+    desc: 'A polished, spa-standard bathroom.',
+    items: ['Clean & sanitise toilet', 'Clean sink & counter', 'Polish mirror', 'Clean shower & bath', 'Present towels', 'Sweep & mop floor', 'Restock & tidy', 'Empty bin'],
+  },
+  {
+    num: '04', name: 'Living Space Reset', count: 8,
+    time: '~2h 45m – 3h 45m',
+    desc: 'A welcoming, guest-ready living environment.',
+    items: ['Dust all surfaces', 'Tidy & declutter', 'Sweep & vacuum', 'Mop floors', 'Wipe tables & surfaces', 'Clean glass & mirrors', 'Arrange soft furnishings', 'Presentation styling'],
+  },
+  {
+    num: '05', name: 'Full Home Reset', count: 4,
+    time: '~2h 45m – 3h 45m',
+    desc: 'Our complete Signature Reset — every room, every detail.',
+    items: ['Everything in our Signature Resets', 'Kitchen · Bedroom · Bathroom · Living Space', 'Your entire home, beautifully restored', 'Our most comprehensive Reset'],
+  },
+]
+
+function AccordionRow({ section }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div style={{ borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        style={{ width: '100%', background: 'none', border: 'none', padding: '22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', gap: 16 }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', width: 20, textAlign: 'right', flexShrink: 0 }}>{section.num}</span>
+          <span className="font-display italic" style={{ fontSize: 22, color: open ? '#EC2461' : '#fff', transition: 'color 200ms', textAlign: 'left' }}>{section.name}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 300, opacity: open ? 0 : 1, transition: 'opacity 200ms' }}>{section.time}</span>
+          <div style={{ width: 28, height: 28, borderRadius: '50%', border: open ? '0.5px solid #EC2461' : '0.5px solid rgba(255,255,255,0.15)', background: open ? '#EC2461' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 200ms', flexShrink: 0 }}>
+            <span style={{ color: '#fff', fontSize: 16, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform 200ms', display: 'block', marginTop: open ? '-1px' : '0' }}>+</span>
+          </div>
+        </div>
+      </button>
+      {open && (
+        <div style={{ paddingBottom: 28, paddingLeft: 40 }}>
+          <p className="font-display italic" style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontWeight: 400, lineHeight: 1.6 }}>{section.desc}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: 'rgba(255,255,255,0.07)', borderRadius: 12, overflow: 'hidden' }}>
+            {section.items.map((item) => (
+              <div key={item} style={{ background: '#0a0a0a', padding: '14px 18px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#EC2461', flexShrink: 0, marginTop: 7 }} />
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', fontWeight: 300, lineHeight: 1.5 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 // Optional media upload — mirrors the booking flow (Cloudinary unsigned upload).
 const MAX_MEDIA = 6
@@ -115,7 +173,9 @@ export default function MembershipApply() {
   const [form, setForm] = useState({
     name: '', email: '', phone: '',
     area: '', propertyType: '', size: '', householdSize: '',
-    support: [], resetChoice: '', frequency: '', preferredDays: [], time: '', notes: '',
+    // resetChoice kept for submission but no longer chosen in the UI — defaults
+    // to the Signature Reset. Weekly is the only membership frequency.
+    resetChoice: 'signature', frequency: 'Weekly', preferredDays: [], time: '',
   })
   const [media, setMedia] = useState([])
   const [errors, setErrors] = useState({})
@@ -124,7 +184,6 @@ export default function MembershipApply() {
   const [done, setDone] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [mediaNotice, setMediaNotice] = useState('')
-  const [dayNote, setDayNote] = useState('')
   const inputRef = useRef(null)
   const counter = useRef(0)
 
@@ -133,41 +192,10 @@ export default function MembershipApply() {
     if (errors[k]) setErrors((e) => ({ ...e, [k]: '' }))
   }
 
-  const toggleSupport = (opt) => {
-    setForm((p) => ({
-      ...p,
-      support: p.support.includes(opt) ? p.support.filter((s) => s !== opt) : [...p.support, opt],
-    }))
-    if (errors.support) setErrors((e) => ({ ...e, support: '' }))
-  }
-
-  // Changing frequency resets the day picker — the cap and "As needed" hide
-  // mean prior selections may no longer be valid.
-  const setFrequency = (v) => {
-    setForm((p) => ({ ...p, frequency: v, preferredDays: [] }))
-    setDayNote('')
-    setErrors((e) => ({ ...e, frequency: '', preferredDays: '' }))
-  }
-
-  // Day picker adapts to frequency: Weekly = single (radio), Twice weekly =
-  // toggle capped at 2, As needed = hidden (picker not rendered).
+  // Single-select day picker (weekly membership) — radio behaviour.
   const toggleDay = (day) => {
-    setDayNote('')
     if (errors.preferredDays) setErrors((e) => ({ ...e, preferredDays: '' }))
-    setForm((p) => {
-      const selected = p.preferredDays
-      const has = selected.includes(day)
-      if (p.frequency === 'Weekly') {
-        return { ...p, preferredDays: has ? [] : [day] }
-      }
-      // Twice weekly
-      if (has) return { ...p, preferredDays: selected.filter((d) => d !== day) }
-      if (selected.length >= 2) {
-        setDayNote('Maximum 2 days for twice weekly')
-        return p
-      }
-      return { ...p, preferredDays: [...selected, day] }
-    })
+    setForm((p) => ({ ...p, preferredDays: p.preferredDays.includes(day) ? [] : [day] }))
   }
 
   const startUpload = (file, kind, preview) => {
@@ -236,10 +264,8 @@ export default function MembershipApply() {
     if (!form.phone.trim()) e.phone = 'Please enter a valid Ghana mobile number (e.g. 024 000 0000)'
     if (!form.area) e.area = 'Please select your area'
     if (!form.propertyType) e.propertyType = 'Please select a property type'
-    if (form.support.length === 0) e.support = 'Please select at least one type of support'
-    if ((form.frequency === 'Weekly' || form.frequency === 'Twice weekly') && form.preferredDays.length === 0) {
-      e.preferredDays = 'Please select your preferred day' + (form.frequency === 'Twice weekly' ? 's' : '')
-    }
+    if (form.preferredDays.length === 0) e.preferredDays = 'Please select your preferred day'
+    if (!form.time) e.time = 'Please select your preferred time'
     return e
   }
 
@@ -263,13 +289,11 @@ export default function MembershipApply() {
         propertyType: form.propertyType,
         size: form.size,
         householdSize: form.householdSize,
-        support: form.support,
         resetChoice: form.resetChoice,
         resetPrice: form.resetChoice ? RESET_PRICES[form.resetChoice] : null,
         frequency: form.frequency,
-        preferredDays: form.frequency === 'As needed' ? [] : form.preferredDays,
+        preferredDays: form.preferredDays,
         time: form.time,
-        notes: form.notes.trim(),
         mediaUrls: media.filter((m) => m.status === 'done' && m.url).map((m) => m.url),
       }
       const res = await fetch('/api/membership-application', {
@@ -341,6 +365,22 @@ export default function MembershipApply() {
             </FadeUp>
           </section>
 
+          {/* WHAT'S INCLUDED ACCORDION */}
+          <section className="cs-section">
+            <div style={{ maxWidth: 560, margin: '0 auto' }}>
+              <FadeUp>
+                <h2 className="font-display italic" style={{ fontSize: 24, fontWeight: 600, color: '#fff', lineHeight: 1.2, marginBottom: 20 }}>
+                  What's included in your Reset
+                </h2>
+                <div style={{ borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+                  {ACCORDION_SECTIONS.map((section) => (
+                    <AccordionRow key={section.num} section={section} />
+                  ))}
+                </div>
+              </FadeUp>
+            </div>
+          </section>
+
           {/* FORM */}
           <section className="cs-section">
             <div style={{ maxWidth: 560, margin: '0 auto' }}>
@@ -387,105 +427,41 @@ export default function MembershipApply() {
                   </Field>
                 </Section>
 
-                {/* Section 3 — What you need */}
-                <Section title="What you need">
-                  <div data-error={!!errors.support}>
-                    <Field label="Support needed" required error={errors.support}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        {SUPPORT_OPTIONS.map((opt) => {
-                          const checked = form.support.includes(opt)
+                {/* Section 3 — Your preferences */}
+                <Section title="Your preferences">
+                  <div data-error={!!errors.preferredDays}>
+                    <Field label="Preferred day" required hint="Select 1 day" error={errors.preferredDays}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {DAYS.map(({ short, full }) => {
+                          const selected = form.preferredDays.includes(full)
                           return (
-                            <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 0', cursor: 'pointer', minHeight: 44, WebkitTapHighlightColor: 'transparent' }}>
-                              <input type="checkbox" checked={checked} onChange={() => toggleSupport(opt)}
-                                style={{ width: 20, height: 20, accentColor: '#EC2461', flexShrink: 0, cursor: 'pointer' }} />
-                              <span style={{ fontSize: 14, color: checked ? '#fff' : 'rgba(255,255,255,0.75)', fontWeight: 300 }}>{opt}</span>
-                            </label>
+                            <button
+                              key={full}
+                              type="button"
+                              onClick={() => toggleDay(full)}
+                              aria-pressed={selected}
+                              style={{
+                                minWidth: 56, minHeight: 44, padding: '10px 16px', borderRadius: 100,
+                                fontFamily: 'DM Sans, sans-serif', fontSize: 14, fontWeight: 500,
+                                cursor: 'pointer', boxSizing: 'border-box', WebkitTapHighlightColor: 'transparent',
+                                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease',
+                                background: selected ? '#EC2461' : 'rgba(255,255,255,0.02)',
+                                color: selected ? '#fff' : 'rgba(255,255,255,0.6)',
+                                border: `0.5px solid ${selected ? '#EC2461' : 'rgba(255,255,255,0.2)'}`,
+                              }}
+                            >
+                              {short}
+                            </button>
                           )
                         })}
                       </div>
                     </Field>
                   </div>
-                  <Field label="Which Reset would you like?">
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                      {RESET_CHOICES.map((opt) => {
-                        const checked = form.resetChoice === opt.id
-                        return (
-                          <label key={opt.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '11px 0', cursor: 'pointer', minHeight: 44, WebkitTapHighlightColor: 'transparent' }}>
-                            <input type="radio" name="resetChoice" checked={checked} onChange={() => set('resetChoice', opt.id)}
-                              style={{ width: 20, height: 20, accentColor: '#EC2461', flexShrink: 0, cursor: 'pointer', marginTop: 1 }} />
-                            <span style={{ fontSize: 14, color: checked ? '#fff' : 'rgba(255,255,255,0.75)', fontWeight: 300, lineHeight: 1.4 }}>
-                              {opt.label} <span style={{ color: '#EC2461' }}>· {opt.note}</span>
-                            </span>
-                          </label>
-                        )
-                      })}
-                    </div>
-                    {form.resetChoice && (
-                      <div style={{ background: 'rgba(236,36,97,0.06)', border: '0.5px solid rgba(236,36,97,0.3)', borderRadius: 12, padding: '16px 20px', marginTop: 12 }}>
-                        <p style={{ fontSize: 11, color: '#EC2461', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 500, marginBottom: 6, fontFamily: 'DM Sans, sans-serif' }}>
-                          Your membership
-                        </p>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-                          <span className="font-display italic" style={{ fontSize: 36, fontWeight: 600, color: '#fff', lineHeight: 1 }}>
-                            ₵{RESET_PRICES[form.resetChoice].toLocaleString()}
-                          </span>
-                          <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', fontWeight: 300 }}>/month</span>
-                        </div>
-                        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 300, lineHeight: 1.5 }}>
-                          Includes 1 Reset per week at your preferred time. Additional Resets available at 10% member discount via WhatsApp.
-                        </p>
-                      </div>
-                    )}
-                  </Field>
-                  <Field label="Preferred frequency">
-                    <Select value={form.frequency} onChange={(e) => setFrequency(e.target.value)} options={FREQUENCIES} placeholder="Select frequency" />
-                  </Field>
-                  {(form.frequency === 'Weekly' || form.frequency === 'Twice weekly') && (
-                    <div data-error={!!errors.preferredDays}>
-                      <Field
-                        label={form.frequency === 'Twice weekly' ? 'Preferred days' : 'Preferred day'}
-                        required
-                        hint={form.frequency === 'Twice weekly' ? 'Select exactly 2 days' : 'Select 1 day'}
-                        error={errors.preferredDays}
-                      >
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                          {DAYS.map(({ short, full }) => {
-                            const selected = form.preferredDays.includes(full)
-                            return (
-                              <button
-                                key={full}
-                                type="button"
-                                onClick={() => toggleDay(full)}
-                                aria-pressed={selected}
-                                style={{
-                                  minWidth: 56, minHeight: 44, padding: '10px 16px', borderRadius: 100,
-                                  fontFamily: 'DM Sans, sans-serif', fontSize: 14, fontWeight: 500,
-                                  cursor: 'pointer', boxSizing: 'border-box', WebkitTapHighlightColor: 'transparent',
-                                  transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease',
-                                  background: selected ? '#EC2461' : 'rgba(255,255,255,0.02)',
-                                  color: selected ? '#fff' : 'rgba(255,255,255,0.6)',
-                                  border: `0.5px solid ${selected ? '#EC2461' : 'rgba(255,255,255,0.2)'}`,
-                                }}
-                              >
-                                {short}
-                              </button>
-                            )
-                          })}
-                        </div>
-                        {dayNote && (
-                          <p style={{ fontSize: 12, color: '#FBBF24', marginTop: 8, fontWeight: 300 }}>{dayNote}</p>
-                        )}
-                      </Field>
-                    </div>
-                  )}
-                  <Field label="Preferred time">
-                    <Select value={form.time} onChange={(e) => set('time', e.target.value)} options={TIMES} placeholder="Select time" />
-                  </Field>
-                  <Field label="Additional notes">
-                    <textarea className="cs-input" style={{ height: 90, resize: 'none' }}
-                      placeholder="Anything else we should know about your home or requirements?"
-                      value={form.notes} onChange={(e) => set('notes', e.target.value)} />
-                  </Field>
+                  <div data-error={!!errors.time}>
+                    <Field label="Preferred time" required error={errors.time}>
+                      <Select value={form.time} onChange={(e) => set('time', e.target.value)} options={TIMES} placeholder="Select time" />
+                    </Field>
+                  </div>
                 </Section>
 
                 {/* Section 4 — Share your space (optional) */}

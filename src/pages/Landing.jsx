@@ -20,7 +20,7 @@ function AccordionRow({ section }) {
           <span className="font-display italic" style={{ fontSize: 22, color: open ? '#EC2461' : '#fff', transition: 'color 200ms', textAlign: 'left' }}>{section.name}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 300, opacity: open ? 0 : 1, transition: 'opacity 200ms' }}>{section.count} services</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontWeight: 300, opacity: open ? 0 : 1, transition: 'opacity 200ms' }}>{section.time}</span>
           <div style={{ width: 28, height: 28, borderRadius: '50%', border: open ? '0.5px solid #EC2461' : '0.5px solid rgba(255,255,255,0.15)', background: open ? '#EC2461' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 200ms', flexShrink: 0 }}>
             <span style={{ color: '#fff', fontSize: 16, lineHeight: 1, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform 200ms', display: 'block', marginTop: open ? '-1px' : '0' }}>+</span>
           </div>
@@ -233,32 +233,46 @@ export default function Landing() {
           {[
             {
               num: '01', name: 'Kitchen Reset', count: 8,
+              time: '~2h 45m – 3h 45m',
               desc: 'A beautifully presented kitchen, ready for the day ahead.',
               items: ['Wash dishes & utensils', 'Clean countertops & stovetop', 'Scrub sink', 'Wipe cabinet fronts', 'Clean microwave', 'Sweep & mop floor', 'Take out trash', 'General organisation'],
             },
             {
               num: '02', name: 'Bedroom Reset', count: 8,
+              time: '~2h 45m – 3h 45m',
               desc: 'A calm, hotel-inspired bedroom experience.',
               items: ['Make beds to hotel standard', 'Change bed linen', 'Dust all surfaces', 'Tidy & organise', 'Sweep & vacuum floor', 'Mop floor', 'Fold & put away clothes', 'Cushion arrangement'],
             },
             {
               num: '03', name: 'Bathroom Reset', count: 8,
+              time: '~2h 45m – 3h 45m',
               desc: 'A polished, spa-standard bathroom.',
               items: ['Clean & sanitise toilet', 'Clean sink & counter', 'Polish mirror', 'Clean shower & bath', 'Present towels', 'Sweep & mop floor', 'Restock & tidy', 'Empty bin'],
             },
             {
               num: '04', name: 'Living Space Reset', count: 8,
+              time: '~2h 45m – 3h 45m',
               desc: 'A welcoming, guest-ready living environment.',
               items: ['Dust all surfaces', 'Tidy & declutter', 'Sweep & vacuum', 'Mop floors', 'Wipe tables & surfaces', 'Clean glass & mirrors', 'Arrange soft furnishings', 'Presentation styling'],
             },
             {
-              num: '05', name: 'Laundry & Ironing', count: 6,
-              desc: 'Washing, folding and ironing — always fresh and ready.',
-              items: ['Wash a load', 'Hang or dry clothes', 'Fold & put away', 'Iron up to 10 items', 'Iron up to 25 items', 'Iron bed linens'],
+              num: '05', name: 'Full Home Reset', count: 4,
+              time: '~2h 45m – 3h 45m',
+              desc: 'Our complete Signature Reset — every room, every detail.',
+              items: ['Everything in our Signature Resets', 'Kitchen · Bedroom · Bathroom · Living Space', 'Your entire home, beautifully restored', 'Our most comprehensive Reset'],
             },
           ].map((section) => (
             <AccordionRow key={section.num} section={section} />
           ))}
+        </div>
+      </section>
+
+      {/* CLEANING PRODUCTS NOTE */}
+      <section style={{ padding: '0 24px' }}>
+        <div style={{ margin: '0 0 16px', padding: '16px 20px', background: 'rgba(255,255,255,0.03)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, fontWeight: 300 }}>
+            <span style={{ color: '#fff', fontWeight: 500 }}>Your products, your standards.</span> We ask that clients provide their preferred cleaning products. Our ethos is to keep your already beautiful space looking exactly that way.
+          </p>
         </div>
       </section>
 
