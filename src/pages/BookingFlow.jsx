@@ -6,7 +6,7 @@ import { Logo, FadeUp, PriceRow, Divider } from '../components/UI.jsx'
 import Calendar from '../components/Calendar.jsx'
 import {
   ZONES, TASK_GROUPS, RESETS, EXCLUDED_TASKS,
-  calcEstimate, calcBooking, formatDuration, formatDate, taskLabels,
+  calcEstimate, calcMultiBooking, formatDuration, formatShortDate, taskLabels,
   isSaturday, isSunday, SUNDAY_SURCHARGE, generateRef,
 } from '../data/index.js'
 import { useBookings } from '../hooks/useStore.js'
@@ -545,37 +545,76 @@ function StepArea({ data, update, onBack, onNext }) {
   )
 }
 
-// STEP 4: Date & Time
+// STEP 4: Date & Time — free multi-date selection (one booking, several visits).
 function StepDate({ data, update, onBack, onNext }) {
-  const sundaySelected = isSunday(data.date)
+  const dates = data.dates || []
+  const sorted = [...dates].sort()
+  const sundayCount = dates.filter(isSunday).length
+
+  const toggleDate = (ymd) =>
+    update({ dates: dates.includes(ymd) ? dates.filter(d => d !== ymd) : [...dates, ymd] })
+  const removeDate = (ymd) => update({ dates: dates.filter(d => d !== ymd) })
+
   return (
     <FadeUp>
-      <StepTitle title="Pick a date & time" sub="Choose when you'd like your assistant to arrive." />
+      <StepTitle title="Pick your dates & time" sub="Tap every day you'd like a visit — book as many as you need." />
       <div className="cs-card p-5 mb-4">
-        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14 }}>Date</p>
-        <Calendar value={data.date} onChange={(d) => update({ date: d })} />
+        <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14 }}>Dates</p>
+        <Calendar selectedDates={dates} onToggleDate={toggleDate} />
       </div>
-      {sundaySelected && (
+
+      {/* Selected dates summary — each date is a removable pill */}
+      {sorted.length > 0 && (
+        <div className="cs-card p-4 mb-4">
+          <p style={{ fontSize: 13, fontWeight: 500, marginBottom: 10 }}>
+            {sorted.length} {sorted.length === 1 ? 'date' : 'dates'} selected
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {sorted.map(d => (
+              <span key={d} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(236,36,97,0.1)', border: '0.5px solid rgba(236,36,97,0.25)',
+                color: '#fff', fontSize: 13, padding: '5px 8px 5px 12px', borderRadius: 20,
+              }}>
+                {formatShortDate(d)}{isSunday(d) && <span style={{ color: '#EC2461', fontSize: 11 }}>+50</span>}
+                <button type="button" onClick={() => removeDate(d)} aria-label={`Remove ${formatShortDate(d)}`}
+                  style={{
+                    width: 22, height: 22, borderRadius: '50%', border: 'none', background: 'rgba(255,255,255,0.08)',
+                    color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                    WebkitTapHighlightColor: 'transparent', flexShrink: 0,
+                  }}>
+                  <X size={13} />
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {sundayCount > 0 && (
         <div className="cs-card p-4 mb-4" style={{ borderColor: 'rgba(236,36,97,0.3)', background: 'rgba(236,36,97,0.06)' }}>
           <p style={{ fontSize: 13, color: '#EC2461', fontWeight: 400 }}>
-            Sunday booking — GH₵ {SUNDAY_SURCHARGE} weekend surcharge applies
+            Sunday surcharge of GH₵ {SUNDAY_SURCHARGE} applies to each Sunday visit.
           </p>
         </div>
       )}
+
       <div className="cs-card p-5 mb-4">
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Preferred start</p>
         {TIME_SLOTS.map(s => (
           <OptionCard key={s} label={s} selected={data.timeSlot === s} onClick={() => update({ timeSlot: s })} />
         ))}
       </div>
-      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={!data.date || !data.timeSlot} />
+      <NavButtons onBack={onBack} onNext={onNext} nextDisabled={dates.length < 1 || !data.timeSlot} />
     </FadeUp>
   )
 }
 
 // STEP 6: Summary & confirm — final review; the confirm/pay action fires here.
 function StepSummary({ data, onBack, onNext, submitting, error }) {
-  const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
+  const dates = data.dates || []
+  const sorted = [...dates].sort()
+  const est = calcMultiBooking({ taskIds: data.tasks || [], dates })
   const labels = taskLabels(data.tasks || [])
   const selectedPay = PAYMENT_OPTIONS.find(o => o.id === data.payment)
   const nextLabel = selectedPay?.online ? `Pay GH₵ ${est.total.toLocaleString()} & confirm` : 'Confirm booking'
@@ -583,17 +622,17 @@ function StepSummary({ data, onBack, onNext, submitting, error }) {
     <FadeUp>
       <StepTitle title="Summary & confirm" sub="Review your booking before confirming." />
       <div className="cs-card p-5 mb-4">
-        <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
+        <PriceRow label="Estimated time / visit" value={formatDuration(est.mins)} />
         <PriceRow label="Area" value={data.area} />
-        <PriceRow label="Date" value={formatDate(data.date)} />
+        <PriceRow label={`Dates (${est.visits} ${est.visits === 1 ? 'visit' : 'visits'})`}
+          value={<span style={{ textAlign: 'right', display: 'block' }}>{sorted.map(formatShortDate).join(' · ')}</span>} />
         <PriceRow label="Start" value={data.timeSlot} />
         <Divider />
-        <PriceRow label={`Service (up to ${3} hrs)`} value={`GH₵ ${349}`} small />
-        {est.extraHours > 0 && (
-          <PriceRow label={`Extra time (${est.extraHours} hr${est.extraHours > 1 ? 's' : ''} × GH₵ 100)`} value={`GH₵ ${est.extraHours * 100}`} small />
-        )}
+        <PriceRow label={`${est.visits} ${est.visits === 1 ? 'visit' : 'visits'} × GH₵ ${est.perVisit.toLocaleString()}`}
+          value={`GH₵ ${est.visitsTotal.toLocaleString()}`} small />
         {est.surcharge > 0 && (
-          <PriceRow label="Sunday weekend surcharge" value={`GH₵ ${est.surcharge}`} accent small />
+          <PriceRow label={`Sunday surcharge (${est.sundayCount} × GH₵ ${SUNDAY_SURCHARGE})`}
+            value={`GH₵ ${est.surcharge.toLocaleString()}`} accent small />
         )}
         <Divider />
         <div className="flex items-center justify-between">
@@ -697,7 +736,9 @@ function StepInfo({ data, update, onBack, onNext }) {
 
 // Final screen: Confirmed — shown after booking; not part of the 6-step counter.
 function StepConfirmed({ data, bookingRef, onBookAnother }) {
-  const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
+  const dates = data.dates || []
+  const sorted = [...dates].sort()
+  const est = calcMultiBooking({ taskIds: data.tasks || [], dates })
   return (
     <FadeUp>
       <div style={{ textAlign: 'center', padding: '24px 0' }}>
@@ -714,12 +755,16 @@ function StepConfirmed({ data, bookingRef, onBookAnother }) {
       <div className="cs-card p-5 mb-4">
         <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>Booking reference</p>
         <p className="font-display italic" style={{ fontSize: 28, fontWeight: 600, color: '#EC2461', marginBottom: 16 }}>{bookingRef}</p>
-        <PriceRow label="Estimated time" value={formatDuration(est.mins)} />
+        <PriceRow label="Estimated time / visit" value={formatDuration(est.mins)} />
         <PriceRow label="Area" value={data.area} />
-        <PriceRow label="Date" value={formatDate(data.date)} />
+        <PriceRow label={`Dates (${est.visits} ${est.visits === 1 ? 'visit' : 'visits'})`}
+          value={<span style={{ textAlign: 'right', display: 'block' }}>{sorted.map(formatShortDate).join(' · ')}</span>} />
         <PriceRow label="Start" value={data.timeSlot} />
+        <Divider />
+        <PriceRow label={`${est.visits} ${est.visits === 1 ? 'visit' : 'visits'} × GH₵ ${est.perVisit.toLocaleString()}`}
+          value={`GH₵ ${est.visitsTotal.toLocaleString()}`} small />
         {est.surcharge > 0 && (
-          <PriceRow label="Sunday weekend surcharge" value={`GH₵ ${est.surcharge}`} accent />
+          <PriceRow label={`Sunday surcharge (${est.sundayCount} × GH₵ ${SUNDAY_SURCHARGE})`} value={`GH₵ ${est.surcharge.toLocaleString()}`} accent small />
         )}
         <Divider />
         <PriceRow label="Total" value={`GH₵ ${est.total.toLocaleString()}`} />
@@ -733,7 +778,7 @@ function StepConfirmed({ data, bookingRef, onBookAnother }) {
 
 export default function BookingFlow() {
   const [step, setStep] = useState(0)
-  const [data, setData] = useState(() => ({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '', media: [], mediaUrls: [], mediaFolderId: generateRef() }))
+  const [data, setData] = useState(() => ({ tasks: [], area: '', zone: '', dates: [], timeSlot: '', notes: '', customer: {}, payment: '', media: [], mediaUrls: [], mediaFolderId: generateRef() }))
   const [bookingRef, setBookingRef] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -746,7 +791,7 @@ export default function BookingFlow() {
 
   // Reset the whole flow back to step 1 for a fresh booking.
   const resetFlow = () => {
-    setData({ tasks: [], area: '', zone: '', date: '', timeSlot: '', notes: '', customer: {}, payment: '', media: [], mediaUrls: [], mediaFolderId: generateRef() })
+    setData({ tasks: [], area: '', zone: '', dates: [], timeSlot: '', notes: '', customer: {}, payment: '', media: [], mediaUrls: [], mediaFolderId: generateRef() })
     setBookingRef('')
     setError('')
     setSubmitting(false)
@@ -756,6 +801,7 @@ export default function BookingFlow() {
 
   // Persist the booking, fire confirmation emails (non-blocking), advance.
   const finalize = (ref, est, payOption, extra = {}) => {
+    const sortedDates = [...(data.dates || [])].sort()
     const booking = {
       id: ref,
       taskIds: data.tasks,
@@ -763,11 +809,16 @@ export default function BookingFlow() {
       estMins: est.mins,
       estHours: Math.round(est.hours * 100) / 100,
       billedHours: est.billedHours,
-      price: est.price,
-      surcharge: est.surcharge || 0,
+      price: est.price,              // per-visit price
+      perVisit: est.perVisit,
+      surcharge: est.surcharge || 0, // total Sunday surcharge across all visits
       total: est.total,
+      totalPrice: est.total,         // explicit total incl. all surcharges
+      totalVisits: est.visits,
       zone: data.zone, area: data.area,
-      date: data.date, timeSlot: data.timeSlot,
+      dates: sortedDates,
+      date: sortedDates[0] || '',    // first visit — legacy display (Admin/Dashboard)
+      timeSlot: data.timeSlot,
       notes: data.notes,
       mediaUrls: data.mediaUrls || [],
       customer: data.customer,
@@ -800,8 +851,13 @@ export default function BookingFlow() {
   const confirm = async () => {
     if (submitting) return
     setError('')
+    const dates = data.dates || []
+    if (dates.length < 1) {
+      setError('Please select at least one date for your booking.')
+      return
+    }
     // Saturday is closed — reject even if a Saturday date slips through (CLAUDE.md).
-    if (isSaturday(data.date)) {
+    if (dates.some(isSaturday)) {
       setError("We're closed on Saturdays. Please choose another day.")
       return
     }
@@ -810,7 +866,7 @@ export default function BookingFlow() {
       setError('Please select a payment method to continue.')
       return
     }
-    const est = calcBooking({ taskIds: data.tasks || [], date: data.date })
+    const est = calcMultiBooking({ taskIds: data.tasks || [], dates })
     const ref = generateRef()
 
     if (!payOption.online) {

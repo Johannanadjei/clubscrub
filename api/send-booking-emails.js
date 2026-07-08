@@ -22,6 +22,13 @@ function formatDate(iso) {
   return `${d}/${m}/${y}`
 }
 
+// Sunday check for a 'YYYY-MM-DD' string (parsed as a local date).
+function isSunday(iso) {
+  const [y, m, d] = String(iso || '').split('-').map(Number)
+  if (!y || !m || !d) return false
+  return new Date(y, m - 1, d).getDay() === 0
+}
+
 function escapeHtml(str) {
   return String(str ?? '')
     .replace(/&/g, '&amp;')
@@ -41,6 +48,17 @@ function buildAdminEmailHtml(booking) {
   const customer = booking.customer || {}
   const tasks = Array.isArray(booking.tasks) ? booking.tasks : []
   const mediaUrls = Array.isArray(booking.mediaUrls) ? booking.mediaUrls : []
+  // Multi-date bookings carry a `dates` array; fall back to legacy single `date`.
+  const dates = Array.isArray(booking.dates) && booking.dates.length
+    ? booking.dates
+    : (booking.date ? [booking.date] : [])
+  const totalVisits = booking.totalVisits || dates.length
+
+  const datesHtml = dates.length
+    ? `<ul style="margin:8px 0 0;padding-left:18px;">${dates
+        .map(d => `<li style="font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:6px;">${escapeHtml(formatDate(d))}${isSunday(d) ? ` <span style="color:${BRAND_PINK};">· Sunday (+surcharge)</span>` : ''}</li>`)
+        .join('')}</ul>`
+    : `<p style="font-size:13px;color:rgba(255,255,255,0.55);margin:8px 0 0;">—</p>`
 
   const tasksHtml = tasks.length
     ? `<ul style="margin:8px 0 0;padding-left:18px;">${tasks
@@ -88,11 +106,15 @@ function buildAdminEmailHtml(booking) {
     <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);margin:24px 0 8px;">Booking</div>
     <table style="width:100%;border-collapse:collapse;">
       ${row('Area', escapeHtml(booking.area || '—'))}
-      ${row('Date', escapeHtml(formatDate(booking.date)))}
+      ${row('Total visits', escapeHtml(String(totalVisits)))}
       ${row('Time', escapeHtml(booking.timeSlot || '—'))}
+      ${booking.perVisit ? row('Per visit', formatCurrency(booking.perVisit)) : ''}
       ${booking.surcharge > 0 ? row('Sunday surcharge', formatCurrency(booking.surcharge)) : ''}
-      ${row('Total', `<span style="color:${BRAND_PINK};font-weight:700;">${formatCurrency(booking.total)}</span>`)}
+      ${row('Total', `<span style="color:${BRAND_PINK};font-weight:700;">${formatCurrency(booking.totalPrice ?? booking.total)}</span>`)}
     </table>
+
+    <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);margin:24px 0 0;">Dates (${totalVisits})</div>
+    ${datesHtml}
 
     <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.4);margin:24px 0 0;">Tasks</div>
     ${tasksHtml}

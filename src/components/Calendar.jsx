@@ -3,7 +3,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { toYmd, parseLocalDate, SUNDAY_SURCHARGE } from '../data/index.js'
 
 // Custom booking calendar (CLAUDE.md: never use a plain <input type="date">).
-// Enforces, visually:
+// Multi-date selection — customers freely toggle any number of dates on/off
+// (no consecutive requirement). Enforces, visually:
 //   - No past dates + 24h minimum notice  → earliest selectable is tomorrow
 //   - 60-day advance limit
 //   - Saturdays closed (greyed out, struck through, unselectable)
@@ -19,14 +20,18 @@ function startOfDay(d) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
 }
 
-export default function Calendar({ value, onChange }) {
+export default function Calendar({ selectedDates = [], onToggleDate }) {
   const today = startOfDay(new Date())
   // 24h minimum notice → earliest bookable day is tomorrow.
   const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
   // 60-day advance limit.
   const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 60)
 
-  const initial = (value && parseLocalDate(value)) || minDate
+  // Open on the month of the earliest selected date, else the first bookable day.
+  const firstSelected = selectedDates.length
+    ? parseLocalDate([...selectedDates].sort()[0])
+    : null
+  const initial = firstSelected || minDate
   const [view, setView] = useState(new Date(initial.getFullYear(), initial.getMonth(), 1))
 
   const year = view.getFullYear()
@@ -85,9 +90,10 @@ export default function Calendar({ value, onChange }) {
           const ymd = toYmd(date)
           const isSat = dow === 6
           const isSun = dow === 0
+          const isToday = date.getTime() === today.getTime()
           const outOfRange = date < minDate || date > maxDate
           const disabled = isSat || outOfRange
-          const selected = value === ymd
+          const selected = selectedDates.includes(ymd)
 
           const title = isSat
             ? "We're closed on Saturdays"
@@ -97,36 +103,49 @@ export default function Calendar({ value, onChange }) {
             <button
               key={ymd}
               type="button"
-              onClick={() => !disabled && onChange(ymd)}
+              onClick={() => !disabled && onToggleDate(ymd)}
               disabled={disabled}
               title={title}
               aria-label={`${ymd}${isSat ? ' (closed)' : isSun ? ` (weekend surcharge GH₵ ${SUNDAY_SURCHARGE})` : ''}`}
               aria-pressed={selected}
               style={{
                 position: 'relative',
-                minHeight: 44, minWidth: 44, borderRadius: 12,
+                minHeight: 44, minWidth: 44,
+                borderRadius: selected ? '50%' : 12,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 fontFamily: 'DM Sans, sans-serif', fontSize: 14,
-                border: selected ? 'none' : '0.5px solid rgba(255,255,255,0.08)',
+                border: selected
+                  ? 'none'
+                  : isToday ? '0.5px solid rgba(255,255,255,0.3)'
+                  : '0.5px solid rgba(255,255,255,0.08)',
                 background: selected ? '#EC2461' : disabled ? 'transparent' : 'rgba(255,255,255,0.03)',
                 color: selected ? '#fff'
                   : isSat ? 'rgba(255,255,255,0.2)'
                   : outOfRange ? 'rgba(255,255,255,0.18)'
                   : '#fff',
+                fontWeight: selected ? 600 : 400,
                 textDecoration: isSat ? 'line-through' : 'none',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 WebkitTapHighlightColor: 'transparent',
-                transition: 'background 0.15s',
+                transition: 'background 0.15s, border-radius 0.15s',
               }}
             >
               {date.getDate()}
-              {/* Sunday surcharge indicator (only on selectable Sundays) */}
+              {/* Sunday surcharge indicator (only on selectable Sundays).
+                  Selected Sundays show a small "+" to signal the extra charge. */}
               {isSun && !outOfRange && (
-                <span style={{
-                  position: 'absolute', bottom: 6,
-                  width: 4, height: 4, borderRadius: '50%',
-                  background: selected ? '#fff' : '#EC2461',
-                }} />
+                selected ? (
+                  <span style={{
+                    position: 'absolute', top: 3, right: 5,
+                    fontSize: 11, fontWeight: 700, lineHeight: 1, color: '#fff',
+                  }}>+</span>
+                ) : (
+                  <span style={{
+                    position: 'absolute', bottom: 6,
+                    width: 4, height: 4, borderRadius: '50%',
+                    background: '#EC2461',
+                  }} />
+                )
               )}
             </button>
           )

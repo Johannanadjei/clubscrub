@@ -263,6 +263,15 @@ export function dayOfWeek(str) {
 export function isSunday(str) { return dayOfWeek(str) === 0 }
 export function isSaturday(str) { return dayOfWeek(str) === 6 }
 
+// Short, human date for compact lists/pills — "Mon 9 Jun".
+const SHORT_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+export function formatShortDate(str) {
+  const d = parseLocalDate(str)
+  if (!d) return str || '—'
+  return `${SHORT_DAYS[d.getDay()]} ${d.getDate()} ${SHORT_MONTHS[d.getMonth()]}`
+}
+
 // DD/MM/YYYY display (CLAUDE.md Ghana format)
 export function formatDate(str) {
   const d = parseLocalDate(str)
@@ -283,6 +292,30 @@ export function calcBooking({ taskIds = [], date = '' }) {
     ...est,            // mins, hours, extraHours, billedHours, price
     surcharge,
     total: est.price + surcharge,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// MULTI-DATE BOOKING TOTAL — one booking can now cover several visit dates.
+// Each visit is priced identically (same tasks); the Sunday surcharge is
+// applied per Sunday visit.
+//   total = (perVisit price × number of dates) + (surcharge × Sunday dates)
+// ---------------------------------------------------------------------------
+export function calcMultiBooking({ taskIds = [], dates = [] }) {
+  const est = calcEstimate(taskIds)          // per-visit estimate
+  const visits = dates.length
+  const sundayCount = dates.filter(isSunday).length
+  const perVisit = est.price
+  const visitsTotal = perVisit * visits
+  const surcharge = sundayCount * SUNDAY_SURCHARGE
+  return {
+    ...est,          // mins, hours, extraHours, billedHours, price (per visit)
+    perVisit,        // price of a single visit (no surcharge)
+    visits,          // number of selected dates
+    sundayCount,     // how many of those dates fall on a Sunday
+    visitsTotal,     // perVisit × visits (before surcharge)
+    surcharge,       // total Sunday surcharge across all visits
+    total: visitsTotal + surcharge,
   }
 }
 
